@@ -28,7 +28,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>{messages.footer}</p></div><div className="footer-links"><Link href="/help">{messages.help}</Link><Link href="/privacy">{messages.privacy}</Link><Link href="/terms">{messages.terms}</Link></div><span className="copyright">© 2026 FanPot · Development preview</span></footer>
   </I18n.Provider>;
 }
-function Logo() { return <Image src="/fanpot-logo.png" width={1312} height={1199} alt="" className="brand-logo" priority />; }
+function Logo() { return <Image src="/fanpot-logo.png" width={1312} height={1199} alt="" className="brand-logo" loading="eager" />; }
 export function RulesCard() {
   const { messages: m } = useContext(I18n);
   return <section className="rules" id="rules"><div className="section-title"><span className="eyebrow">THE FANPOT PROMISE</span><h2>{m.rulesTitle}</h2><p>{m.rulesSub}</p></div><div className="rule-grid">{[Heart, ReceiptText, Sparkles].map((Icon, i) => <article key={i}><span className={`rule-icon color-${i}`}><Icon size={23} strokeWidth={1.75}/></span><h3>{m[`rule${i + 1}` as keyof typeof m]}</h3><p>{m[`rule${i + 1}Body` as keyof typeof m]}</p></article>)}</div></section>;
