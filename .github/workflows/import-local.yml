@@ -1,0 +1,24 @@
+name: Import local FanPot commit
+
+on:
+  push:
+    paths:
+      - .github/workflows/import-local.yml
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore the existing local commit
+        env:
+          EXPECTED_COMMIT: 3b79084dd6de14c460a9b3b35359d2630e7fc081
+        run: |
+          git bundle verify fanpot.bundle
+          git fetch fanpot.bundle refs/heads/main
+          test "$(git rev-parse FETCH_HEAD)" = "$EXPECTED_COMMIT"
+          git push origin "$EXPECTED_COMMIT:refs/heads/main" \
+            "--force-with-lease=refs/heads/main:${GITHUB_SHA}"
