@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ArrowUpRight, Heart, Sparkles, ReceiptText, ArrowLeft, Check, CircleHelp } from 'lucide-react';
 import en from '../messages/en.json';
@@ -21,13 +22,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
   }
   return <I18n.Provider value={{ language, messages }}>
     <a className="skip" href="#main">{language === 'ko' ? '본문 바로가기' : 'Skip to content'}</a>
-    <header className="header"><div className="nav-wrap"><Link className="brand" href="/" aria-label="FanPot home"><Logo />FanPot<span className="brand-dot">.</span></Link>
+    <header className="header"><div className="nav-wrap"><Link className="brand" href="/" aria-label="FanPot home"><Logo /></Link>
       <nav aria-label={language === 'ko' ? '주 메뉴' : 'Main navigation'}><Link href="/" className="nav-projects">{messages.projects}</Link><Link href="/me">{messages.mySupport}</Link><button className="language" onClick={changeLanguage} aria-label={language === 'en' ? '한국어로 변경' : 'Switch to English'}>{language === 'en' ? 'EN' : 'KO'}<span aria-hidden="true">⌄</span></button></nav></div></header>
     {children}
-    <footer><div><Link href="/" className="brand small"><Logo />FanPot.</Link><p>{messages.footer}</p></div><div className="footer-links"><Link href="/help">{messages.help}</Link><Link href="/privacy">{messages.privacy}</Link><Link href="/terms">{messages.terms}</Link></div><span className="copyright">© 2026 FanPot · Development preview</span></footer>
+    <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>{messages.footer}</p></div><div className="footer-links"><Link href="/help">{messages.help}</Link><Link href="/privacy">{messages.privacy}</Link><Link href="/terms">{messages.terms}</Link></div><span className="copyright">© 2026 FanPot · Development preview</span></footer>
   </I18n.Provider>;
 }
-function Logo() { return <svg width="31" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 15h22l-2 12H7L5 15Z" fill="#6543C6"/><path d="M16 17C5 11 11 3 16 8C21 3 27 11 16 17Z" fill="#E98FB1"/><path d="m25 3 1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3Z" fill="#6543C6"/></svg>; }
+function Logo() { return <Image src="/fanpot-logo.png" width={1312} height={1199} alt="" className="brand-logo" priority />; }
 export function RulesCard() {
   const { messages: m } = useContext(I18n);
   return <section className="rules" id="rules"><div className="section-title"><span className="eyebrow">THE FANPOT PROMISE</span><h2>{m.rulesTitle}</h2><p>{m.rulesSub}</p></div><div className="rule-grid">{[Heart, ReceiptText, Sparkles].map((Icon, i) => <article key={i}><span className={`rule-icon color-${i}`}><Icon size={23} strokeWidth={1.75}/></span><h3>{m[`rule${i + 1}` as keyof typeof m]}</h3><p>{m[`rule${i + 1}Body` as keyof typeof m]}</p></article>)}</div></section>;
