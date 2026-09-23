@@ -8,3 +8,8 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 .skip{opacity:0;pointer-events:none}.skip:focus{opacity:1;pointer-events:auto}
 @media(max-width:600px){.detail-grid{align-items:stretch}.detail-grid>div{display:contents}.detail-grid .poster{width:100%}.detail-grid .project-intro{order:1}.detail-grid .funding-panel{order:2}.detail-grid .content-block{order:3}}
+
+.brand{gap:0}
+.brand-logo{display:block;width:94px;height:auto}
+.brand.small .brand-logo{width:118px}
+@media(max-width:600px){.brand-logo{width:78px}.brand.small .brand-logo{width:108px}}
