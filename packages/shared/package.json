@@ -1,0 +1,1 @@
+{ "name": "@fanpot/shared", "private": true, "version": "0.1.0", "type": "module", "exports": { "./*": "./*.ts" }, "dependencies": { "viem": "2.56.8", "zod": "4.6.5", "canonicalize": "5.1.0" } }

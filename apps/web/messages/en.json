@@ -1,0 +1,22 @@
+{
+  "projects": "Projects", "mySupport": "My support", "tagline": "A little love. A shared celebration.",
+  "intro": "Bring a birthday project to life, together. With clear plans for every USDC you contribute.",
+  "eyebrow": "FOR THE MOMENTS WE MAKE TOGETHER", "browse": "Explore projects", "how": "How funds work",
+  "projectHeading": "Something wonderful starts here", "projectSub": "Fan-led birthday ads and cafés, made with a little love from everyone.",
+  "emptyTitle": "Our first projects are on their way", "emptyBody": "Projects will appear after their plans and funding rules have been reviewed. No campaigns are accepting funds yet.",
+  "preview": "Preview a project", "previewLabel": "DESIGN PREVIEW · FICTIONAL ARTIST", "previewNote": "This is a local product preview. No contract has been deployed and no contributions are being collected.",
+  "rulesTitle": "More love. Clearer rules.", "rulesSub": "The plan is shared before a project starts. The rules stay the same after you join.",
+  "rule1": "One goal, together", "rule1Body": "If the goal is missed, each supporter can claim their full contribution. Network costs are separate.",
+  "rule2": "A budget with boundaries", "rule2Body": "Payments go only to the recipients agreed in advance, after a separate reviewer approves them.",
+  "rule3": "The rest comes back", "rule3Body": "Unused funds are available to claim in proportion to each wallet’s contribution.",
+  "footer": "Made for fans. Guided by shared plans.", "help": "Help", "privacy": "Privacy", "terms": "Terms",
+  "back": "All projects", "projectTitle": "A brighter birthday, together", "projectType": "LUMI · Birthday project", "organizer": "A fictional project by LUMI Together",
+  "storyTitle": "A little light for a special day", "story": "Imagine a birthday message brightening a Seoul station, and a small café corner where fans can leave their wishes. This fictional project shows how a shared plan, a fixed budget and clear refund rules come together on FanPot.",
+  "budget": "What we’re planning", "ad": "Birthday ad", "cafe": "Birthday café", "reserved": "Unused reserve · returned proportionally", "plannedGoal": "Planned goal", "notStarted": "Funding has not started", "noFigures": "Live funding and supporter counts will appear only after a real contract is activated.",
+  "support": "Support this project", "notReady": "Contributions are unavailable in this preview.", "supporters": "The fans behind the project", "noSupporters": "A space for everyone who joins. No supporters yet.",
+  "updates": "Project updates", "noUpdates": "The first update will be shared here.", "ledger": "Funds & spending", "noLedger": "No deployment or transaction records exist for this preview.", "privacyHint": "Amounts can be hidden from the FanPot supporter list. Blockchain transactions remain public.",
+  "meTitle": "Your projects, in one place", "meBody": "Wallet connection and personal refund views are in development. No wallet is connected and no funds have been requested.", "proofTitle": "Deployment evidence", "proofBody": "Not deployed. No Mainnet addresses, transaction hashes, verification badges or participation results are available yet.",
+  "helpTitle": "A shared plan, from start to finish", "helpBody": "FanPot uses USDC on Arc. Participation will require a compatible wallet, a token allowance approval when needed, and a separate contribution transaction. Names and display preferences require an optional wallet login signature. Never send tokens directly to a campaign address.",
+  "privacyTitle": "Your name is your choice", "privacyBody": "The default is Anonymous with the amount hidden on the supporter list. Nicknames and social handles belong in the database, never onchain. Public transactions may still be linked through timing or a known address. This local preview has no user database or analytics; it stores only your language preference on this device.",
+  "termsTitle": "Before a project starts", "termsBody": "This development preview does not accept contributions. The MVP limits are 100 USDC per project and 20 USDC cumulatively per wallet per project, with a 0% platform fee. Network costs are separate. Funding success does not establish that an advertisement was delivered. Production terms and operating arrangements must be completed before a real pilot."
+}

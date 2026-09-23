@@ -1,0 +1,17 @@
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
+import { existsSync, mkdirSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+const require = createRequire(import.meta.url);
+const packageRequire = createRequire(require.resolve('@foundry-rs/forge/package.json'));
+const arch = process.arch === 'x64' ? 'amd64' : process.arch;
+const exe = process.platform === 'win32' ? 'forge.exe' : 'forge';
+const binary = packageRequire.resolve(`@foundry-rs/forge-${process.platform}-${arch}/bin/${exe}`);
+const args = process.argv.slice(2);
+const localSolc = resolve('.tools/solc.exe');
+if (process.platform === 'win32' && existsSync(localSolc) && ['test', 'build', 'coverage'].includes(args[0]) && !args.includes('--use')) args.push('--use', localSolc);
+const cache = resolve('.tools/cache');
+mkdirSync(cache, { recursive: true });
+const result = spawnSync(binary, args, { stdio: 'inherit', env: { ...process.env, XDG_CACHE_HOME: cache, FOUNDRY_CACHE_DIR: cache } });
+if (result.error) console.error(result.error.message);
+process.exit(result.status ?? 1);

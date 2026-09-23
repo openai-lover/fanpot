@@ -1,0 +1,26 @@
+{
+  "name": "fanpot", "private": true, "version": "0.1.0", "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "setup:contracts": "node scripts/setup-contracts.mjs",
+    "dev": "pnpm --filter @fanpot/web dev",
+    "build": "pnpm verify:config && pnpm --filter @fanpot/web build",
+    "build:local": "pnpm --filter @fanpot/web build",
+    "typecheck": "tsc --noEmit && pnpm --filter @fanpot/web typecheck",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:contracts": "node scripts/forge.mjs test --root packages/contracts",
+    "test:e2e": "node scripts/e2e.mjs",
+    "abi": "node scripts/export-abi.mjs",
+    "verify:size": "node scripts/verify-contract-size.mjs",
+    "verify:config": "node scripts/verify-config.ts",
+    "verify:proof": "node scripts/verify-proof.ts"
+  },
+  "devDependencies": {
+    "@foundry-rs/forge": "1.7.1", "@openzeppelin/contracts": "5.6.1",
+    "@playwright/test": "1.63.0", "@types/node": "24.10.1",
+    "typescript": "5.9.3", "vitest": "5.0.1",
+    "eslint": "10.9.1", "typescript-eslint": "8.68.0"
+  },
+  "dependencies": { "viem": "2.56.8", "zod": "4.6.5", "canonicalize": "5.1.0" }
+}
