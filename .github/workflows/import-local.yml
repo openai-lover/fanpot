@@ -1,4 +1,4 @@
-name: Import local FanPot commit
+name: Import local FanPot source
 
 on:
   push:
@@ -13,12 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Restore the existing local commit
+      - name: Import source files
         env:
           EXPECTED_COMMIT: 3b79084dd6de14c460a9b3b35359d2630e7fc081
         run: |
           git bundle verify fanpot.bundle
           git fetch fanpot.bundle refs/heads/main
           test "$(git rev-parse FETCH_HEAD)" = "$EXPECTED_COMMIT"
-          git push origin "$EXPECTED_COMMIT:refs/heads/main" \
-            "--force-with-lease=refs/heads/main:${GITHUB_SHA}"
+          git archive "$EXPECTED_COMMIT" | tar -xf -
+          git add -A
+          git reset -q HEAD -- .github/workflows/ci.yml
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "feat: import FanPot source"
+          git push origin HEAD:main
