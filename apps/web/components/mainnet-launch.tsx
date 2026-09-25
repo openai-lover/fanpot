@@ -1,19 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createPublicClient, createWalletClient, custom, decodeEventLog, getAddress, http, isAddress, keccak256, parseUnits, toBytes, type EIP1193Provider } from 'viem';
+import { createPublicClient, createWalletClient, custom, decodeEventLog, getAddress, http, isAddress, parseUnits, type EIP1193Provider } from 'viem';
 import { ARC_USDC, fanpotArc } from '@fanpot/shared/chain';
+import { MAINNET_DRAFT_REF, MAINNET_ORGANIZER, MAINNET_PURPOSE_HASH, MAINNET_REVIEWER, MAINNET_RULES, MAINNET_RULES_HASH, MAINNET_VENDOR } from '@fanpot/shared/mainnet-plan';
 import { fanPotFactoryAbi } from '@fanpot/shared/abi/FanPotFactory';
 import { fanPotCampaignAbi } from '@fanpot/shared/abi/FanPotCampaign';
 import build from '../data/mainnet-factory-bytecode.json';
 
-const organizer = '0x844DFA170aDC069755eBF58FcccDC1e465cF88A5' as const;
-const reviewer = '0xD25a47E35bF60C9AA51E1F450f3E0e850721Fe78' as const;
-const suggestedVendor = '0xbb431b640e57c1134af69c8014227daab8405f90';
-const rules = 'FanPot Arc Mainnet proof of concept v1. Fictional LUMI birthday screen. Goal 2 USDC. One simulated vendor allocation capped at 1 USDC. Remaining funds are claimable by supporters after settlement. No advertisement is booked or delivered.';
-const rulesHash = keccak256(toBytes(rules));
-const purposeHash = keccak256(toBytes('Fictional LUMI birthday screen: simulated vendor payout; no advertisement booked'));
-const draftRef = keccak256(toBytes('fanpot:arc-mainnet:lumi-birthday-screen:v1'));
+const organizer = MAINNET_ORGANIZER;
+const reviewer = MAINNET_REVIEWER;
+const suggestedVendor = MAINNET_VENDOR;
+const rules = MAINNET_RULES;
+const rulesHash = MAINNET_RULES_HASH;
+const purposeHash = MAINNET_PURPOSE_HASH;
+const draftRef = MAINNET_DRAFT_REF;
 const publicClient = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0]) });
 const explorer = 'https://explorer.arc.io';
 type Address = `0x${string}`;
@@ -39,7 +40,7 @@ export function MainnetLaunch() {
   const [account, setAccount] = useState<Address | null>(null);
   const [factory, setFactory] = useState('');
   const [campaign, setCampaign] = useState('');
-  const [vendor, setVendor] = useState(suggestedVendor);
+  const [vendor, setVendor] = useState<string>(suggestedVendor);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   const [transactions, setTransactions] = useState<Record<string, string>>({});

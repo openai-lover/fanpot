@@ -1,16 +1,16 @@
 import { readFileSync } from 'node:fs';
-import { createPublicClient, decodeEventLog, encodeDeployData, getAddress, http, isAddress, keccak256, toBytes } from 'viem';
+import { createPublicClient, decodeEventLog, encodeDeployData, getAddress, http, isAddress } from 'viem';
 import { arc } from 'viem/chains';
 import { fanPotFactoryAbi } from '../packages/shared/abi/FanPotFactory.ts';
 import { fanPotCampaignAbi } from '../packages/shared/abi/FanPotCampaign.ts';
 import { ARC_USDC } from '../packages/shared/chain.ts';
+import { MAINNET_PURPOSE_HASH, MAINNET_RULES_HASH } from '../packages/shared/mainnet-plan.ts';
 
 type Proof = { chainId: number; factory: string | null; campaign: string | null; organizer: string; reviewer: string; vendor: string | null; transactions: Record<string, string> };
 const proof = JSON.parse(readFileSync('apps/web/data/arc-mainnet-deployment.json', 'utf8')) as Proof;
 const build = JSON.parse(readFileSync('apps/web/data/mainnet-factory-bytecode.json', 'utf8')) as { compiler: string; bytecode: `0x${string}` };
-const rules = 'FanPot Arc Mainnet proof of concept v1. Fictional LUMI birthday screen. Goal 2 USDC. One simulated vendor allocation capped at 1 USDC. Remaining funds are claimable by supporters after settlement. No advertisement is booked or delivered.';
-const rulesHash = keccak256(toBytes(rules));
-const purposeHash = keccak256(toBytes('Fictional LUMI birthday screen: simulated vendor payout; no advertisement booked'));
+const rulesHash = MAINNET_RULES_HASH;
+const purposeHash = MAINNET_PURPOSE_HASH;
 const required = ['deploy-factory', 'allow-organizer', 'create-campaign', 'activate-campaign', 'contribute-campaign'];
 
 function assert(condition: unknown, message: string): asserts condition { if (!condition) throw Error(message); }
