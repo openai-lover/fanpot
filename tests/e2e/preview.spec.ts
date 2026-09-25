@@ -37,6 +37,7 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
   expect(await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform)).not.toBe(earlyFrame);
   await scrub(.81);
   await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.9);
+  await expect.poll(() => page.locator('.story-billboard').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
   const alignment = await page.evaluate(() => {
     const board = document.querySelector('.story-billboard')!.getBoundingClientRect();
     const target = document.querySelector(innerWidth <= 700 ? '.story-real-mobile .story-real-target' : '.story-real-desktop .story-real-target')!.getBoundingClientRect();

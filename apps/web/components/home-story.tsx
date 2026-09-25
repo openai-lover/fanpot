@@ -114,7 +114,7 @@ export function HomeStory() {
         const scaleX = 1 + (targetScaleX - 1) * mount;
         const scaleY = 1 + (targetScaleY - 1) * mount;
         billboardFrameRef.current.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) perspective(1100px) rotateY(${(-34 * turn).toFixed(1)}deg) rotateZ(${(-2 * (1 - mount) + 5 * turn).toFixed(1)}deg) scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
-        billboardFrameRef.current.style.opacity = String(1 - span(progress, .76, .83));
+        billboardFrameRef.current.style.opacity = String(1 - span(progress, .72, .8));
       }
       if (billboardRef.current) {
         billboardRef.current.style.filter = `brightness(${(.42 + mount * .58).toFixed(3)}) saturate(${(.68 + mount * .32).toFixed(3)})`;
@@ -127,7 +127,7 @@ export function HomeStory() {
       stage.style.setProperty('--story-art-y', `${(potFocus * -1.8 + mount * 1.2).toFixed(2)}%`);
       stage.style.setProperty('--story-sweep-x', `${(-190 + span(progress, .65, .81) * 570).toFixed(1)}%`);
       stage.style.setProperty('--story-sweep-opacity', (mount * .48).toFixed(3));
-      stage.style.setProperty('--story-conduit', (span(progress, .65, .78) * (1 - span(progress, .82, .92))).toFixed(3));
+      stage.style.setProperty('--story-conduit', (span(progress, .65, .78) * (1 - reality)).toFixed(3));
       stage.style.setProperty('--story-city-y', `${(potFocus * 13 * depth).toFixed(1)}px`);
       stage.style.setProperty('--story-pot-aura', (reveal * .22 + light * .42).toFixed(3));
       stage.style.setProperty('--story-light', light.toFixed(3));
