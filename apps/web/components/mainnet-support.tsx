@@ -8,7 +8,7 @@ import { fanPotCampaignAbi } from '@fanpot/shared/abi/FanPotCampaign';
 const campaignClient = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0]) });
 const tokenAbi = parseAbi(['function allowance(address owner, address spender) view returns (uint256)', 'function approve(address spender, uint256 amount) returns (bool)', 'function balanceOf(address owner) view returns (uint256)']);
 
-export function MainnetSupport({ campaign, phase, remaining }: { campaign: `0x${string}`; phase: number; remaining: string }) {
+export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy }: { campaign: `0x${string}`; phase: number; remaining: string; deadline: number; settleBy: number }) {
   const [amount, setAmount] = useState('0.25');
   const [walletAddress, setWalletAddress] = useState<`0x${string}` | null>(null);
   const [balance, setBalance] = useState<string | null>(null);
@@ -93,5 +93,19 @@ export function MainnetSupport({ campaign, phase, remaining }: { campaign: `0x${
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Refund claim failed.'); }
     finally { setBusy(false); }
   }
-  return <section className="mainnet-panel mainnet-action"><h2>Your onchain position</h2><p>Connect MetaMask to see your balance, contribution and refund entitlement. Arc Mainnet transactions use real USDC, including gas.</p><button className="outline-button" type="button" disabled={busy} onClick={refresh}>{busy ? 'Working…' : walletAddress ? 'Refresh wallet' : 'Connect wallet'}</button>{walletAddress && <dl><div><dt>Wallet</dt><dd>{walletAddress.slice(0, 6)}…{walletAddress.slice(-4)}</dd></div><div><dt>USDC balance</dt><dd>{balance} USDC</dd></div><div><dt>Contributed</dt><dd>{contributed} USDC</dd></div><div><dt>Claimable refund</dt><dd>{claimable} USDC</dd></div></dl>}{phase === 1 && <div className="mainnet-contribute"><label htmlFor="mainnet-amount">Contribution in USDC</label><div><input id="mainnet-amount" type="number" min="0.1" max={remaining} step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" type="button" disabled={busy} onClick={support}>Support on Mainnet</button></div><small>MetaMask may ask for one exact USDC approval, then one contribution transaction.</small></div>}{phase === 4 && <button className="button" type="button" disabled={busy || claimable === '0'} onClick={refund}>Claim available refund</button>}<p className="mainnet-wallet-message" aria-live="polite">{message}</p></section>;
+  async function finish(functionName: 'finalize' | 'settle') {
+    setBusy(true); setMessage('Checking deadline and campaign state…');
+    try {
+      const now = Math.floor(Date.now() / 1000);
+      if (functionName === 'finalize' && now < deadline) throw Error('Funding deadline has not passed.');
+      if (functionName === 'settle' && now < settleBy) throw Error('The settlement timeout has not passed. Budget resolution can settle sooner.');
+      const { wallet, account } = await connect();
+      const hash = await wallet.writeContract({ account, chain: fanpotArc, address: campaign, abi: fanPotCampaignAbi, functionName });
+      const receipt = await campaignClient.waitForTransactionReceipt({ hash });
+      if (receipt.status !== 'success') throw Error('Settlement transaction failed.');
+      setMessage(`Confirmed: ${hash}`); window.location.reload();
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Settlement failed.'); }
+    finally { setBusy(false); }
+  }
+  return <section className="mainnet-panel mainnet-action"><h2>Your onchain position</h2><p>Connect MetaMask to see your balance, contribution and refund entitlement. Arc Mainnet transactions use real USDC, including gas.</p><button className="outline-button" type="button" disabled={busy} onClick={refresh}>{busy ? 'Working…' : walletAddress ? 'Refresh wallet' : 'Connect wallet'}</button>{walletAddress && <dl><div><dt>Wallet</dt><dd>{walletAddress.slice(0, 6)}…{walletAddress.slice(-4)}</dd></div><div><dt>USDC balance</dt><dd>{balance} USDC</dd></div><div><dt>Contributed</dt><dd>{contributed} USDC</dd></div><div><dt>Claimable refund</dt><dd>{claimable} USDC</dd></div></dl>}{phase === 1 && <div className="mainnet-contribute"><label htmlFor="mainnet-amount">Contribution in USDC</label><div><input id="mainnet-amount" type="number" min="0.1" max={remaining} step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" type="button" disabled={busy} onClick={support}>Support on Mainnet</button></div><small>MetaMask may ask for one exact USDC approval, then one contribution transaction.</small></div>}{(phase === 0 || phase === 1) && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('finalize')}>Finalize after funding deadline</button>}{(phase === 2 || phase === 3) && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('settle')}>Settle after timeout</button>}{phase === 4 && <button className="button" type="button" disabled={busy || claimable === '0'} onClick={refund}>Claim available refund</button>}<p className="mainnet-wallet-message" aria-live="polite">{message}</p></section>;
 }

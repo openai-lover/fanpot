@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import deployment from '../../apps/web/data/arc-mainnet-deployment.json';
+import { readFileSync } from 'node:fs';
+const deployment = JSON.parse(readFileSync('apps/web/data/arc-mainnet-deployment.json', 'utf8')) as { factory: string | null; campaign: string | null };
 
 test('public home explains the project and labels generated campaigns', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));

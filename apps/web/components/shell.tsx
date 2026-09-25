@@ -42,5 +42,13 @@ export function CampaignPreview() {
 }
 export function Information({ kind }: { kind: 'me' | 'proof' | 'help' | 'privacy' | 'terms' }) {
   const { messages: m } = useContext(I18n);
-  return <main id="main" tabIndex={-1} className="info-page"><span className="info-icon"><Heart size={30}/></span><h1>{m[`${kind}Title` as keyof typeof m]}</h1><p>{m[`${kind}Body` as keyof typeof m]}</p><Link href="/" className="outline-button">{m.back}<ArrowUpRight size={18}/></Link>{kind === 'help' && <RulesCard/>}</main>;
+  const liveCopy: Partial<Record<typeof kind, { title: string; body: string }>> = {
+    me: { title: 'Your onchain position', body: 'Open the Arc Mainnet campaign, connect MetaMask, and read your contribution and claimable refund directly from the contract. There is no account database.' },
+    proof: { title: 'Deployment evidence', body: 'The Arc Mainnet campaign page reads current contract state and links to the factory, campaign, source repository, and transaction receipts. The artist and campaign scenario remain fictional.' },
+    help: { title: 'How to support', body: 'Connect MetaMask on Arc Mainnet. A first contribution may require an exact USDC allowance approval and then a separate contribution transaction. Read the fixed campaign rules and gas estimate before confirming.' },
+    privacy: { title: 'Your name is your choice', body: 'FanPot does not collect names or social handles in this prototype. Wallet addresses and transaction amounts are public on Arc. A wallet may be linked to you through timing or other public information.' },
+    terms: { title: 'Before you support', body: 'This is a small Arc Mainnet proof of concept with a fictional artist and simulated vendor. USDC contributions and network fees are real. Contributions may remain locked until campaign settlement. A funded goal does not mean an ad was booked or delivered. No platform fee is charged.' },
+  };
+  const content = mainnetLive ? liveCopy[kind] : undefined;
+  return <main id="main" tabIndex={-1} className="info-page"><span className="info-icon"><Heart size={30}/></span><h1>{content?.title ?? m[`${kind}Title` as keyof typeof m]}</h1><p>{content?.body ?? m[`${kind}Body` as keyof typeof m]}</p><Link href={mainnetLive && (kind === 'proof' || kind === 'me' || kind === 'help') ? '/mainnet' : '/'} className="outline-button">{mainnetLive && (kind === 'proof' || kind === 'me' || kind === 'help') ? 'Open Mainnet campaign' : m.back}<ArrowUpRight size={18}/></Link>{kind === 'help' && <RulesCard/>}</main>;
 }
