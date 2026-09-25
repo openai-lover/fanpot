@@ -38,5 +38,6 @@
 .story-sticky[data-outcome="refund"] .story-fan-label .story-fan-give{display:none}
 .story-sticky[data-outcome="refund"] .story-fan-label .story-fan-claim{display:block}
 @media(max-width:700px){.story-sticky[data-outcome="refund"] .story-fan:not(:first-child){display:none}}
+@media(min-width:701px) and (max-width:1100px){.story-sticky[data-outcome="refund"] .story-fan:nth-child(n+3){display:none}}
 .story-reality{position:absolute;inset:0;z-index:1;opacity:var(--story-reality,0);pointer-events:none;will-change:opacity}.story-reality svg{position:absolute;inset:0;width:100%;height:100%}.story-reality .story-real-mobile{display:none}.story-real-art{opacity:var(--story-real-art,0);filter:drop-shadow(0 0 15px #e4b4ef)}.story-reality:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#1c1937e8 0%,#1c1937bd 24%,#1c193744 47%,transparent 68%);pointer-events:none}.story-city{opacity:calc(.37 * var(--story-concept,1))}
 @media(max-width:700px){.story-reality .story-real-desktop{display:none}.story-reality .story-real-mobile{display:block}.story-reality:after{background:linear-gradient(180deg,#211c3fcf 0%,#211c3f9e 26%,transparent 46%)}.story-billboard{width:90%;right:5%}.story-sticky[data-outcome="funded"] .story-outcome{top:auto;bottom:15%}}
