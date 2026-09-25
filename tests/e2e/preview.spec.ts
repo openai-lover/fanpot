@@ -44,6 +44,9 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
     return Math.max(Math.abs(board.left - target.left), Math.abs(board.top - target.top), Math.abs(board.width - target.width), Math.abs(board.height - target.height));
   });
   expect(alignment).toBeLessThan(4);
+  await scrub(.9);
+  await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
+  await expect.poll(() => page.locator('.story-pot').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(1);
   await scrub(.94);
   await expect(page.locator('.story-step')).toContainText('06 / 06');
   await expect(page.locator('.story-pot-status')).toHaveText('GOAL MISSED · REFUNDS OPEN');

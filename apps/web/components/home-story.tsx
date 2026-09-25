@@ -103,7 +103,7 @@ export function HomeStory() {
       const mount = span(progress, .48, .79);
       const turn = Math.sin(mount * Math.PI);
       const reality = span(progress, .5, .72);
-      const installedArt = span(progress, .7, .81) * (1 - span(progress, .83, .92));
+      const installedArt = span(progress, .7, .81) * (1 - span(progress, .82, .89));
       const light = span(progress, .64, .78) * (1 - span(progress, .82, .94));
       const potFocus = span(progress, .16, .38) * (1 - span(progress, .55, .7));
       const compact = window.innerWidth <= 700;
@@ -143,10 +143,10 @@ export function HomeStory() {
       stage.style.setProperty('--story-refund', span(progress, .83, .93).toFixed(3));
       stage.style.setProperty('--story-cue', (1 - span(progress, .09, .15)).toFixed(3));
       if (potRef.current) {
-        const cardPresence = Math.max(1 - span(progress, .69, .8), span(progress, .85, .93));
+        const cardPresence = Math.max(1 - span(progress, .69, .8), span(progress, .83, .89));
         potRef.current.style.opacity = String(span(progress, .17, .28) * cardPresence);
         const entry = span(progress, .18, .32);
-        const rise = ((1 - entry) * 54 - potFocus * 19 + span(progress, .69, .8) * 65 - span(progress, .85, .93) * 65) * depth;
+        const rise = ((1 - entry) * 54 - potFocus * 19 + span(progress, .69, .8) * 65 - span(progress, .83, .89) * 65) * depth;
         const scale = .94 + entry * .06 + potFocus * (compact ? .025 : .09);
         potRef.current.style.transform = `translate3d(0, ${rise.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
       }
