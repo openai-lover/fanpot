@@ -14,6 +14,7 @@ const purposeHash = MAINNET_PURPOSE_HASH;
 const required = ['deploy-factory', 'allow-organizer', 'create-campaign', 'activate-campaign', 'contribute-campaign'];
 
 function assert(condition: unknown, message: string): asserts condition { if (!condition) throw Error(message); }
+function sameAddress(actual: string | null | undefined, expected: string) { return actual?.toLowerCase() === expected.toLowerCase(); }
 async function main() {
   assert(proof.chainId === 5042, 'Wrong manifest chain ID');
   assert(typeof proof.factory === 'string' && isAddress(proof.factory) && typeof proof.campaign === 'string' && isAddress(proof.campaign) && isAddress(proof.organizer) && isAddress(proof.reviewer) && typeof proof.vendor === 'string' && isAddress(proof.vendor), 'Deployment addresses are missing or invalid');
@@ -33,20 +34,20 @@ async function main() {
     client.readContract({ address: campaign, abi: fanPotCampaignAbi, functionName: 'getAllocation', args: [0] }),
   ]);
   assert(factoryCode && factoryCode !== '0x' && campaignCode && campaignCode !== '0x', 'Missing deployed bytecode');
-  assert(registered && owner === organizer && fixedReviewer === reviewer && factoryUsdc.toLowerCase() === ARC_USDC.toLowerCase(), 'Factory config mismatch');
-  assert(config.organizer === organizer && config.reviewer === reviewer && config.usdc.toLowerCase() === ARC_USDC.toLowerCase() && config.goal === 2_000_000n && config.rulesHash === rulesHash, 'Campaign config mismatch');
-  assert(allocation.recipient === vendor && allocation.cap === 1_000_000n && allocation.purposeHash === purposeHash, 'Allocation mismatch');
+  assert(registered && sameAddress(owner, organizer) && sameAddress(fixedReviewer, reviewer) && sameAddress(factoryUsdc, ARC_USDC), 'Factory config mismatch');
+  assert(sameAddress(config.organizer, organizer) && sameAddress(config.reviewer, reviewer) && sameAddress(config.usdc, ARC_USDC) && config.goal === 2_000_000n && config.rulesHash === rulesHash, 'Campaign config mismatch');
+  assert(sameAddress(allocation.recipient, vendor) && allocation.cap === 1_000_000n && allocation.purposeHash === purposeHash, 'Allocation mismatch');
   assert(summary.phase >= 1 && summary.totalContributed > 0n, 'Campaign is not activated with a real contribution');
   const receipts = Object.fromEntries(await Promise.all(required.map(async (label) => {
     const receipt = await client.getTransactionReceipt({ hash: proof.transactions[label] as `0x${string}` });
     assert(receipt.status === 'success', `${label} reverted`);
     return [label, receipt] as const;
   })));
-  assert(receipts['deploy-factory'].contractAddress === factory && receipts['deploy-factory'].from === organizer, 'Factory deployment receipt mismatch');
-  assert(receipts['allow-organizer'].to === factory && receipts['create-campaign'].to === factory && receipts['activate-campaign'].to === campaign && receipts['contribute-campaign'].to === campaign, 'Transaction destinations mismatch');
-  assert(receipts['activate-campaign'].from === reviewer, 'Reviewer did not activate campaign');
+  assert(sameAddress(receipts['deploy-factory'].contractAddress, factory) && sameAddress(receipts['deploy-factory'].from, organizer), 'Factory deployment receipt mismatch');
+  assert(sameAddress(receipts['allow-organizer'].to, factory) && sameAddress(receipts['create-campaign'].to, factory) && sameAddress(receipts['activate-campaign'].to, campaign) && sameAddress(receipts['contribute-campaign'].to, campaign), 'Transaction destinations mismatch');
+  assert(sameAddress(receipts['activate-campaign'].from, reviewer), 'Reviewer did not activate campaign');
   const creation = receipts['create-campaign'].logs.map((log) => { try { return decodeEventLog({ abi: fanPotFactoryAbi, data: log.data, topics: log.topics }); } catch { return null; } }).find((event) => event?.eventName === 'CampaignCreated');
-  assert(creation?.eventName === 'CampaignCreated' && creation.args.campaign === campaign && creation.args.rulesHash === rulesHash, 'CampaignCreated event mismatch');
+  assert(creation?.eventName === 'CampaignCreated' && sameAddress(creation.args.campaign, campaign) && creation.args.rulesHash === rulesHash, 'CampaignCreated event mismatch');
   const deploymentTx = await client.getTransaction({ hash: proof.transactions['deploy-factory'] as `0x${string}` });
   const expectedInput = encodeDeployData({ abi: fanPotFactoryAbi, bytecode: build.bytecode, args: [organizer, reviewer, ARC_USDC] });
   assert(deploymentTx.input === expectedInput, 'Factory creation bytecode does not match the checked-in build');

@@ -2,14 +2,14 @@
 
 좋아하는 마음을 모아, 약속한 프로젝트를 함께.
 
-K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. [공개 데모](https://fanpot-web-one.vercel.app/)와 Arc Testnet 시연이 있습니다. Arc Mainnet 거래 증거는 아직 확인 중이며, 실제 모금 서비스는 아닙니다.
+K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. [공개 데모](https://fanpot-web-one.vercel.app/)와 Arc Testnet 시연이 있습니다. Arc Mainnet에 팩토리 계약을 배포했지만, 캠페인 생성과 기여는 아직 없으며 실제 모금 서비스는 아닙니다.
 
 ## 구현 기준
 
 - `docs/reference/FanPot_Codex_Implementation_Handoff_KO.md`: 구현 기준.
 - `docs/reference/FanPot_Product_and_Build_Spec_KO.md`: 배경·제품 방향.
 - `docs/grant-readiness.md`: Arc Microgrants 공식 자격 요건과 현재 증거 상태.
-- Arc Testnet의 가상 캠페인 네 개와 시연 지갑 거래를 실행했습니다. Mainnet 지갑 서명, 실제 상품 발주, 공모전 제출은 아직 실행하지 않았습니다.
+- Arc Testnet의 가상 캠페인 네 개와 시연 지갑 거래를 실행했습니다. Mainnet 팩토리 배포 거래 1건을 검증했습니다. Mainnet 캠페인 생성·기여, 실제 상품 발주, 공모전 제출은 아직 실행하지 않았습니다.
 
 ## 이번에 구현한 것
 
@@ -21,7 +21,7 @@ K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. [공개 데모
 - 비례 환불, 무기한 미청구 권리, 0원 claim, rounding dust 유지, 직접 송금과 장부 분리.
 - SafeERC20, storage ReentrancyGuard, CEI, Math.mulDiv, 입금 delta 검사.
 - bigint 금액·gas 계산, canonical rules hash, 공개 개인정보 projection, 기여 receipt 검증.
-- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/launch`는 Arc Mainnet 계약 배포와 검토자 활성화를 위한 지갑 흐름이며, `/mainnet`은 증거가 기록되면 온체인 상태와 기여 기능을 제공합니다.
+- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/launch`는 Arc Mainnet 계약 배포와 검토자 활성화를 위한 지갑 흐름이며, `/mainnet`은 검증된 팩토리와 캠페인 증거를 보여 줍니다. 현재 MetaMask가 도메인을 위험하다고 표시하여 `/launch` 지갑 거래는 공식 검토가 끝날 때까지 중지했습니다.
 - 설정값·실제 배포 증거가 없는 상태에서 production 검사를 통과하지 못하도록 차단.
 
 ## 로컬 실행
@@ -73,7 +73,7 @@ pnpm dev
 
 1. Supabase SQL migration/RLS와 SIWE 일회 nonce·세션·행 소유권·CSRF.
 2. prepared snapshot 고정, 이벤트 색인·receipt reconciliation·중복/역순 처리·원자적 cursor.
-3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet과 소액 Mainnet 캠페인을 지원합니다.
+3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet에 작동하며 소액 Mainnet 흐름은 보안 경고 검토 중입니다.
 4. 운영자 생성, 검토·지급 UI, 증빙 재인코딩·고정 SHA-256.
 5. local-chain E2E → 실제 MetaMask 지갑 검증 → 독립 리뷰 → 운영 수준의 Mainnet 준비.
 

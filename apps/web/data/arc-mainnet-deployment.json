@@ -1,9 +1,11 @@
 {
   "chainId": 5042,
-  "factory": null,
+  "factory": "0x8D8a8bEdE436bfF36E70d261E2041dA6F6777Ab6",
   "campaign": null,
   "reviewer": "0xD25a47E35bF60C9AA51E1F450f3E0e850721Fe78",
   "organizer": "0x844DFA170aDC069755eBF58FcccDC1e465cF88A5",
   "vendor": null,
-  "transactions": {}
+  "transactions": {
+    "deploy-factory": "0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892"
+  }
 }

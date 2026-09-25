@@ -7,6 +7,7 @@ import { MAINNET_DRAFT_REF, MAINNET_ORGANIZER, MAINNET_PURPOSE_HASH, MAINNET_REV
 import { fanPotFactoryAbi } from '@fanpot/shared/abi/FanPotFactory';
 import { fanPotCampaignAbi } from '@fanpot/shared/abi/FanPotCampaign';
 import build from '../data/mainnet-factory-bytecode.json';
+import deployment from '../data/arc-mainnet-deployment.json';
 
 const organizer = MAINNET_ORGANIZER;
 const reviewer = MAINNET_REVIEWER;
@@ -17,6 +18,7 @@ const purposeHash = MAINNET_PURPOSE_HASH;
 const draftRef = MAINNET_DRAFT_REF;
 const publicClient = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0]) });
 const explorer = 'https://explorer.arc.io';
+const walletActionsPaused = true;
 type Address = `0x${string}`;
 
 function provider() {
@@ -46,9 +48,9 @@ export function MainnetLaunch() {
   const [transactions, setTransactions] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    setFactory(localStorage.getItem('fanpot-mainnet-factory') ?? '');
+    setFactory(deployment.factory ?? localStorage.getItem('fanpot-mainnet-factory') ?? '');
     setCampaign(localStorage.getItem('fanpot-mainnet-campaign') ?? '');
-    try { setTransactions(JSON.parse(localStorage.getItem('fanpot-mainnet-transactions') ?? '{}')); } catch { /* ignore invalid local cache */ }
+    try { setTransactions({ ...JSON.parse(localStorage.getItem('fanpot-mainnet-transactions') ?? '{}'), ...deployment.transactions }); } catch { setTransactions(deployment.transactions); }
     const fromUrl = new URLSearchParams(window.location.search).get('campaign');
     if (fromUrl && isAddress(fromUrl)) setCampaign(getAddress(fromUrl));
   }, []);
@@ -63,6 +65,7 @@ export function MainnetLaunch() {
   function saveFactory(value: string) { setFactory(value); if (isAddress(value)) localStorage.setItem('fanpot-mainnet-factory', getAddress(value)); }
   function saveCampaign(value: string) { setCampaign(value); if (isAddress(value)) localStorage.setItem('fanpot-mainnet-campaign', getAddress(value)); }
   async function run(label: string, action: () => Promise<void>) {
+    if (walletActionsPaused) { setMessage('Wallet actions are paused while the MetaMask site warning is reviewed.'); return; }
     setBusy(true); setMessage(`${label}: waiting for wallet…`);
     try { await action(); setMessage(`${label}: confirmed on Arc Mainnet.`); }
     catch (error) { setMessage(error instanceof Error ? error.message : String(error)); }
@@ -129,11 +132,12 @@ export function MainnetLaunch() {
   }
 
   return <div className="launch-grid">
+    {walletActionsPaused && <section className="mainnet-panel launch-wide" role="alert"><h2>Wallet actions temporarily paused</h2><p>MetaMask currently marks this domain as unsafe. Do not connect or sign while the classification is under review. The verified factory deployment remains visible below. <a href="https://github.com/MetaMask/eth-phishing-detect/issues/296876" target="_blank" rel="noreferrer">Follow the review request ↗</a></p></section>}
     <section className="mainnet-panel launch-wide"><h2>Campaign plan</h2><p>Fictional LUMI birthday screen · 2 USDC goal · one 1 USDC capped simulated vendor allocation · 14-day funding window. Any unspent funds remain claimable by supporters after settlement. No ad placement or merchandise is being sold.</p><details><summary>Exact rules committed onchain</summary><p>{rules}</p><code>{rulesHash}</code></details><dl><div><dt>Organizer</dt><dd>{organizer}</dd></div><div><dt>Reviewer</dt><dd>{reviewer}</dd></div><div><dt>USDC</dt><dd>{ARC_USDC}</dd></div></dl></section>
-    <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Choose the organizer on this computer. The reviewer can open this page on the other computer when the campaign address is ready.</p><button className="button" disabled={busy} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p></section>
-    <section className="mainnet-panel"><h2>2. Deploy factory</h2><p>MetaMask will show the current USDC gas estimate. Check it before signing, and deploy only once with the organizer wallet.</p><button className="button" disabled={busy || !!factory} onClick={deploy}>Deploy factory</button><label className="launch-label">Factory address<input value={factory} onChange={(event) => saveFactory(event.target.value)} placeholder="0x…" /></label><button className="outline-button" disabled={busy || !isAddress(factory)} onClick={allowOrganizer}>Allow organizer</button></section>
-    <section className="mainnet-panel"><h2>3. Create campaign</h2><p>The vendor address is controlled by the builder. A payout still requires a separate reviewer decision, and no payout is needed to demonstrate live funding.</p><label className="launch-label">Simulated vendor address<input value={vendor} onChange={(event) => setVendor(event.target.value)} /></label><button className="button" disabled={busy || !isAddress(factory) || !!campaign} onClick={createCampaign}>Create 2 USDC campaign</button><label className="launch-label">Campaign address<input value={campaign} onChange={(event) => saveCampaign(event.target.value)} placeholder="0x…" /></label></section>
-    <section className="mainnet-panel"><h2>4. Reviewer activation</h2><p>On the other computer, connect {reviewer} and confirm activation. The reviewer wallet needs Arc USDC for gas.</p><button className="button" disabled={busy || !isAddress(campaign)} onClick={activate}>Activate with reviewer wallet</button>{isAddress(campaign) && <a href={`/launch?campaign=${getAddress(campaign)}`}>Reviewer link ↗</a>}</section>
+    <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Choose the organizer on this computer. The reviewer can open this page on the other computer when the campaign address is ready.</p><button className="button" disabled={busy || walletActionsPaused} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p></section>
+    <section className="mainnet-panel"><h2>2. Deploy factory</h2><p>The verified factory below has already been deployed. Do not deploy another one. MetaMask shows the current USDC gas estimate before any later transaction.</p><button className="button" disabled={busy || walletActionsPaused || !!factory} onClick={deploy}>Deploy factory</button><label className="launch-label">Factory address<input value={factory} onChange={(event) => saveFactory(event.target.value)} placeholder="0x…" /></label><button className="outline-button" disabled={busy || walletActionsPaused || !isAddress(factory)} onClick={allowOrganizer}>Allow organizer</button></section>
+    <section className="mainnet-panel"><h2>3. Create campaign</h2><p>The vendor address is controlled by the builder. A payout still requires a separate reviewer decision, and no payout is needed to demonstrate live funding.</p><label className="launch-label">Simulated vendor address<input value={vendor} onChange={(event) => setVendor(event.target.value)} /></label><button className="button" disabled={busy || walletActionsPaused || !isAddress(factory) || !!campaign} onClick={createCampaign}>Create 2 USDC campaign</button><label className="launch-label">Campaign address<input value={campaign} onChange={(event) => saveCampaign(event.target.value)} placeholder="0x…" /></label></section>
+    <section className="mainnet-panel"><h2>4. Reviewer activation</h2><p>On the other computer, connect {reviewer} and confirm activation. The reviewer wallet needs Arc USDC for gas.</p><button className="button" disabled={busy || walletActionsPaused || !isAddress(campaign)} onClick={activate}>Activate with reviewer wallet</button>{isAddress(campaign) && <a href={`/launch?campaign=${getAddress(campaign)}`}>Reviewer link ↗</a>}</section>
     <section className="mainnet-panel launch-wide"><h2>Transaction evidence</h2><p aria-live="polite">{message || 'Each step needs a separate MetaMask confirmation. Never share your seed phrase.'}</p><ul>{Object.entries(transactions).map(([label, hash]) => <li key={label}><a href={`${explorer}/tx/${hash}`} target="_blank" rel="noreferrer">{label} · {hash.slice(0, 12)}… ↗</a></li>)}</ul><p>After creating and activating the campaign, add its verified addresses and receipts to the public deployment manifest before submitting the grant.</p></section>
   </div>;
 }
