@@ -42,4 +42,5 @@
 @media(max-width:700px){.story-billboard{top:5%;right:22%;width:56%}.story-billboard-pole{right:48%}}
 .story-scene-copy:last-child h2{max-width:340px}
 .story-scene-copy:last-child p{max-width:320px}
+@media(min-width:701px){.story-scene-copy:last-child h2{font-size:clamp(38px,4vw,58px)}}
 .story-real-fill{opacity:var(--story-real-art,0)}
