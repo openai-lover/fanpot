@@ -36,3 +36,4 @@
 .story-fan-label .story-fan-claim{display:none}
 .story-sticky[data-outcome="refund"] .story-fan-label .story-fan-give{display:none}
 .story-sticky[data-outcome="refund"] .story-fan-label .story-fan-claim{display:block}
+@media(max-width:700px){.story-sticky[data-outcome="refund"] .story-fan:not(:first-child){display:none}}
