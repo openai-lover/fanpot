@@ -9,7 +9,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return <I18n.Provider value={{ messages: en }}>
     <a className="skip" href="#main">Skip to content</a>
     <header className="header"><div className="nav-wrap"><Link className="brand" href="/" aria-label="FanPot home"><Logo /></Link>
-      <nav aria-label="Main navigation"><Link href="/#projects">Projects</Link><Link href="/#rules">How funds work</Link><Link href="/arc-demo">Arc Testnet demo</Link></nav></div></header>
+      <nav aria-label="Main navigation"><Link href="/#projects">Projects</Link><Link href="/mainnet">Arc Mainnet</Link><Link href="/arc-demo">Testnet demo</Link></nav></div></header>
     {children}
     <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>Arc Testnet demo · Fictional artists and campaigns</p></div><div className="footer-links"><Link href="/help">Help</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div><span className="copyright">© 2026 FanPot · Development preview</span></footer>
   </I18n.Provider>;

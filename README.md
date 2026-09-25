@@ -21,7 +21,7 @@ K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. **현재 단�
 - 비례 환불, 무기한 미청구 권리, 0원 claim, rounding dust 유지, 직접 송금과 장부 분리.
 - SafeERC20, storage ReentrancyGuard, CEI, Math.mulDiv, 입금 delta 검사.
 - bigint 금액·gas 계산, canonical rules hash, 공개 개인정보 projection, 기여 receipt 검증.
-- Next.js 영·한 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다.
+- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/mainnet`은 Arc Mainnet과 USDC를 읽기 전용으로 확인합니다.
 - 설정값·실제 배포 증거가 없는 상태에서 production 검사를 통과하지 못하도록 차단.
 
 ## 로컬 실행

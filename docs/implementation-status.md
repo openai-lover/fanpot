@@ -4,6 +4,8 @@
 
 2026-09-25: added four explicitly fictional Arc Testnet campaigns, an on-chain readout, and a MetaMask contribution path for one funding campaign. The scenarios cover live funding, settled spending, skipped budget, cancellation, and refunds. Details and transaction links: [Arc Testnet demo](arc-testnet-demo.md). This is still not a completed MVP or Mainnet proof; [grant eligibility remains unmet](grant-readiness.md).
 
+2026-09-25: added a read-only [Arc Mainnet connection](mainnet-connection.md) and English-only site UI. Mainnet RPC and USDC interface checks are live; no FanPot Mainnet contract or contribution path exists yet.
+
 | Handoff area | State |
 |---|---|
 | §5–6 and §15.5–6 campaign/factory core | Implemented and exercised on Foundry local EVM |
