@@ -2,24 +2,16 @@
 
 Official program: [Arc Microgrants](https://community.arc.io/public/events/arc-microgrants-f8tijfjhyq). Twenty 500 USDC awards are available. It asks for a working **Arc mainnet** deployment with an openable live link, a **public** repo, a short Arc use-case description, and a public builder profile. Testnet-only builds and design mockups are explicitly ineligible. Applications close 2026-10-14 at 23:59 ET and are reviewed as they arrive. Selection looks at Arc relevance, technical credibility, build quality, and promise; no outcome can be guaranteed.
 
-## What a reviewer can inspect now
+## Public material
 
-- Four labelled Arc Testnet stories cover live funding, full funding and payout, an optional allocation skipped with unused budget refunded, and cancellation with full refunds.
-- Contracts fix recipients and caps, use USDC, separate organizer and reviewer roles, and let supporters claim refunds. [Public transaction manifest](../apps/web/data/arc-testnet-demo.json) and [scenario guide](arc-testnet-demo.md) provide contract addresses and receipts.
-- Generated campaign images clarify what a fan would support. They are labelled as concepts; all contributions and vendor wallets are simulated and controlled by this project.
+- Repository: [openai-lover/fanpot](https://github.com/openai-lover/fanpot), public after a tracked-secret audit.
+- HTTPS site: [FanPot](https://fanpot-web-one.vercel.app/). Its production build currently follows `main`; check that `/launch` and `/mainnet` are available after the pending merge and deployment.
+- Arc Testnet: four clearly labelled fictional scenarios in the [transaction manifest](../apps/web/data/arc-testnet-demo.json) and [scenario guide](arc-testnet-demo.md). These demonstrate funding, payout, skipped budget, cancellation, and refunds, but are not Mainnet evidence or real fan traction.
 
-## Eligibility blockers
+## Mainnet proof still required
 
-1. Contracts and interactive demo exist on **Arc Testnet** only. The program requires **Arc mainnet** at submission.
-2. `openai-lover/fanpot` is currently **private**. The program requires a **public repo**.
-3. The working website is currently on `127.0.0.1`, without a public HTTPS link a reviewer can open.
-4. The present `/arc-demo` UI is a controlled simulation, not evidence of real fandom demand, advertising placement, or merchandise delivery. Do not describe it as traction.
+The `/launch` wallet flow and `/mainnet` public view are implemented in the current PR, but no FanPot Mainnet factory or campaign is recorded yet. The [Mainnet manifest](../apps/web/data/arc-mainnet-deployment.json) must be populated from confirmed receipts. `pnpm verify:proof` intentionally fails until it verifies factory deployment, organizer allowlisting, campaign creation, reviewer activation, and a real USDC contribution against Arc Mainnet state.
 
-## Minimum path to an eligible submission
+Use the organizer `0x844DFA170aDC069755eBF58FcccDC1e465cF88A5`, separate reviewer `0xD25a47E35bF60C9AA51E1F450f3E0e850721Fe78`, and builder-controlled demonstration vendor `0xbb431b640e57c1134af69c8014227daab8405f90`. The planned fictional LUMI campaign has a 2 USDC goal and a single 1 USDC vendor cap. Wallet holders must review and sign their own transactions. Do not describe the fictional campaign as real fan demand, goods, or an advertising placement.
 
-1. Review the contracts and permissions, then deploy a small mainnet campaign with a separately controlled reviewer and a real USDC test flow. Verify source and all transaction receipts. Keep real spend tightly capped.
-2. Publish the app to a stable HTTPS URL and make the mainnet campaign view usable there. Show project purpose, fixed budget, live on-chain totals, proof of payout/refund, and the contract address.
-3. Check the repository for secrets and private material before changing its visibility to public. Merge only reviewed changes.
-4. Provide one concise project link and public builder profile in the submission. Describe FanPot as a fan campaign USDC escrow and refund prototype, not as an operating charity or evidence of genuine fan purchases.
-
-The extra testnet cases increase technical credibility and explain the user journey. They do not replace these eligibility gates.
+After proof passes and the public Mainnet page displays the verified state, submit the site, repo, concise use case, and public builder profile through the official submission page. Actual submission has not occurred.

@@ -2,14 +2,14 @@
 
 좋아하는 마음을 모아, 약속한 프로젝트를 함께.
 
-K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. **현재 단계는 Arc Testnet 시연이며, 실제 모금 서비스나 Mainnet 배포가 아닙니다.**
+K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. [공개 데모](https://fanpot-web-one.vercel.app/)와 Arc Testnet 시연이 있습니다. Arc Mainnet 거래 증거는 아직 확인 중이며, 실제 모금 서비스는 아닙니다.
 
 ## 구현 기준
 
 - `docs/reference/FanPot_Codex_Implementation_Handoff_KO.md`: 구현 기준.
 - `docs/reference/FanPot_Product_and_Build_Spec_KO.md`: 배경·제품 방향.
-- `docs/grant-readiness.md`: Arc Microgrants 공식 자격 요건과 현재 미충족 항목.
-- Arc Testnet의 가상 캠페인 네 개와 시연 지갑 거래만 실행했습니다. Mainnet 배포·실제 상품 발주·공모전 제출은 실행하지 않았습니다.
+- `docs/grant-readiness.md`: Arc Microgrants 공식 자격 요건과 현재 증거 상태.
+- Arc Testnet의 가상 캠페인 네 개와 시연 지갑 거래를 실행했습니다. Mainnet 지갑 서명, 실제 상품 발주, 공모전 제출은 아직 실행하지 않았습니다.
 
 ## 이번에 구현한 것
 
@@ -21,7 +21,7 @@ K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. **현재 단�
 - 비례 환불, 무기한 미청구 권리, 0원 claim, rounding dust 유지, 직접 송금과 장부 분리.
 - SafeERC20, storage ReentrancyGuard, CEI, Math.mulDiv, 입금 delta 검사.
 - bigint 금액·gas 계산, canonical rules hash, 공개 개인정보 projection, 기여 receipt 검증.
-- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/mainnet`은 Arc Mainnet과 USDC를 읽기 전용으로 확인합니다.
+- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/launch`는 Arc Mainnet 계약 배포와 검토자 활성화를 위한 지갑 흐름이며, `/mainnet`은 증거가 기록되면 온체인 상태와 기여 기능을 제공합니다.
 - 설정값·실제 배포 증거가 없는 상태에서 production 검사를 통과하지 못하도록 차단.
 
 ## 로컬 실행
@@ -53,7 +53,7 @@ pnpm dev
 
 `pnpm setup:contracts`는 forge-std v1.9.7의 exact commit을 검사합니다. Windows에서는 공식 solc-bin의 Solidity 0.8.30 바이너리를 SHA-256으로 검증해 `.tools/`에 설치합니다. 다른 플랫폼은 Foundry가 `foundry.toml`의 0.8.30을 사용합니다. npm으로 고정한 Forge 1.7.1을 `pnpm test:contracts`가 실행합니다. 시스템 Forge를 쓰면 `cd packages/contracts && forge test`도 가능합니다(Windows solc 경로 별도 지정 가능).
 
-`pnpm build:local`은 키 없는 UI 검증용 빌드입니다. **`pnpm build`는 실제 production 환경값 검사를 먼저 실행하며, 현재는 실패하는 것이 정상입니다.** `verify:config`는 환경의 형식만 검사하며 실제 네트워크 검증을 대신하지 않습니다. `.env.example`을 보고 각 환경에 필요한 값을 주입하세요. Node 스크립트는 `.env`를 자동 로드하지 않습니다.
+`pnpm build:local`은 키 없는 UI 검증용 빌드입니다. **`pnpm build`는 실제 production 환경값 검사를 먼저 실행하며, 현재는 실패하는 것이 정상입니다.** `verify:config`는 환경의 형식만 검사하며 실제 네트워크 검증을 대신하지 않습니다. `pnpm verify:proof`는 Mainnet 주소와 영수증이 모두 기록되기 전까지 실패합니다. `.env.example`을 보고 각 환경에 필요한 값을 주입하세요. Node 스크립트는 `.env`를 자동 로드하지 않습니다.
 
 ## 검증 결과 — 2026-09-21
 
@@ -73,11 +73,11 @@ pnpm dev
 
 1. Supabase SQL migration/RLS와 SIWE 일회 nonce·세션·행 소유권·CSRF.
 2. prepared snapshot 고정, 이벤트 색인·receipt reconciliation·중복/역순 처리·원자적 cursor.
-3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. 현재 MetaMask 경로는 Arc Testnet 기여만 지원합니다.
+3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet과 소액 Mainnet 캠페인을 지원합니다.
 4. 운영자 생성, 검토·지급 UI, 증빙 재인코딩·고정 SHA-256.
-5. local-chain E2E → 실제 MetaMask 지갑 검증 → 독립 리뷰 → Mainnet 준비.
+5. local-chain E2E → 실제 MetaMask 지갑 검증 → 독립 리뷰 → 운영 수준의 Mainnet 준비.
 
-현재는 이 후속 단계가 완료되지 않았으므로 실제 금전 결제를 활성화하지 않습니다. `verify:proof`는 manifest가 생겨도 실시간 receipt/bytecode verifier를 구현하기 전에는 계속 실패합니다.
+전체 운영 서비스에 필요한 인증·색인·파일 업로드는 아직 미완료입니다. Mainnet 캠페인 흐름은 소액 시연에 한정하며, `verify:proof`는 실제 Mainnet 배포·기여 영수증을 검증해야 통과합니다.
 
 ## 계정·운영값이 필요한 시점
 
@@ -86,9 +86,9 @@ pnpm dev
 | 서버 통합 검증 | Supabase 개발 프로젝트 URL·server service role key·DB 연결, 앱 origin, 독립 random secrets |
 | 실제 모바일 지갑 통합 | WalletConnect project ID·허용 origin |
 | Testnet 배포 | organizer/reviewer/publisher 지갑 주소, 로컬 하드웨어 지갑 또는 암호화 keystore, 테스트용 USDC |
-| Production 준비 | Vercel 계정·cron 지원, 운영 DB·도메인·RPC, 실제 배포 block/주소/receipt, 검토된 공급자·운영 조건 |
+| 운영 서비스 준비 | 운영 DB·도메인·RPC, 실제 배포 block/주소/receipt, 검토된 공급자·운영 조건 |
 
-키나 시드 문구를 채팅·클라이언트·Git에 넣지 않습니다. 현재 단계에는 추가 계정값이 필요하지 않습니다.
+키나 시드 문구를 채팅·클라이언트·Git에 넣지 않습니다. Mainnet 거래는 각 지갑 소유자가 직접 서명합니다.
 
 ## 구조와 한계
 
