@@ -171,7 +171,7 @@ export function HomeStory() {
         const stagger = clamp((arrival - index * .075) / .55);
         const move = 1 - stagger;
         fan.style.transform = `translate3d(${Math.round(offset.x * worldWidth * move)}px, ${Math.round(offset.y * worldHeight * move)}px, 0) scale(${(0.85 + .15 * move).toFixed(3)})`;
-        fan.style.opacity = String(Math.min(1, span(progress, .15 + index * .012, .24 + index * .012)) * (1 - span(progress, .51, .62)));
+        fan.style.opacity = String(Math.min(1, span(progress, .15 + index * .012, .24 + index * .012)) * (1 - span(progress, .44, .52)));
       });
     }
 
