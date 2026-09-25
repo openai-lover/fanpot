@@ -9,9 +9,9 @@ const sceneCopy = [
   { kicker: '01 / THE IDEA', title: 'Imagine their name lighting up the city.', body: 'One fan has an idea. Together, fans can give it a place in the world.', detail: 'LUMI is a fictional artist. The billboard is an illustration; no ad has been booked.' },
   { kicker: '02 / TOGETHER', title: 'Small contributions. One big moment.', body: 'A little from each fan moves the same plan forward.', detail: 'Illustrative fan contributions include $5, $10, $20 and $25.' },
   { kicker: '03 / THE FANPOT', title: 'One pot. Clear progress.', body: 'See the goal, the amount raised, and the plan everyone is supporting.', detail: 'A sample FanPot shows the amount raised, a $3,000 goal, fan count, and recent support.' },
-  { kicker: '04 / ONE CURRENCY', title: 'A shared way to show up, wherever you are.', body: 'Fans contribute in USDC on Arc. The campaign holds the funds under fixed rules.', detail: 'The current live product remains a prototype; the numbers in this story are illustrative.' },
-  { kicker: '05 / THE GOAL', title: 'A funded idea is ready for its next step.', body: 'See the placement concept come to life. A reviewed payout and a real ad booking would come next.', detail: 'The example reaches $3,000 of $3,000. This city placement is AI-generated, not booked. A separate reviewer must approve a capped payout before it is sent.' },
-  { kicker: '06 / IF THE GOAL IS MISSED', title: 'Your part is still yours to claim.', body: 'After an unfunded campaign is finalized, supporters can claim their USDC back from the contract.', detail: 'In this alternate example, the campaign stops at $2,040 of $3,000. Refunds are claimable after finalization; they are not automatic.' },
+  { kicker: '04 / CLEAR RULES', title: 'One currency. Rules fans can see.', body: 'Fans contribute in USDC on Arc. If the goal is missed, supporters can claim their funds after the campaign is finalized.', detail: 'A refund requires a separate claim transaction; it is not automatic. The amounts shown here are illustrative.' },
+  { kicker: '05 / THE GOAL', title: 'The goal opens the next step.', body: 'At $3,000, a capped payout still needs independent review before anyone arranges the ad.', detail: 'Reaching the goal does not book an ad or send funds to an organizer automatically.' },
+  { kicker: '06 / THE VISION', title: 'Imagine it on the city screen.', body: 'This AI-generated placement shows what fans could make possible. No ad has been booked.', detail: 'LUMI is a fictional artist and the Seoul street placement is an AI-generated concept.' },
 ] as const;
 
 const fans = [
@@ -89,7 +89,7 @@ export function HomeStory() {
       frame = 0;
       if (!track || !stage || motion.matches) return;
       const progress = clamp(-track.getBoundingClientRect().top / travel);
-      const ranges = [[-.05, .195], [.155, .36], [.325, .52], [.48, .655], [.615, .83], [.795, 1.02]] as const;
+      const ranges = [[-.05, .195], [.155, .36], [.325, .52], [.48, .665], [.625, .855], [.82, 1.02]] as const;
       const copyLevels = ranges.map(([start, end]) => visible(progress, start, end));
       const activeScene = copyLevels.reduce((best, level, index) => level > copyLevels[best] ? index : best, 0);
       copies.forEach((copy, index) => { copy.style.opacity = index === activeScene ? String(Math.max(.88, copyLevels[index])) : '0'; });
@@ -100,11 +100,11 @@ export function HomeStory() {
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`;
 
       const reveal = span(progress, .14, .29);
-      const mount = span(progress, .48, .79);
+      const mount = span(progress, .54, .91);
       const turn = Math.sin(mount * Math.PI);
-      const reality = span(progress, .5, .72);
-      const installedArt = span(progress, .7, .81) * (1 - span(progress, .82, .89));
-      const light = span(progress, .64, .78) * (1 - span(progress, .82, .94));
+      const reality = span(progress, .56, .82);
+      const installedArt = span(progress, .82, .96);
+      const light = span(progress, .8, .95);
       const potFocus = span(progress, .16, .38) * (1 - span(progress, .55, .7));
       const compact = window.innerWidth <= 700;
       const depth = compact ? .55 : 1;
@@ -114,7 +114,7 @@ export function HomeStory() {
         const scaleX = 1 + (targetScaleX - 1) * mount;
         const scaleY = 1 + (targetScaleY - 1) * mount;
         billboardFrameRef.current.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) perspective(1100px) rotateY(${(-34 * turn).toFixed(1)}deg) rotateZ(${(-2 * (1 - mount) + 5 * turn).toFixed(1)}deg) scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
-        billboardFrameRef.current.style.opacity = String(1 - span(progress, .72, .8));
+        billboardFrameRef.current.style.opacity = String(1 - span(progress, .87, .96));
       }
       if (billboardRef.current) {
         billboardRef.current.style.filter = `brightness(${(.42 + mount * .58).toFixed(3)}) saturate(${(.68 + mount * .32).toFixed(3)})`;
@@ -125,35 +125,31 @@ export function HomeStory() {
       stage.style.setProperty('--story-art-scale', (1.08 + potFocus * .085 - mount * .055).toFixed(3));
       stage.style.setProperty('--story-art-x', `${(-2 + potFocus * 3 + mount * 1.5).toFixed(2)}%`);
       stage.style.setProperty('--story-art-y', `${(potFocus * -1.8 + mount * 1.2).toFixed(2)}%`);
-      stage.style.setProperty('--story-sweep-x', `${(-190 + span(progress, .65, .81) * 570).toFixed(1)}%`);
+      stage.style.setProperty('--story-sweep-x', `${(-190 + span(progress, .82, .96) * 570).toFixed(1)}%`);
       stage.style.setProperty('--story-sweep-opacity', (mount * .48).toFixed(3));
-      stage.style.setProperty('--story-conduit', (span(progress, .65, .78) * (1 - reality)).toFixed(3));
       stage.style.setProperty('--story-city-y', `${(potFocus * 13 * depth).toFixed(1)}px`);
       stage.style.setProperty('--story-pot-aura', (reveal * .22 + light * .42).toFixed(3));
       stage.style.setProperty('--story-light', light.toFixed(3));
-      stage.style.setProperty('--story-fans', (reveal * (1 - span(progress, .54, .63))).toFixed(3));
-      stage.style.setProperty('--story-activity', (span(progress, .31, .41) * (1 - span(progress, .64, .72))).toFixed(3));
-      stage.style.setProperty('--story-usdc', span(progress, .46, .56).toFixed(3));
+      stage.style.setProperty('--story-activity', (span(progress, .31, .41) * (1 - span(progress, .62, .72))).toFixed(3));
       if (currencyRef.current) {
-        const emphasis = span(progress, .46, .56) * (1 - span(progress, .72, .83));
+        const emphasis = span(progress, .46, .56) * (1 - span(progress, .7, .82));
         currencyRef.current.style.opacity = String(.62 + .38 * emphasis);
         currencyRef.current.style.transform = `scale(${(1 + .12 * emphasis).toFixed(3)})`;
       }
-      stage.style.setProperty('--story-success', (span(progress, .70, .78) * (1 - span(progress, .82, .87))).toFixed(3));
-      stage.style.setProperty('--story-refund', span(progress, .83, .93).toFixed(3));
+      stage.style.setProperty('--story-success', (span(progress, .71, .8) * (1 - span(progress, .87, .96))).toFixed(3));
+      stage.style.setProperty('--story-safeguard', (span(progress, .47, .54) * (1 - span(progress, .64, .71))).toFixed(3));
       stage.style.setProperty('--story-cue', (1 - span(progress, .09, .15)).toFixed(3));
       if (potRef.current) {
-        const cardPresence = Math.max(1 - span(progress, .69, .8), span(progress, .83, .89));
+        const cardPresence = 1 - span(progress, .77, .92);
         potRef.current.style.opacity = String(span(progress, .17, .28) * cardPresence);
         const entry = span(progress, .18, .32);
-        const rise = ((1 - entry) * 54 - potFocus * 19 + span(progress, .69, .8) * 65 - span(progress, .83, .89) * 65) * depth;
+        const rise = ((1 - entry) * 54 - potFocus * 19 + span(progress, .77, .92) * 65) * depth;
         const scale = .94 + entry * .06 + potFocus * (compact ? .025 : .09);
         potRef.current.style.transform = `translate3d(0, ${rise.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
       }
 
-      const alternate = progress >= .86;
-      const amount = alternate ? 2040 : progress < .20 ? 185 : progress >= .64 ? 3000 : Math.round(185 + 2815 * span(progress, .20, .64));
-      const supporters = alternate ? 291 : Math.round(26 + 402 * span(progress, .18, .64));
+      const amount = progress < .20 ? 185 : progress >= .72 ? 3000 : Math.round(185 + 2815 * span(progress, .20, .72));
+      const supporters = Math.round(26 + 402 * span(progress, .18, .72));
       const percentage = Math.round(amount / 30);
       if (amount !== previousAmount) {
         previousAmount = amount;
@@ -165,18 +161,17 @@ export function HomeStory() {
         previousFans = supporters;
         if (supporterRef.current) supporterRef.current.textContent = String(supporters);
       }
-      if (potStatusRef.current) potStatusRef.current.textContent = alternate ? 'GOAL MISSED · REFUNDS OPEN' : amount === 3000 ? 'GOAL REACHED · AWAITING REVIEW' : 'FUNDING EXAMPLE';
-      stage.dataset.outcome = alternate ? 'refund' : amount === 3000 ? 'funded' : 'funding';
+      if (potStatusRef.current) potStatusRef.current.textContent = amount === 3000 ? 'GOAL REACHED · AWAITING REVIEW' : 'FUNDING EXAMPLE';
+      stage.dataset.outcome = amount === 3000 ? 'funded' : 'funding';
 
       const arrival = span(progress, .18, .37);
-      const departure = span(progress, .84, .89);
       fanRefs.current.forEach((fan, index) => {
         if (!fan) return;
         const offset = fans[index];
         const stagger = clamp((arrival - index * .075) / .55);
-        const move = departure > 0 ? departure : 1 - stagger;
-        fan.style.transform = `translate3d(${Math.round(offset.x * worldWidth * move)}px, ${Math.round(offset.y * worldHeight * move)}px, 0) scale(${(0.85 + .15 * (departure > 0 ? departure : 1 - stagger)).toFixed(3)})`;
-        fan.style.opacity = String(departure > 0 ? Math.min(1, departure * 2) : Math.min(1, span(progress, .15 + index * .012, .24 + index * .012)) * (1 - span(progress, .51, .62)));
+        const move = 1 - stagger;
+        fan.style.transform = `translate3d(${Math.round(offset.x * worldWidth * move)}px, ${Math.round(offset.y * worldHeight * move)}px, 0) scale(${(0.85 + .15 * move).toFixed(3)})`;
+        fan.style.opacity = String(Math.min(1, span(progress, .15 + index * .012, .24 + index * .012)) * (1 - span(progress, .51, .62)));
       });
     }
 
@@ -212,12 +207,11 @@ export function HomeStory() {
             <div className="story-billboard" ref={billboardFrameRef}><div className="story-billboard-screen" ref={billboardRef}><Image src="/arc-demo/ad-artwork-idol-v2.jpg" alt="" fill priority sizes="(max-width: 700px) 85vw, 46vw" /></div><span className="story-billboard-caption">LUMI · BIRTHDAY LIGHTS</span></div>
             <div className="story-billboard-pole" />
             <div className="story-billboard-light" />
-            <div className="story-conduit" />
-            <div className="story-fan-field">{fans.map((fan, index) => <div className={`story-fan story-fan-${fan.color}`} key={fan.name} ref={(node) => { fanRefs.current[index] = node; }}><span className="story-fan-avatar">{fan.initials}</span><span className="story-fan-label">{fan.name}<strong className="story-fan-give">+${fan.amount}</strong><strong className="story-fan-claim">Claim ${fan.amount}</strong></span></div>)}</div>
+            <div className="story-fan-field">{fans.map((fan, index) => <div className={`story-fan story-fan-${fan.color}`} key={fan.name} ref={(node) => { fanRefs.current[index] = node; }}><span className="story-fan-avatar">{fan.initials}</span><span className="story-fan-label">{fan.name}<strong>+${fan.amount}</strong></span></div>)}</div>
             <div className="story-pot" ref={potRef} style={{ opacity: 0 }}><div className="story-pot-top"><span className="story-pot-logo"><Heart size={15} fill="currentColor" /> FanPot</span><span className="story-pot-status" ref={potStatusRef}>FUNDING EXAMPLE</span></div><span className="story-pot-caption">LUMI birthday screen</span><div className="story-pot-amount"><strong ref={balanceRef}>$185</strong><span>of $3,000</span></div><div className="story-pot-meter"><span ref={meterRef} style={{ width: '6%' }} /></div><div className="story-pot-bottom"><span><strong ref={percentRef}>6%</strong> funded</span><span><strong ref={supporterRef}>26</strong> fans</span></div><div className="story-pot-currency">FUNDED IN <strong ref={currencyRef}>USDC</strong></div></div>
             <div className="story-activity"><span>RECENT SUPPORT</span><div><i className="story-activity-dot"/>Mina contributed <strong>$25</strong></div><div><i className="story-activity-dot alt"/>Alex contributed <strong>$10</strong></div><div><i className="story-activity-dot third"/>Anonymous contributed <strong>$5</strong></div></div>
             <div className="story-outcome"><span>GOAL REACHED</span><strong>$3,000 / $3,000</strong><small>Next: organizer request + reviewer approval</small></div>
-            <div className="story-refund"><RotateCcw size={17}/><div><strong>Another outcome: goal missed</strong><span>USDC becomes claimable after finalization.</span></div></div>
+            <div className="story-safeguard"><RotateCcw size={17}/><div><strong>If the goal is missed</strong><span>Fans claim USDC after finalization.</span></div></div>
           </div>
         </div>
         <div className="story-bottom-bar"><span className="story-scroll-cue"><ArrowDown size={16}/> SCROLL TO SEE HOW IT WORKS</span><span className="story-step"><span ref={sceneNumberRef}>01</span> / 06</span><span className="story-progress"><span ref={progressRef} /></span></div>
