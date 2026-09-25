@@ -4,7 +4,7 @@ import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 const file = '.demo/keys.json';
 if (existsSync(file)) throw Error(`${file} already exists; refusing to replace testnet wallets`);
 mkdirSync('.demo', { recursive: true });
-const roles = ['organizer', 'reviewer', 'fanA', 'fanB', 'adVendor', 'printVendor'];
+const roles = ['organizer', 'reviewer', 'fanA', 'fanB', 'fanC', 'fanD', 'adVendor', 'printVendor', 'cafeVendor'];
 const keys = Object.fromEntries(roles.map((role) => {
   const privateKey = generatePrivateKey();
   return [role, { address: privateKeyToAccount(privateKey).address, privateKey }];

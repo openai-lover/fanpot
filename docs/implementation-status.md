@@ -2,7 +2,7 @@
 
 2026-09-21: completed the first local implementation milestone requested by the user. The full implementation handoff remains the acceptance standard. This is not a completed MVP.
 
-2026-09-25: added two explicitly fictional Arc Testnet campaigns, an on-chain readout, and a MetaMask contribution path for one funding campaign. Details and transaction links: [Arc Testnet demo](arc-testnet-demo.md). This is still not a completed MVP or Mainnet proof.
+2026-09-25: added four explicitly fictional Arc Testnet campaigns, an on-chain readout, and a MetaMask contribution path for one funding campaign. The scenarios cover live funding, settled spending, skipped budget, cancellation, and refunds. Details and transaction links: [Arc Testnet demo](arc-testnet-demo.md). This is still not a completed MVP or Mainnet proof; [grant eligibility remains unmet](grant-readiness.md).
 
 | Handoff area | State |
 |---|---|

@@ -19,6 +19,20 @@
       "rulesHash": "0x23c18936e91db363c751473b085392e19c068725994fa5544c03c8d13c6f89df",
       "draftRef": "0x8bd9ad4f665ed42cd16a6bde84138fceccf2e4328514d5e07255f03f66c752a0",
       "deadline": 1791530889
+    },
+    "cafe": {
+      "slug": "lumi-birthday-cafe-demo",
+      "address": "0x5142b33c63657c4e4AD3402984b0e0e45A68b5B9",
+      "rulesHash": "0x9192f9a38c6f88566fd91cebab13c78a399e017b413c2bea43d821c91871356f",
+      "draftRef": "0x3f86e7e06e7943e5deeee3f236eeef77df10e3b06c4a6f5e86e54b575a346470",
+      "deadline": 1791532275
+    },
+    "cancelled": {
+      "slug": "lumi-bus-shelter-cancelled-demo",
+      "address": "0x1db5f0a7eda9493e6F8772d28c3e5c47148aFA38",
+      "rulesHash": "0x820d273c25e68e4f6fbe867d9009e6ca5f92f5ffc8d73e9f1b8668a80145d939",
+      "draftRef": "0x57f16bdfd2248a3755f1b0654f9e5de21b7c119c338f1850eaa41a462008cf66",
+      "deadline": 1791532338
     }
   },
   "actors": {
@@ -27,7 +41,10 @@
     "fanA": "0xf53a15Ea07E503bCe1bE42A27637084243268Ef3",
     "fanB": "0x9E1e5d395BB327b1B1F0B042CA2e457138f1eC10",
     "adVendor": "0x014308F3dCEc8FF7a979f203C5Fd01A0287fD4E5",
-    "printVendor": "0xBe9f0a07396f8C1a8a3bAD454085b3F18fcFA726"
+    "printVendor": "0xBe9f0a07396f8C1a8a3bAD454085b3F18fcFA726",
+    "fanC": "0xbD72B569af06D5B976C9fe943b3C182233b71B2f",
+    "fanD": "0x2D177456296377cf7247bCfE70f52d7eF0794231",
+    "cafeVendor": "0x3fBD5310aE18526a9532CCa8Ee29abF94d416E7B"
   },
   "transactions": {
     "deploy-factory": "0x79d150fdaad4f0af78c38e61de117acbe228733eb370f35e3aaa7f3a9fe0066e",
@@ -55,6 +72,31 @@
     "pay-merch-display": "0x23be18ba09e59a3e376395355f3d6d593cefcfa81aa1f1b5e5f6226d73746bce",
     "settle-merch": "0x4644c9a7714d53dc241df7e360d44762b679c36e90a604223966df52aa55660d",
     "refund-merch-fan-a": "0x0702da6d3c5450bac27cb575c90f8f3a794f0a21e30dfd5724a9353d6ca1d35b",
-    "refund-merch-fan-b": "0x521375db4c76f0a933df9f85b734dbf255bfc831ff976f6768dbce4cdceb0aae"
+    "refund-merch-fan-b": "0x521375db4c76f0a933df9f85b734dbf255bfc831ff976f6768dbce4cdceb0aae",
+    "faucet-fan-c": "0xa0e9772752c6b6b184ae70958089ade482dd4b4af6337634181c06fe134bbb01",
+    "seed-fan-d": "0xab8fdbe4c93b0d8241be7b13e2a2f4854e1cc6372935e98f96615dc2d0cf08bf",
+    "create-cafe": "0x0f31e4dd099e71c75e8c8182fcf072b8e360cba588c7ae3a6f263ebb0fac1a5a",
+    "activate-cafe": "0x2e5a2ddddb84e4105e9c8def1486a05cef933bf129958b560145725c29ee5d1c",
+    "approve-cafe-fanC": "0x5b846a1cfb4149aa7bbdaba0830407f58d2acc6732464685d47210ce6d9ce351",
+    "contribute-cafe-fanC": "0xdd1d5f22db6f14bc42d4d9b93bf71df9d0418e3c6a2337fc4bd8a333298f3f29",
+    "approve-cafe-fanD": "0x532641d69110aae470132a62b4300f19d94336ba13dee7ecdbbdf302ada11e69",
+    "contribute-cafe-fanD": "0x2159a264a8fcbd2de2ff3195ddbba796dec8df5657a2f07b7f32836f9b8cfee9",
+    "request-cafe-print": "0xe079717d30cd7e11389a493e27718c71598e4fc616f90c46d360bb390e500dad",
+    "pay-cafe-print": "0xb29deb1fdbde3ccbf87ce3b595f22add658426609551bb722508fbe659d1f0d2",
+    "request-cafe-display": "0xf171c1a6fe95f2099dea993400069b637c76b5a5b0638411460377c86709e1a0",
+    "pay-cafe-display": "0xd73c1551064ab8b13896d0e40d93b973e052aec9dc9357b0a88eccd182cd2c52",
+    "skip-cafe-signage": "0xb55c59e4e3f766725a2c49fbdefd47dd077ce6d4791b066227a8a5cff5e0ca2e",
+    "settle-cafe": "0x06b717026c500697a5aa52f3fe873aaba22ba30bda963efb50573e74361e99d0",
+    "refund-cafe-fan-c": "0xf03c8027f689ee0fb717d168b1439966d5da401a599e06cb6db30a967ef0745c",
+    "refund-cafe-fan-d": "0x0e92cddf70eff00f51c2a3cef59fbdb73dd0a17bc46974f0ff1e2007b5a09ede",
+    "create-cancelled": "0xe5dd215cda7d339d1f835bc19ea38f5ce47fb51c7a67d96c6cc7f156c850a483",
+    "activate-cancelled": "0x620df330bbd36289fcdbbbdaf81ad04bdf5bc835d784acc159803ba91ef38bb3",
+    "approve-cancelled-fanC": "0xd8ca5eaf1a8e40dd23cd4adaa8ad07187719ef77e3e35638206a22a916de5dcf",
+    "contribute-cancelled-fanC": "0xc3a2b3b2e58ab8c8df1d879a78b90fe3936439f49237326fcd2d26296ebe7cc4",
+    "approve-cancelled-fanD": "0xd8e9bea083e04af2bda4c300da09661351f6678dd7dbf62d7517dd4be756d0b8",
+    "contribute-cancelled-fanD": "0xb86922f59f9630ccf6b9d8e34079ba9ea734505c9e51793fb63c9c6aba42047e",
+    "stop-cancelled": "0x9b1959b79b47555b161d1490b99bb6bdfaa84054d95be1affc48e4092032238e",
+    "refund-cancelled-fan-c": "0xdbc4ce5ee4e01fae05fc51f02708fa37cdc8864c7cde4e516d639b781073ecdc",
+    "refund-cancelled-fan-d": "0x50d193bcaeb77ba6b32047910b8a4619c3b1b9099856ccdde04b69ad32abc5cc"
   }
 }

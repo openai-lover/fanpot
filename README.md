@@ -8,7 +8,8 @@ K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. **현재 단�
 
 - `docs/reference/FanPot_Codex_Implementation_Handoff_KO.md`: 구현 기준.
 - `docs/reference/FanPot_Product_and_Build_Spec_KO.md`: 배경·제품 방향.
-- Arc Testnet의 가상 캠페인 두 개와 시연 지갑 거래만 실행했습니다. Mainnet 배포·실제 상품 발주·공모전 제출은 실행하지 않았습니다.
+- `docs/grant-readiness.md`: Arc Microgrants 공식 자격 요건과 현재 미충족 항목.
+- Arc Testnet의 가상 캠페인 네 개와 시연 지갑 거래만 실행했습니다. Mainnet 배포·실제 상품 발주·공모전 제출은 실행하지 않았습니다.
 
 ## 이번에 구현한 것
 
@@ -20,7 +21,7 @@ K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. **현재 단�
 - 비례 환불, 무기한 미청구 권리, 0원 claim, rounding dust 유지, 직접 송금과 장부 분리.
 - SafeERC20, storage ReentrancyGuard, CEI, Math.mulDiv, 입금 delta 검사.
 - bigint 금액·gas 계산, canonical rules hash, 공개 개인정보 projection, 기여 receipt 검증.
-- Next.js 영·한 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 두 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다.
+- Next.js 영·한 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다.
 - 설정값·실제 배포 증거가 없는 상태에서 production 검사를 통과하지 못하도록 차단.
 
 ## 로컬 실행
@@ -46,9 +47,9 @@ pnpm dev
 
 ### Arc Testnet 시연
 
-`http://127.0.0.1:3000/arc-demo`에서 [광고 캠페인](https://explorer.testnet.arc.io/address/0xD83755bC9cb2F1a8CF4f979721c63494071a13c4)과 [굿즈 캠페인](https://explorer.testnet.arc.io/address/0x094e6fF64C9190b7178418bA6B25a10DDFB076B0)의 체인 상태를 확인합니다. 광고 캠페인은 7/10 USDC 모금 중이고, 굿즈 캠페인은 10 USDC를 모아 시연 업체 지갑에 9 USDC를 지급하고 후원자에게 1 USDC를 환급했습니다. 후원자는 실제 팬이 아니라 이 프로젝트의 테스트 지갑 두 개입니다. 지급은 상품 구매나 광고 게재가 아닙니다. 금액은 소규모 테스트용이며 실제 견적이 아닙니다. 거래 해시와 공개 주소는 `apps/web/data/arc-testnet-demo.json`에 있습니다.
+`http://127.0.0.1:3000/arc-demo`에서 네 가상 캠페인의 체인 상태를 확인합니다. 광고 캠페인은 7/10 USDC 모금 중이고, 굿즈 캠페인은 10 모금 → 9 지급 → 1 환급, 카페 캠페인은 10 모금 → 8 지급·선택 예산 생략 → 2 환급, 중단된 광고 캠페인은 5 모금 → 5 전액 환급을 시연합니다. 후원자는 실제 팬이 아니라 이 프로젝트가 통제하는 테스트 지갑입니다. 지급은 상품 구매나 광고 게재가 아닙니다. 금액은 소규모 테스트용이며 실제 견적이 아닙니다. 거래 해시와 공개 주소는 `apps/web/data/arc-testnet-demo.json`에 있습니다.
 
-재현하려면 `node scripts/create-demo-wallets.mjs`로 Git에서 제외된 `.demo/keys.json`을 만들고 시연 organizer 주소에 Arc Testnet faucet USDC를 받은 뒤 `node scripts/compile-demo.mjs`와 `node scripts/deploy-testnet-demo.mjs`를 실행합니다. 시연 스크립트는 운영자·검토자·가상 후원자·가상 공급자 지갑을 모두 통제합니다. 기밀 키나 시드 문구를 Git, 채팅, 브라우저에 넣지 마세요. 기존 시연은 [상세 기록](docs/arc-testnet-demo.md)에 설명했습니다.
+재현하려면 `node scripts/create-demo-wallets.mjs`로 Git에서 제외된 `.demo/keys.json`을 만들고 시연 organizer와 fanC 주소에 각각 Arc Testnet faucet USDC를 받은 뒤 `node scripts/compile-demo.mjs`, `node scripts/deploy-testnet-demo.mjs`, `node scripts/deploy-extra-testnet-demo.mjs`를 순서대로 실행합니다. 시연 스크립트는 운영자·검토자·가상 후원자·가상 공급자 지갑을 모두 통제합니다. 기밀 키나 시드 문구를 Git, 채팅, 브라우저에 넣지 마세요. 기존 시연은 [상세 기록](docs/arc-testnet-demo.md)에 설명했습니다.
 
 `pnpm setup:contracts`는 forge-std v1.9.7의 exact commit을 검사합니다. Windows에서는 공식 solc-bin의 Solidity 0.8.30 바이너리를 SHA-256으로 검증해 `.tools/`에 설치합니다. 다른 플랫폼은 Foundry가 `foundry.toml`의 0.8.30을 사용합니다. npm으로 고정한 Forge 1.7.1을 `pnpm test:contracts`가 실행합니다. 시스템 Forge를 쓰면 `cd packages/contracts && forge test`도 가능합니다(Windows solc 경로 별도 지정 가능).
 
