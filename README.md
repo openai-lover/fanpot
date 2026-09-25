@@ -1,5 +1,17 @@
 # FanPot
 
+## For Arc Microgrants reviewers
+
+FanPot is an open-source fan campaign escrow proof of concept for Arc. Supporters fund a fixed USDC goal; recipients, payout caps, deadlines, and a rules hash are committed when a campaign is created. A separate reviewer must approve a matching payout request. Failed or settled campaigns expose claimable refunds. The contracts are non-upgradeable and have no platform fee or administrator sweep.
+
+- [Public app](https://fanpot-web-one.vercel.app/) · [Arc Mainnet proof](https://fanpot-web-one.vercel.app/mainnet) · [Arc Testnet scenarios](https://fanpot-web-one.vercel.app/arc-demo)
+- [Verified Arc Mainnet factory deployment](https://explorer.arc.io/tx/0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892) · [factory contract](https://explorer.arc.io/address/0x8D8a8bEdE436bfF36E70d261E2041dA6F6777Ab6) · `pnpm verify:factory`
+- **Current gate:** No Arc Mainnet campaign or contribution is published yet. MetaMask marks the site unsafe; all wallet actions are paused pending [official review](https://github.com/MetaMask/eth-phishing-detect/issues/296876). This project has **not** been submitted to the grant program.
+
+All artists, fans, vendors, and campaign stories shown here are fictional demonstrations. Images are AI-generated concepts. The project has not booked an advertisement, manufactured goods, or passed an independent smart-contract audit. The Testnet transactions do not stand in for Mainnet proof. See [grant readiness](docs/grant-readiness.md) and the [submission draft](docs/microgrant-submission.md).
+
+## 개발 기록 (한국어)
+
 좋아하는 마음을 모아, 약속한 프로젝트를 함께.
 
 K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. [공개 데모](https://fanpot-web-one.vercel.app/)와 Arc Testnet 시연이 있습니다. Arc Mainnet에 팩토리 계약을 배포했지만, 캠페인 생성과 기여는 아직 없으며 실제 모금 서비스는 아닙니다.
