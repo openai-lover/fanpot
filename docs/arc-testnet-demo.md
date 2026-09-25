@@ -15,7 +15,7 @@ The [factory](https://explorer.testnet.arc.io/address/0xaab21a0879686b0385e095fb
 
 ## Visual concepts
 
-Five AI-generated images in `apps/web/public/arc-demo/` show what the fictional campaigns *could* make: a subway screen placement (`subway-display.jpg`), the display artwork (`ad-artwork.jpg`), a cupsleeve and photocard product mockup (`goods-mockup.jpg`), a possible café display (`cafe-concept.jpg`), and a bus shelter proposal (`bus-shelter-concept.jpg`). They were generated for this demo with the built-in image generation tool. The prompts specified a fictional LUMI identity, lavender and blush celestial graphics, and no real artist likeness, transit branding, or café branding. Every site placement is labelled as a concept mockup. These images are not proof of a completed order, installation, or event.
+The original five AI-generated images in `apps/web/public/arc-demo/` establish the subway, ad artwork, goods, café, and bus shelter concepts. Versioned `*-idol-v2.jpg` images add a consistent portrait of LUMI, an original fictional adult performer. `lumi-portrait-v2.jpg` is the identity portrait. All six new images were made with the built-in image generation tool: first a photorealistic fictional adult studio portrait with no real celebrity resemblance; then matching lavender birthday ad artwork; then precise edits placing that artwork in the subway screen and bus shelter lightbox and the same portrait on goods photocards and café display material. The source scenes and previous images remain in the directory. The site visibly identifies LUMI as fictional and the images as AI-generated concepts. They are not real idol photos or proof of an order, installation, or event.
 
 ## How to reproduce with new testnet wallets
 
