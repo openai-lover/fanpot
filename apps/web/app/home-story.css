@@ -40,3 +40,5 @@
 .story-billboard{top:15%;right:12%;width:58%}
 .story-billboard-pole{right:39%}
 @media(max-width:700px){.story-billboard{top:5%;right:22%;width:56%}.story-billboard-pole{right:48%}}
+.story-scene-copy:last-child p{max-width:320px}
+.story-real-fill{opacity:var(--story-real-art,0)}
