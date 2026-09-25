@@ -32,6 +32,7 @@ function visible(value: number, start: number, end: number, fade = 0.045) {
 export function HomeStory() {
   const trackRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const billboardFrameRef = useRef<HTMLDivElement>(null);
   const billboardRef = useRef<HTMLDivElement>(null);
   const potRef = useRef<HTMLDivElement>(null);
   const balanceRef = useRef<HTMLElement>(null);
@@ -84,10 +85,29 @@ export function HomeStory() {
 
       const reveal = span(progress, .14, .29);
       const light = span(progress, .64, .78) * (1 - span(progress, .82, .94));
+      const potFocus = span(progress, .16, .38) * (1 - span(progress, .55, .7));
+      const payoff = span(progress, .63, .78) * (1 - span(progress, .82, .93));
+      const exit = span(progress, .83, .94);
+      const compact = window.innerWidth <= 700;
+      const depth = compact ? .55 : 1;
+      if (billboardFrameRef.current) {
+        const scale = 1.025 - potFocus * (compact ? .078 : .13) + payoff * (compact ? .075 : .16) - exit * .025;
+        const x = (potFocus * 22 - payoff * 12 + exit * 8) * depth;
+        const y = (potFocus * -28 + payoff * 18 - exit * 7) * depth;
+        const angle = -2 - potFocus * 1.3 + payoff * 1.7;
+        billboardFrameRef.current.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${angle.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+      }
       if (billboardRef.current) {
         billboardRef.current.style.filter = `brightness(${(.42 + light * .58).toFixed(3)}) saturate(${(.68 + light * .32).toFixed(3)})`;
-        billboardRef.current.style.transform = `scale(${(1.045 - light * .045).toFixed(3)})`;
       }
+      stage.style.setProperty('--story-art-scale', (1.08 + potFocus * .085 - payoff * .055).toFixed(3));
+      stage.style.setProperty('--story-art-x', `${(-2 + potFocus * 3 + payoff * 1.5).toFixed(2)}%`);
+      stage.style.setProperty('--story-art-y', `${(potFocus * -1.8 + payoff * 1.2).toFixed(2)}%`);
+      stage.style.setProperty('--story-sweep-x', `${(-190 + span(progress, .65, .81) * 570).toFixed(1)}%`);
+      stage.style.setProperty('--story-sweep-opacity', (payoff * .48).toFixed(3));
+      stage.style.setProperty('--story-conduit', (span(progress, .65, .78) * (1 - span(progress, .82, .92))).toFixed(3));
+      stage.style.setProperty('--story-city-y', `${((potFocus * 13 - payoff * 20) * depth).toFixed(1)}px`);
+      stage.style.setProperty('--story-pot-aura', (reveal * .22 + payoff * .42).toFixed(3));
       stage.style.setProperty('--story-light', light.toFixed(3));
       stage.style.setProperty('--story-fans', (reveal * (1 - span(progress, .54, .63))).toFixed(3));
       stage.style.setProperty('--story-activity', (span(progress, .31, .41) * (1 - span(progress, .64, .72))).toFixed(3));
@@ -102,7 +122,10 @@ export function HomeStory() {
       stage.style.setProperty('--story-cue', (1 - span(progress, .09, .15)).toFixed(3));
       if (potRef.current) {
         potRef.current.style.opacity = String(span(progress, .17, .28));
-        potRef.current.style.transform = `translate3d(0, ${(1 - span(progress, .18, .33)) * 34}px, 0) scale(${(.93 + span(progress, .18, .33) * .07).toFixed(3)})`;
+        const entry = span(progress, .18, .32);
+        const rise = ((1 - entry) * 54 - potFocus * 19 + exit * 10) * depth;
+        const scale = .94 + entry * .06 + potFocus * (compact ? .025 : .09) + payoff * .02 - exit * .02;
+        potRef.current.style.transform = `translate3d(0, ${rise.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
       }
 
       const alternate = progress >= .86;
@@ -159,9 +182,10 @@ export function HomeStory() {
         <div className="story-inner">
           <div className="story-copy-stack">{sceneCopy.map((scene, index) => <div className="story-scene-copy" data-story-scene key={scene.kicker} style={{ opacity: index === 0 ? 1 : 0 }}><span className="story-kicker">{scene.kicker}</span>{index === 0 ? <h1>{scene.title}</h1> : <h2>{scene.title}</h2>}<p>{scene.body}</p></div>)}</div>
           <div className="story-world">
-            <div className="story-billboard"><div className="story-billboard-screen" ref={billboardRef}><Image src="/arc-demo/ad-artwork-idol-v2.jpg" alt="" fill priority sizes="(max-width: 700px) 85vw, 46vw" /></div><span className="story-billboard-caption">LUMI · BIRTHDAY LIGHTS</span></div>
+            <div className="story-billboard" ref={billboardFrameRef}><div className="story-billboard-screen" ref={billboardRef}><Image src="/arc-demo/ad-artwork-idol-v2.jpg" alt="" fill priority sizes="(max-width: 700px) 85vw, 46vw" /></div><span className="story-billboard-caption">LUMI · BIRTHDAY LIGHTS</span></div>
             <div className="story-billboard-pole" />
             <div className="story-billboard-light" />
+            <div className="story-conduit" />
             <div className="story-fan-field">{fans.map((fan, index) => <div className={`story-fan story-fan-${fan.color}`} key={fan.name} ref={(node) => { fanRefs.current[index] = node; }}><span className="story-fan-avatar">{fan.initials}</span><span className="story-fan-label">{fan.name}<strong className="story-fan-give">+${fan.amount}</strong><strong className="story-fan-claim">Claim ${fan.amount}</strong></span></div>)}</div>
             <div className="story-pot" ref={potRef} style={{ opacity: 0 }}><div className="story-pot-top"><span className="story-pot-logo"><Heart size={15} fill="currentColor" /> FanPot</span><span className="story-pot-status" ref={potStatusRef}>FUNDING EXAMPLE</span></div><span className="story-pot-caption">LUMI birthday screen</span><div className="story-pot-amount"><strong ref={balanceRef}>$185</strong><span>of $3,000</span></div><div className="story-pot-meter"><span ref={meterRef} style={{ width: '6%' }} /></div><div className="story-pot-bottom"><span><strong ref={percentRef}>6%</strong> funded</span><span><strong ref={supporterRef}>26</strong> fans</span></div><div className="story-pot-currency">FUNDED IN <strong ref={currencyRef}>USDC</strong></div></div>
             <div className="story-activity"><span>RECENT SUPPORT</span><div><i className="story-activity-dot"/>Mina contributed <strong>$25</strong></div><div><i className="story-activity-dot alt"/>Alex contributed <strong>$10</strong></div><div><i className="story-activity-dot third"/>Anonymous contributed <strong>$5</strong></div></div>

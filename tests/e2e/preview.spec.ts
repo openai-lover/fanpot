@@ -27,17 +27,21 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
   await scrub(.29);
   await expect(page.locator('.story-step')).toContainText('02 / 06');
   const earlyAmount = await page.locator('.story-pot-amount strong').textContent();
+  const earlyFrame = await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform);
   await scrub(.35);
   await expect.poll(() => page.locator('.story-scene-copy').evaluateAll((scenes) => scenes.filter((scene) => Number(getComputedStyle(scene).opacity) > .05).length)).toBe(1);
   await scrub(.76);
   await expect(page.locator('.story-step')).toContainText('05 / 06');
   await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
+  await expect.poll(() => page.locator('.story-conduit').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.5);
+  expect(await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform)).not.toBe(earlyFrame);
   await scrub(.94);
   await expect(page.locator('.story-step')).toContainText('06 / 06');
   await expect(page.locator('.story-pot-status')).toHaveText('GOAL MISSED · REFUNDS OPEN');
   await scrub(.29);
   await expect(page.locator('.story-step')).toContainText('02 / 06');
   await expect(page.locator('.story-pot-amount strong')).toHaveText(earlyAmount ?? '');
+  await expect.poll(() => page.locator('.story-conduit').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
