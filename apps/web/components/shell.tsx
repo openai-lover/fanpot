@@ -6,6 +6,7 @@ import { ArrowUpRight, Heart, LockKeyhole, ClipboardCheck, RotateCcw, ArrowLeft,
 import en from '../messages/en.json';
 import mainnetDeployment from '../data/arc-mainnet-deployment.json';
 const I18n = createContext({ messages: en });
+const hasMainnetFactory = Boolean(mainnetDeployment.factory);
 const mainnetLive = Boolean(mainnetDeployment.factory && mainnetDeployment.campaign);
 export function Shell({ children }: { children: React.ReactNode }) {
   return <I18n.Provider value={{ messages: en }}>
@@ -13,7 +14,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <header className="header"><div className="nav-wrap"><Link className="brand" href="/" aria-label="FanPot home"><Logo /></Link>
       <nav aria-label="Main navigation"><Link href="/#projects">Projects</Link><Link href="/mainnet">Arc Mainnet</Link><Link href="/arc-demo">Testnet demo</Link></nav></div></header>
     {children}
-    <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>{mainnetLive ? 'Arc Mainnet proof of concept · Fictional artist' : 'Arc Testnet demo · Fictional artists and campaigns'}</p></div><div className="footer-links"><Link href="/help">Help</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div><span className="copyright">© 2026 FanPot · {mainnetLive ? 'Onchain prototype' : 'Development preview'}</span></footer>
+    <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>{mainnetLive ? 'Arc Mainnet proof of concept · Fictional artist' : hasMainnetFactory ? 'Arc Mainnet factory · Arc Testnet demos' : 'Arc Testnet demo · Fictional artists and campaigns'}</p></div><div className="footer-links"><Link href="/help">Help</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div><span className="copyright">© 2026 FanPot · {mainnetLive ? 'Onchain prototype' : 'Development preview'}</span></footer>
   </I18n.Provider>;
 }
 function Logo() { return <Image src="/fanpot-logo.png" width={1312} height={1199} alt="" className="brand-logo" loading="eager" />; }
@@ -50,5 +51,6 @@ export function Information({ kind }: { kind: 'me' | 'proof' | 'help' | 'privacy
     terms: { title: 'Before you support', body: 'This is a small Arc Mainnet proof of concept with a fictional artist and simulated vendor. USDC contributions and network fees are real. Contributions may remain locked until campaign settlement. A funded goal does not mean an ad was booked or delivered. No platform fee is charged.' },
   };
   const content = mainnetLive ? liveCopy[kind] : undefined;
-  return <main id="main" tabIndex={-1} className="info-page"><span className="info-icon"><Heart size={30}/></span><h1>{content?.title ?? m[`${kind}Title` as keyof typeof m]}</h1><p>{content?.body ?? m[`${kind}Body` as keyof typeof m]}</p><Link href={mainnetLive && (kind === 'proof' || kind === 'me' || kind === 'help') ? '/mainnet' : '/'} className="outline-button">{mainnetLive && (kind === 'proof' || kind === 'me' || kind === 'help') ? 'Open Mainnet campaign' : m.back}<ArrowUpRight size={18}/></Link>{kind === 'help' && <RulesCard/>}</main>;
+  const linkToMainnet = (mainnetLive && (kind === 'proof' || kind === 'me' || kind === 'help')) || (kind === 'proof' && hasMainnetFactory);
+  return <main id="main" tabIndex={-1} className="info-page"><span className="info-icon"><Heart size={30}/></span><h1>{content?.title ?? m[`${kind}Title` as keyof typeof m]}</h1><p>{content?.body ?? m[`${kind}Body` as keyof typeof m]}</p><Link href={linkToMainnet ? '/mainnet' : '/'} className="outline-button">{linkToMainnet ? 'Open Mainnet proof' : m.back}<ArrowUpRight size={18}/></Link>{kind === 'help' && <RulesCard/>}</main>;
 }
