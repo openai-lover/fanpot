@@ -11,7 +11,7 @@ const sceneCopy = [
   { kicker: '03 / THE FANPOT', title: 'One pot. Clear progress.', body: 'See the goal, the amount raised, and the plan everyone is supporting.', detail: 'A sample FanPot shows the amount raised, a $3,000 goal, fan count, and recent support.' },
   { kicker: '04 / CLEAR RULES', title: 'One currency. Rules fans can see.', body: 'Fans contribute in USDC on Arc. If the goal is missed, supporters can claim their funds after the campaign is finalized.', detail: 'A refund requires a separate claim transaction; it is not automatic. The amounts shown here are illustrative.' },
   { kicker: '05 / THE GOAL', title: 'The goal opens the next step.', body: 'At $3,000, a capped payout still needs independent review before anyone arranges the ad.', detail: 'Reaching the goal does not book an ad or send funds to an organizer automatically.' },
-  { kicker: '06 / THE VISION', title: 'Picture it. Bigger.', body: 'From a small idea to a city-sized screen. This AI-generated placement is a concept; no ad has been booked.', detail: 'LUMI is a fictional artist and the large city billboard is an AI-generated concept.' },
+  { kicker: '06 / THE VISION', title: 'Dream bigger.', body: 'From a small idea to a city-sized screen. This AI-generated placement is a concept; no ad has been booked.', detail: 'LUMI is a fictional artist and the large city billboard is an AI-generated concept.' },
 ] as const;
 
 const fans = [
