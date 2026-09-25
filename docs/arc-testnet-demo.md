@@ -17,6 +17,8 @@ The [factory](https://explorer.testnet.arc.io/address/0xaab21a0879686b0385e095fb
 
 The original five AI-generated images in `apps/web/public/arc-demo/` establish the subway, ad artwork, goods, café, and bus shelter concepts. Versioned `*-idol-v2.jpg` images add a consistent portrait of LUMI, an original fictional adult performer. `lumi-portrait-v2.jpg` is the identity portrait. All six new images were made with the built-in image generation tool: first a photorealistic fictional adult studio portrait with no real celebrity resemblance; then matching lavender birthday ad artwork; then precise edits placing that artwork in the subway screen and bus shelter lightbox and the same portrait on goods photocards and café display material. The source scenes and previous images remain in the directory. The site visibly identifies LUMI as fictional and the images as AI-generated concepts. They are not real idol photos or proof of an order, installation, or event.
 
+The later `lumi-candid-v3.jpg` adds a different expression and full-body angle; `cafe-concept-candid-v3.jpg` places it on a new café poster. `vanta5-rooftop-concept-v1.jpg` and `vanta5-photobook-concept-v1.jpg` show five original fictional adult male performers in contrasting rooftop and daylight studio compositions. These four assets were also made with the built-in image generation tool. VANTA5 is a visual idea only: no VANTA5 campaign contract, contributions, or vendor transactions exist. The four existing testnet contracts remain LUMI examples, so the site does not attach their balances to the new group concept.
+
 ## How to reproduce with new testnet wallets
 
 1. Install dependencies with `pnpm install --frozen-lockfile --ignore-scripts`.

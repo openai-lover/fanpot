@@ -11,7 +11,7 @@
 | §15.7 canonical rules hash | Pure schema and hashing implemented; DB prepared transaction and chain binding pending |
 | §8 public projection | Pure helper implemented and tested; API/DB/RLS/cache boundary pending |
 | §15.9 gas and receipt | Pure gas guard and contribution log validation implemented; wallet state machine pending |
-| §4/7 UI | Responsive bilingual local preview plus a separate Arc Testnet page with live totals and a MetaMask contribution action |
+| §4/7 UI | Responsive English-only local preview with fictional solo and group visuals, plus an Arc Testnet page with live totals and a MetaMask contribution action |
 | §15.4 SQL / auth / indexing / APIs | Pending; health endpoint only |
 | Uploads / sanitized evidence | Pending |
 | Create / support / thanks / manage flows | Minimal testnet contribution path; full authenticated flows pending |
