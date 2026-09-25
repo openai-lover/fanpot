@@ -10,7 +10,7 @@ const sceneCopy = [
   { kicker: '02 / TOGETHER', title: 'Small contributions. One big moment.', body: 'A little from each fan moves the same plan forward.', detail: 'Illustrative fan contributions include $5, $10, $20 and $25.' },
   { kicker: '03 / THE FANPOT', title: 'One pot. Clear progress.', body: 'See the goal, the amount raised, and the plan everyone is supporting.', detail: 'A sample FanPot shows the amount raised, a $3,000 goal, fan count, and recent support.' },
   { kicker: '04 / ONE CURRENCY', title: 'A shared way to show up, wherever you are.', body: 'Fans contribute in USDC on Arc. The campaign holds the funds under fixed rules.', detail: 'The current live product remains a prototype; the numbers in this story are illustrative.' },
-  { kicker: '05 / THE GOAL', title: 'A funded idea is ready for its next step.', body: 'Reaching the goal opens the path to a reviewed, capped payout. An ad still needs to be arranged.', detail: 'The example reaches $3,000 of $3,000. A separate reviewer must approve a capped payout before it is sent.' },
+  { kicker: '05 / THE GOAL', title: 'A funded idea is ready for its next step.', body: 'See the placement concept come to life. A reviewed payout and a real ad booking would come next.', detail: 'The example reaches $3,000 of $3,000. This city placement is AI-generated, not booked. A separate reviewer must approve a capped payout before it is sent.' },
   { kicker: '06 / IF THE GOAL IS MISSED', title: 'Your part is still yours to claim.', body: 'After an unfunded campaign is finalized, supporters can claim their USDC back from the contract.', detail: 'In this alternate example, the campaign stops at $2,040 of $3,000. Refunds are claimable after finalization; they are not automatic.' },
 ] as const;
 
@@ -34,6 +34,8 @@ export function HomeStory() {
   const stageRef = useRef<HTMLDivElement>(null);
   const billboardFrameRef = useRef<HTMLDivElement>(null);
   const billboardRef = useRef<HTMLDivElement>(null);
+  const desktopTargetRef = useRef<SVGRectElement>(null);
+  const mobileTargetRef = useRef<SVGRectElement>(null);
   const potRef = useRef<HTMLDivElement>(null);
   const balanceRef = useRef<HTMLElement>(null);
   const supporterRef = useRef<HTMLElement>(null);
@@ -56,6 +58,10 @@ export function HomeStory() {
     let travel = Math.max(1, track.offsetHeight - viewHeight);
     let worldWidth = stage.querySelector<HTMLElement>('.story-world')?.offsetWidth ?? 700;
     let worldHeight = stage.querySelector<HTMLElement>('.story-world')?.offsetHeight ?? 650;
+    let targetX = 0;
+    let targetY = 0;
+    let targetScaleX = 1;
+    let targetScaleY = 1;
     let previousAmount = -1;
     let previousFans = -1;
     let previousScene = -1;
@@ -66,6 +72,16 @@ export function HomeStory() {
       travel = Math.max(1, track.offsetHeight - viewHeight);
       worldWidth = stage.querySelector<HTMLElement>('.story-world')?.offsetWidth ?? 700;
       worldHeight = stage.querySelector<HTMLElement>('.story-world')?.offsetHeight ?? 650;
+      const world = stage.querySelector<HTMLElement>('.story-world');
+      const board = billboardFrameRef.current;
+      const target = (window.innerWidth <= 700 ? mobileTargetRef.current : desktopTargetRef.current)?.getBoundingClientRect();
+      if (world && board && target) {
+        const origin = world.getBoundingClientRect();
+        targetX = target.left - origin.left - board.offsetLeft;
+        targetY = target.top - origin.top - board.offsetTop;
+        targetScaleX = target.width / board.offsetWidth;
+        targetScaleY = target.height / board.offsetHeight;
+      }
       schedule();
     }
 
@@ -84,30 +100,36 @@ export function HomeStory() {
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`;
 
       const reveal = span(progress, .14, .29);
+      const mount = span(progress, .48, .79);
+      const turn = Math.sin(mount * Math.PI);
+      const reality = span(progress, .5, .72);
+      const installedArt = span(progress, .7, .81) * (1 - span(progress, .83, .92));
       const light = span(progress, .64, .78) * (1 - span(progress, .82, .94));
       const potFocus = span(progress, .16, .38) * (1 - span(progress, .55, .7));
-      const payoff = span(progress, .63, .78) * (1 - span(progress, .82, .93));
-      const exit = span(progress, .83, .94);
       const compact = window.innerWidth <= 700;
       const depth = compact ? .55 : 1;
       if (billboardFrameRef.current) {
-        const scale = 1.025 - potFocus * (compact ? .078 : .13) + payoff * (compact ? .075 : .16) - exit * .025;
-        const x = (potFocus * 22 - payoff * 12 + exit * 8) * depth;
-        const y = (potFocus * -28 + payoff * 18 - exit * 7) * depth;
-        const angle = -2 - potFocus * 1.3 + payoff * 1.7;
-        billboardFrameRef.current.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${angle.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        const x = targetX * mount;
+        const y = targetY * mount - turn * (compact ? 20 : 38);
+        const scaleX = 1 + (targetScaleX - 1) * mount;
+        const scaleY = 1 + (targetScaleY - 1) * mount;
+        billboardFrameRef.current.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) perspective(1100px) rotateY(${(-34 * turn).toFixed(1)}deg) rotateZ(${(-2 * (1 - mount) + 5 * turn).toFixed(1)}deg) scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
+        billboardFrameRef.current.style.opacity = String(1 - span(progress, .76, .83));
       }
       if (billboardRef.current) {
-        billboardRef.current.style.filter = `brightness(${(.42 + light * .58).toFixed(3)}) saturate(${(.68 + light * .32).toFixed(3)})`;
+        billboardRef.current.style.filter = `brightness(${(.42 + mount * .58).toFixed(3)}) saturate(${(.68 + mount * .32).toFixed(3)})`;
       }
-      stage.style.setProperty('--story-art-scale', (1.08 + potFocus * .085 - payoff * .055).toFixed(3));
-      stage.style.setProperty('--story-art-x', `${(-2 + potFocus * 3 + payoff * 1.5).toFixed(2)}%`);
-      stage.style.setProperty('--story-art-y', `${(potFocus * -1.8 + payoff * 1.2).toFixed(2)}%`);
+      stage.style.setProperty('--story-reality', reality.toFixed(3));
+      stage.style.setProperty('--story-concept', (1 - reality).toFixed(3));
+      stage.style.setProperty('--story-real-art', installedArt.toFixed(3));
+      stage.style.setProperty('--story-art-scale', (1.08 + potFocus * .085 - mount * .055).toFixed(3));
+      stage.style.setProperty('--story-art-x', `${(-2 + potFocus * 3 + mount * 1.5).toFixed(2)}%`);
+      stage.style.setProperty('--story-art-y', `${(potFocus * -1.8 + mount * 1.2).toFixed(2)}%`);
       stage.style.setProperty('--story-sweep-x', `${(-190 + span(progress, .65, .81) * 570).toFixed(1)}%`);
-      stage.style.setProperty('--story-sweep-opacity', (payoff * .48).toFixed(3));
+      stage.style.setProperty('--story-sweep-opacity', (mount * .48).toFixed(3));
       stage.style.setProperty('--story-conduit', (span(progress, .65, .78) * (1 - span(progress, .82, .92))).toFixed(3));
-      stage.style.setProperty('--story-city-y', `${((potFocus * 13 - payoff * 20) * depth).toFixed(1)}px`);
-      stage.style.setProperty('--story-pot-aura', (reveal * .22 + payoff * .42).toFixed(3));
+      stage.style.setProperty('--story-city-y', `${(potFocus * 13 * depth).toFixed(1)}px`);
+      stage.style.setProperty('--story-pot-aura', (reveal * .22 + light * .42).toFixed(3));
       stage.style.setProperty('--story-light', light.toFixed(3));
       stage.style.setProperty('--story-fans', (reveal * (1 - span(progress, .54, .63))).toFixed(3));
       stage.style.setProperty('--story-activity', (span(progress, .31, .41) * (1 - span(progress, .64, .72))).toFixed(3));
@@ -121,10 +143,11 @@ export function HomeStory() {
       stage.style.setProperty('--story-refund', span(progress, .83, .93).toFixed(3));
       stage.style.setProperty('--story-cue', (1 - span(progress, .09, .15)).toFixed(3));
       if (potRef.current) {
-        potRef.current.style.opacity = String(span(progress, .17, .28));
+        const cardPresence = Math.max(1 - span(progress, .69, .8), span(progress, .85, .93));
+        potRef.current.style.opacity = String(span(progress, .17, .28) * cardPresence);
         const entry = span(progress, .18, .32);
-        const rise = ((1 - entry) * 54 - potFocus * 19 + exit * 10) * depth;
-        const scale = .94 + entry * .06 + potFocus * (compact ? .025 : .09) + payoff * .02 - exit * .02;
+        const rise = ((1 - entry) * 54 - potFocus * 19 + span(progress, .69, .8) * 65 - span(progress, .85, .93) * 65) * depth;
+        const scale = .94 + entry * .06 + potFocus * (compact ? .025 : .09);
         potRef.current.style.transform = `translate3d(0, ${rise.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
       }
 
@@ -177,8 +200,12 @@ export function HomeStory() {
     <section className="story-track" ref={trackRef} aria-label="How a FanPot comes together">
       <div className="story-sticky" ref={stageRef} aria-hidden="true">
         <div className="story-backdrop" />
+        <div className="story-reality" aria-hidden="true">
+          <svg className="story-real-desktop" viewBox="0 0 1672 941" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="story-desktop-screen"><rect x="812" y="172" width="718" height="366" /></clipPath></defs><image href="/arc-demo/story-seoul-billboard-desktop-v1.png" width="1672" height="941" /><image className="story-real-art" href="/arc-demo/ad-artwork-idol-v2.jpg" x="812" y="172" width="718" height="366" preserveAspectRatio="xMidYMid slice" clipPath="url(#story-desktop-screen)" /><rect className="story-real-target" ref={desktopTargetRef} x="795" y="147" width="759" height="411" fill="transparent" /></svg>
+          <svg className="story-real-mobile" viewBox="0 0 941 1672" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="story-mobile-screen"><rect x="177" y="779" width="581" height="309" /></clipPath></defs><image href="/arc-demo/story-seoul-billboard-mobile-v1.png" width="941" height="1672" /><image className="story-real-art" href="/arc-demo/ad-artwork-idol-v2.jpg" x="177" y="779" width="581" height="309" preserveAspectRatio="xMidYMid slice" clipPath="url(#story-mobile-screen)" /><rect className="story-real-target" ref={mobileTargetRef} x="159" y="760" width="620" height="350" fill="transparent" /></svg>
+        </div>
         <div className="story-city" aria-hidden="true"><i/><i/><i/><i/><i/><i/><i/></div>
-        <div className="story-topbar"><span className="story-mark"><Heart size={16} fill="currentColor" /> FANPOT</span><span>AN ILLUSTRATED FAN PROJECT · NO AD BOOKED</span></div>
+        <div className="story-topbar"><span className="story-mark"><Heart size={16} fill="currentColor" /> FANPOT</span><span>AI-GENERATED PLACEMENT · NO AD BOOKED</span></div>
         <div className="story-inner">
           <div className="story-copy-stack">{sceneCopy.map((scene, index) => <div className="story-scene-copy" data-story-scene key={scene.kicker} style={{ opacity: index === 0 ? 1 : 0 }}><span className="story-kicker">{scene.kicker}</span>{index === 0 ? <h1>{scene.title}</h1> : <h2>{scene.title}</h2>}<p>{scene.body}</p></div>)}</div>
           <div className="story-world">

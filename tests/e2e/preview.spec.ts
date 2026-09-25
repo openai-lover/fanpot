@@ -35,9 +35,18 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
   await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
   await expect.poll(() => page.locator('.story-conduit').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.5);
   expect(await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform)).not.toBe(earlyFrame);
+  await scrub(.81);
+  await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.9);
+  const alignment = await page.evaluate(() => {
+    const board = document.querySelector('.story-billboard')!.getBoundingClientRect();
+    const target = document.querySelector(innerWidth <= 700 ? '.story-real-mobile .story-real-target' : '.story-real-desktop .story-real-target')!.getBoundingClientRect();
+    return Math.max(Math.abs(board.left - target.left), Math.abs(board.top - target.top), Math.abs(board.width - target.width), Math.abs(board.height - target.height));
+  });
+  expect(alignment).toBeLessThan(4);
   await scrub(.94);
   await expect(page.locator('.story-step')).toContainText('06 / 06');
   await expect(page.locator('.story-pot-status')).toHaveText('GOAL MISSED · REFUNDS OPEN');
+  await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
   await scrub(.29);
   await expect(page.locator('.story-step')).toContainText('02 / 06');
   await expect(page.locator('.story-pot-amount strong')).toHaveText(earlyAmount ?? '');
