@@ -73,9 +73,9 @@ export function HomeStory() {
       if (!track || !stage || motion.matches) return;
       const progress = clamp(-track.getBoundingClientRect().top / travel);
       const ranges = [[-.05, .195], [.155, .36], [.325, .52], [.48, .655], [.615, .83], [.795, 1.02]] as const;
-      copies.forEach((copy, index) => { copy.style.opacity = String(visible(progress, ranges[index][0], ranges[index][1])); });
-
-      const activeScene = progress < .175 ? 0 : progress < .34 ? 1 : progress < .50 ? 2 : progress < .635 ? 3 : progress < .815 ? 4 : 5;
+      const copyLevels = ranges.map(([start, end]) => visible(progress, start, end));
+      const activeScene = copyLevels.reduce((best, level, index) => level > copyLevels[best] ? index : best, 0);
+      copies.forEach((copy, index) => { copy.style.opacity = index === activeScene ? String(copyLevels[index]) : '0'; });
       if (activeScene !== previousScene) {
         previousScene = activeScene;
         if (sceneNumberRef.current) sceneNumberRef.current.textContent = String(activeScene + 1).padStart(2, '0');
@@ -85,7 +85,7 @@ export function HomeStory() {
       const reveal = span(progress, .14, .29);
       const light = span(progress, .64, .78) * (1 - span(progress, .82, .94));
       if (billboardRef.current) {
-        billboardRef.current.style.filter = `brightness(${(.24 + light * .76).toFixed(3)}) saturate(${(.58 + light * .42).toFixed(3)})`;
+        billboardRef.current.style.filter = `brightness(${(.42 + light * .58).toFixed(3)}) saturate(${(.68 + light * .32).toFixed(3)})`;
         billboardRef.current.style.transform = `scale(${(1.045 - light * .045).toFixed(3)})`;
       }
       stage.style.setProperty('--story-light', light.toFixed(3));
@@ -106,8 +106,8 @@ export function HomeStory() {
       }
 
       const alternate = progress >= .86;
-      const amount = alternate ? 2040 : progress < .20 ? 185 : progress >= .73 ? 3000 : Math.round(185 + 2815 * span(progress, .20, .73));
-      const supporters = alternate ? 291 : Math.round(26 + 402 * span(progress, .18, .72));
+      const amount = alternate ? 2040 : progress < .20 ? 185 : progress >= .64 ? 3000 : Math.round(185 + 2815 * span(progress, .20, .64));
+      const supporters = alternate ? 291 : Math.round(26 + 402 * span(progress, .18, .64));
       const percentage = Math.round(amount / 30);
       if (amount !== previousAmount) {
         previousAmount = amount;
@@ -123,7 +123,7 @@ export function HomeStory() {
       stage.dataset.outcome = alternate ? 'refund' : amount === 3000 ? 'funded' : 'funding';
 
       const arrival = span(progress, .18, .37);
-      const departure = span(progress, .86, .98);
+      const departure = span(progress, .84, .93);
       fanRefs.current.forEach((fan, index) => {
         if (!fan) return;
         const offset = fans[index];
@@ -162,7 +162,7 @@ export function HomeStory() {
             <div className="story-billboard"><div className="story-billboard-screen" ref={billboardRef}><Image src="/arc-demo/ad-artwork-idol-v2.jpg" alt="" fill priority sizes="(max-width: 700px) 85vw, 46vw" /></div><span className="story-billboard-caption">LUMI · BIRTHDAY LIGHTS</span></div>
             <div className="story-billboard-pole" />
             <div className="story-billboard-light" />
-            <div className="story-fan-field">{fans.map((fan, index) => <div className={`story-fan story-fan-${fan.color}`} key={fan.name} ref={(node) => { fanRefs.current[index] = node; }}><span className="story-fan-avatar">{fan.initials}</span><span className="story-fan-label">{fan.name}<strong>+${fan.amount}</strong></span></div>)}</div>
+            <div className="story-fan-field">{fans.map((fan, index) => <div className={`story-fan story-fan-${fan.color}`} key={fan.name} ref={(node) => { fanRefs.current[index] = node; }}><span className="story-fan-avatar">{fan.initials}</span><span className="story-fan-label">{fan.name}<strong className="story-fan-give">+${fan.amount}</strong><strong className="story-fan-claim">Claim ${fan.amount}</strong></span></div>)}</div>
             <div className="story-pot" ref={potRef} style={{ opacity: 0 }}><div className="story-pot-top"><span className="story-pot-logo"><Heart size={15} fill="currentColor" /> FanPot</span><span className="story-pot-status" ref={potStatusRef}>FUNDING EXAMPLE</span></div><span className="story-pot-caption">LUMI birthday screen</span><div className="story-pot-amount"><strong ref={balanceRef}>$185</strong><span>of $3,000</span></div><div className="story-pot-meter"><span ref={meterRef} style={{ width: '6%' }} /></div><div className="story-pot-bottom"><span><strong ref={percentRef}>6%</strong> funded</span><span><strong ref={supporterRef}>26</strong> fans</span></div><div className="story-pot-currency">FUNDED IN <strong ref={currencyRef}>USDC</strong></div></div>
             <div className="story-activity"><span>RECENT SUPPORT</span><div><i className="story-activity-dot"/>Mina contributed <strong>$25</strong></div><div><i className="story-activity-dot alt"/>Alex contributed <strong>$10</strong></div><div><i className="story-activity-dot third"/>Anonymous contributed <strong>$5</strong></div></div>
             <div className="story-outcome"><span>GOAL REACHED</span><strong>$3,000 / $3,000</strong><small>Next: organizer request + reviewer approval</small></div>
