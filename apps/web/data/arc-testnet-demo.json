@@ -1,0 +1,60 @@
+{
+  "chainId": 5042002,
+  "rpc": "https://rpc.testnet.arc.io",
+  "explorer": "https://explorer.testnet.arc.io",
+  "usdc": "0x3600000000000000000000000000000000000000",
+  "factory": "0xaab21a0879686b0385e095fb8cb04febeacccf11",
+  "scenario": "fictional, simulated fan campaign; faucet tokens; no real orders or artist affiliation",
+  "campaigns": {
+    "advertising": {
+      "slug": "lumi-birthday-ad",
+      "address": "0xD83755bC9cb2F1a8CF4f979721c63494071a13c4",
+      "rulesHash": "0x76c9805a1df6db276eecb38c8e79190fe85783bee50c9815b5a47ed8e7365058",
+      "draftRef": "0xeb364ae6f3547776f15c2c3b475cf7ee165529bff9f458fa8c4653f1ce918f40",
+      "deadline": 1791530823
+    },
+    "merch": {
+      "slug": "lumi-fanmade-goods",
+      "address": "0x094e6fF64C9190b7178418bA6B25a10DDFB076B0",
+      "rulesHash": "0x23c18936e91db363c751473b085392e19c068725994fa5544c03c8d13c6f89df",
+      "draftRef": "0x8bd9ad4f665ed42cd16a6bde84138fceccf2e4328514d5e07255f03f66c752a0",
+      "deadline": 1791530889
+    }
+  },
+  "actors": {
+    "organizer": "0x5268CD01d20069C8e2CC1EC05b8Ab5578CC696b5",
+    "reviewer": "0x6977282940411Fca280A549533cFddF053249889",
+    "fanA": "0xf53a15Ea07E503bCe1bE42A27637084243268Ef3",
+    "fanB": "0x9E1e5d395BB327b1B1F0B042CA2e457138f1eC10",
+    "adVendor": "0x014308F3dCEc8FF7a979f203C5Fd01A0287fD4E5",
+    "printVendor": "0xBe9f0a07396f8C1a8a3bAD454085b3F18fcFA726"
+  },
+  "transactions": {
+    "deploy-factory": "0x79d150fdaad4f0af78c38e61de117acbe228733eb370f35e3aaa7f3a9fe0066e",
+    "allow-organizer": "0x4f243d298211a9c700f8c019f6f05ae081631fa0d1e8381d1b769cdf55a9f32d",
+    "seed-fan-a": "0xb4c2b887b2ffbfb7069bd57ec874373be2fbf12a0672dfce13a804d96ab6ca2a",
+    "seed-fan-b": "0xdace418c202da35dfb682bd2e0d5b09da84ef9bd1adb2d03531bfc3122eb31a5",
+    "create-lumi-birthday-ad": "0x07f05e8d3b0bae701ab2d8ec1d4bdbd902dc7350ba0c65165895f31ab657c591",
+    "gas-reviewer": "0x03a62f228dfd2aeda841c84397df05999cdbd2ff4ad9c1b11741b2a1e17899a9",
+    "gas-fanA": "0x1986817e637af92ad259950bc9d8efb7a6803cbfb2ec7d8d81e086d4b45cf42e",
+    "gas-fanB": "0x1e8052d8258179a6766554012989bdb55aae9c5de947052f33d1fb43dbdef54a",
+    "activate-ad": "0x8f3586f082debd044c89abb93ab8b5409c4b48733bd6693e491ce5abf289e85e",
+    "approve-ad-fanA-1": "0x2cb5ca9b6a8859156b0682150ba072ad7b23c6d76a038a188bb4cccfc26f8d59",
+    "contribute-ad-fanA-1": "0x9485ff6118b5914dd946a6ec4c6e5fa7f4bcfbe0172adc727ef714045d2e4108",
+    "approve-ad-fanB-1": "0xb3971260acad1297ebd5c6b7fda0170de0bb5b7109f6c553a7831cb2be2742f6",
+    "contribute-ad-fanB-1": "0x7faf7771cc6045fdd3ed2d85f698946d3f12b74a4cc144623ffc1f052585f39b",
+    "create-lumi-fanmade-goods": "0xc4e51a42bc4d7d818e5d42a8542aee5857b8b9d13ef3d7e1cdcd624d7288c9ea",
+    "activate-merch": "0x5a3f10d497ed92adfc8753ba0f6c1bf15a8881169b18bba6c5407fabdfd8425e",
+    "approve-merch-fanA-1": "0xdd22f3e97c6861e627938ae6c218ab81b44cb9564ca101663eb56502c2b8186d",
+    "contribute-merch-fanA-1": "0xfc3aeb6ca64cc51b907ec57500ea71e17a5e1be774c4dc62b7b3b7dd51eef043",
+    "approve-merch-fanB-1": "0x9caa3f59834b52e54c57d05fccbf5a222b93ae943f48fbe9964348702e06bfdc",
+    "contribute-merch-fanB-1": "0x017ffa1efe75cde9c08e3dbdb70a2c3c948711f07097e4cdcad902e0acf37d6e",
+    "request-merch-print": "0x04aa536738c33bb666372d5054a0947917ed67cc7b64387816be7632b8be98a2",
+    "pay-merch-print": "0x8c84de4ff16852cb29689c50879d92ac024667924ab5481d21482a6ef507cb15",
+    "request-merch-display": "0xef0469947151068744398cabd5f560553ab871b7953975b4318063983180fac0",
+    "pay-merch-display": "0x23be18ba09e59a3e376395355f3d6d593cefcfa81aa1f1b5e5f6226d73746bce",
+    "settle-merch": "0x4644c9a7714d53dc241df7e360d44762b679c36e90a604223966df52aa55660d",
+    "refund-merch-fan-a": "0x0702da6d3c5450bac27cb575c90f8f3a794f0a21e30dfd5724a9353d6ca1d35b",
+    "refund-merch-fan-b": "0x521375db4c76f0a933df9f85b734dbf255bfc831ff976f6768dbce4cdceb0aae"
+  }
+}
