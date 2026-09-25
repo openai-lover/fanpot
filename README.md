@@ -37,6 +37,7 @@ pnpm abi
 pnpm test
 pnpm lint
 pnpm typecheck
+pnpm verify:factory
 pnpm build:local
 pnpm exec playwright install chromium
 pnpm test:e2e
@@ -53,7 +54,7 @@ pnpm dev
 
 `pnpm setup:contracts`는 forge-std v1.9.7의 exact commit을 검사합니다. Windows에서는 공식 solc-bin의 Solidity 0.8.30 바이너리를 SHA-256으로 검증해 `.tools/`에 설치합니다. 다른 플랫폼은 Foundry가 `foundry.toml`의 0.8.30을 사용합니다. npm으로 고정한 Forge 1.7.1을 `pnpm test:contracts`가 실행합니다. 시스템 Forge를 쓰면 `cd packages/contracts && forge test`도 가능합니다(Windows solc 경로 별도 지정 가능).
 
-`pnpm build:local`은 키 없는 UI 검증용 빌드입니다. **`pnpm build`는 실제 production 환경값 검사를 먼저 실행하며, 현재는 실패하는 것이 정상입니다.** `verify:config`는 환경의 형식만 검사하며 실제 네트워크 검증을 대신하지 않습니다. `pnpm verify:proof`는 Mainnet 주소와 영수증이 모두 기록되기 전까지 실패합니다. `.env.example`을 보고 각 환경에 필요한 값을 주입하세요. Node 스크립트는 `.env`를 자동 로드하지 않습니다.
+`pnpm build:local`은 키 없는 UI 검증용 빌드입니다. **`pnpm build`는 실제 production 환경값 검사를 먼저 실행하며, 현재는 실패하는 것이 정상입니다.** `verify:config`는 환경의 형식만 검사하며 실제 네트워크 검증을 대신하지 않습니다. `pnpm verify:factory`는 배포된 Arc Mainnet 팩토리의 거래·바이트코드·역할을 검증합니다. `pnpm verify:proof`는 캠페인 거래와 기여 영수증까지 기록되기 전까지 실패합니다. `.env.example`을 보고 각 환경에 필요한 값을 주입하세요. Node 스크립트는 `.env`를 자동 로드하지 않습니다.
 
 ## 검증 결과 — 2026-09-21
 

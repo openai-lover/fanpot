@@ -18,6 +18,7 @@
     "verify:size": "node scripts/verify-contract-size.mjs",
     "verify:config": "node scripts/verify-config.ts",
     "verify:mainnet-rpc": "node scripts/verify-mainnet-rpc.mjs",
+    "verify:factory": "node scripts/verify-mainnet-factory.ts",
     "verify:proof": "node scripts/verify-proof.ts"
   },
   "devDependencies": {
