@@ -130,7 +130,7 @@ export function HomeStory() {
       stage.style.setProperty('--story-city-y', `${(potFocus * 13 * depth).toFixed(1)}px`);
       stage.style.setProperty('--story-pot-aura', (reveal * .22 + light * .42).toFixed(3));
       stage.style.setProperty('--story-light', light.toFixed(3));
-      stage.style.setProperty('--story-activity', (span(progress, .31, .41) * (1 - span(progress, .62, .72))).toFixed(3));
+      stage.style.setProperty('--story-activity', (span(progress, .31, .41) * (1 - span(progress, .44, .51))).toFixed(3));
       if (currencyRef.current) {
         const emphasis = span(progress, .46, .56) * (1 - span(progress, .7, .82));
         currencyRef.current.style.opacity = String(.62 + .38 * emphasis);
