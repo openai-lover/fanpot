@@ -5,6 +5,7 @@ import { createContext, useContext } from 'react';
 import { ArrowUpRight, Heart, LockKeyhole, ClipboardCheck, RotateCcw, ArrowLeft, Check, CircleHelp } from 'lucide-react';
 import en from '../messages/en.json';
 import mainnetDeployment from '../data/arc-mainnet-deployment.json';
+import { HomeStory } from './home-story';
 const I18n = createContext({ messages: en });
 const hasMainnetFactory = Boolean(mainnetDeployment.factory);
 const mainnetLive = Boolean(mainnetDeployment.factory && mainnetDeployment.campaign);
@@ -31,10 +32,12 @@ const demoProjects = [
 ];
 export function Home() {
   const { messages: m } = useContext(I18n);
-  return <main id="main" tabIndex={-1}>
-    <section className="hero"><div className="hero-copy"><span className="eyebrow">{mainnetLive ? 'FAN PROJECTS · ARC MAINNET PROTOTYPE' : m.eyebrow}</span><h1>{m.tagline}</h1><p>{mainnetLive ? 'Pool USDC in an Arc Mainnet campaign contract. Fixed payout caps, separate review, and claimable refunds make the fund rules visible to every supporter.' : m.intro}</p><div className="hero-actions"><Link className="button" href={mainnetLive ? '/mainnet' : '#projects'}>{mainnetLive ? 'Explore live campaign' : m.browse}<ArrowUpRight size={18}/></Link><a className="text-link" href="#rules">{m.how}<span>↗</span></a></div></div><div className="hero-art"><div className="art-label"><span/>FICTIONAL GROUP CONCEPT</div><div className="hero-mockup"><Image src="/arc-demo/vanta5-rooftop-concept-v1.jpg" width={1536} height={1024} alt="AI-generated photo of fictional adult boy group VANTA5 on a rooftop" priority sizes="(max-width: 600px) 88vw, 48vw" /></div></div></section>
-    <RulesCard/>
+  return <main id="main" tabIndex={-1} className="home-main">
+    <HomeStory/>
+    <div className="home-content">
     <section className="projects-section" id="projects"><div className="section-heading"><div><span className="eyebrow">CAMPAIGN EXAMPLES</span><h2>{mainnetLive ? 'Live proof and testnet scenarios' : m.projectHeading}</h2><p>All artists and images are fictional. Chain labels distinguish Mainnet transactions from Testnet simulations.</p></div></div><div className="campaign-teasers">{mainnetLive && <Link className="campaign-teaser" href="/mainnet"><div className="campaign-teaser-image"><Image src="/arc-demo/subway-display-idol-v2.jpg" width={1536} height={1024} alt="AI-generated LUMI station display mockup; no advertisement booked" sizes="(max-width: 750px) 100vw, 50vw"/><span>AI-GENERATED CONCEPT</span></div><div className="campaign-teaser-copy"><span className="small-pill">LIVE · ARC MAINNET</span><h3>LUMI birthday screen</h3><p>See real USDC escrow, live onchain totals and a fixed vendor budget.</p><strong>View live proof <ArrowUpRight size={16}/></strong></div></Link>}{demoProjects.map((project) => <Link className="campaign-teaser" href={`/arc-demo#${project.id}`} key={project.id}><div className="campaign-teaser-image"><Image src={project.image} width={1536} height={1024} alt={project.alt} sizes="(max-width: 750px) 100vw, 50vw"/><span>AI-GENERATED CONCEPT</span></div><div className="campaign-teaser-copy"><span className="small-pill">{project.status}</span><h3>{project.title}</h3><p>{project.description}</p><strong>View details <ArrowUpRight size={16}/></strong></div></Link>)}</div></section>
+    <RulesCard/>
+    </div>
   </main>;
 }
 export function CampaignPreview() {

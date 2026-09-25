@@ -6,13 +6,37 @@ test('public home explains the project and labels generated campaigns', async ({
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.getByRole('heading', { name: 'Fund fan ideas with clear rules.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Imagine their name lighting up the city.' })).toBeVisible();
+  await expect(page.getByText('Refunds are claimable after finalization; they are not automatic.', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Arc Mainnet' })).toBeVisible();
   await expect(page.getByText('AI-GENERATED CONCEPT').first()).toBeVisible();
   await expect(page.getByText('CONCEPT ONLY · NO FUNDING')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
   await page.screenshot({ path: `test-results/${info.project.name}-home.png`, fullPage: true });
+});
+
+test('home story follows scroll position and can be rewound', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const track = page.locator('.story-track');
+  const geometry = await track.evaluate((element) => ({ top: element.getBoundingClientRect().top + scrollY, height: element.clientHeight }));
+  const scrub = async (progress: number) => {
+    await page.evaluate((y) => window.scrollTo({ top: y, behavior: 'instant' }), geometry.top + (geometry.height - (page.viewportSize()?.height ?? 900)) * progress);
+  };
+  await scrub(.29);
+  await expect(page.locator('.story-step')).toContainText('02 / 06');
+  const earlyAmount = await page.locator('.story-pot-amount strong').textContent();
+  await scrub(.76);
+  await expect(page.locator('.story-step')).toContainText('05 / 06');
+  await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
+  await scrub(.94);
+  await expect(page.locator('.story-step')).toContainText('06 / 06');
+  await expect(page.locator('.story-pot-status')).toHaveText('GOAL MISSED · REFUNDS OPEN');
+  await scrub(.29);
+  await expect(page.locator('.story-step')).toContainText('02 / 06');
+  await expect(page.locator('.story-pot-amount strong')).toHaveText(earlyAmount ?? '');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
 test('preview campaign cannot silently take funds', async ({ page }, info) => {
