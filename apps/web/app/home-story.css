@@ -31,7 +31,8 @@
 .story-pot-currency strong{display:inline-block;transform-origin:right center}
 .story-activity,.story-outcome,.story-refund{transform:none}
 @media(max-width:1100px){.story-activity,.story-outcome,.story-refund{top:43%;bottom:auto}}
-@media(max-width:700px){.story-activity,.story-outcome,.story-refund{top:34%;bottom:auto}}
+@media(max-width:700px){.story-pot{bottom:12%}.story-activity,.story-outcome,.story-refund{top:24%;bottom:auto}}
+@media(max-width:420px){.story-pot{bottom:12%}}
 .story-fan-label .story-fan-claim{display:none}
 .story-sticky[data-outcome="refund"] .story-fan-label .story-fan-give{display:none}
 .story-sticky[data-outcome="refund"] .story-fan-label .story-fan-claim{display:block}

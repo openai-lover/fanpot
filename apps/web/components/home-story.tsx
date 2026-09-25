@@ -75,7 +75,7 @@ export function HomeStory() {
       const ranges = [[-.05, .195], [.155, .36], [.325, .52], [.48, .655], [.615, .83], [.795, 1.02]] as const;
       const copyLevels = ranges.map(([start, end]) => visible(progress, start, end));
       const activeScene = copyLevels.reduce((best, level, index) => level > copyLevels[best] ? index : best, 0);
-      copies.forEach((copy, index) => { copy.style.opacity = index === activeScene ? String(copyLevels[index]) : '0'; });
+      copies.forEach((copy, index) => { copy.style.opacity = index === activeScene ? String(Math.max(.88, copyLevels[index])) : '0'; });
       if (activeScene !== previousScene) {
         previousScene = activeScene;
         if (sceneNumberRef.current) sceneNumberRef.current.textContent = String(activeScene + 1).padStart(2, '0');
@@ -123,7 +123,7 @@ export function HomeStory() {
       stage.dataset.outcome = alternate ? 'refund' : amount === 3000 ? 'funded' : 'funding';
 
       const arrival = span(progress, .18, .37);
-      const departure = span(progress, .84, .93);
+      const departure = span(progress, .84, .89);
       fanRefs.current.forEach((fan, index) => {
         if (!fan) return;
         const offset = fans[index];
