@@ -33,7 +33,8 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
   await scrub(.76);
   await expect(page.locator('.story-step')).toContainText('05 / 06');
   await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
-  await expect.poll(() => page.locator('.story-conduit').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.5);
+  await expect.poll(() => page.locator('.story-reality').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(1);
+  await expect.poll(() => page.locator('.story-conduit').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
   expect(await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform)).not.toBe(earlyFrame);
   await scrub(.81);
   await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.9);
