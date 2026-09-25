@@ -11,6 +11,10 @@ The story pattern was informed by [DUKPLACE's fan support guide](https://dukplac
 
 The [factory](https://explorer.testnet.arc.io/address/0xaab21a0879686b0385e095fb8cb04febeacccf11) created both independent campaign contracts. The [full public manifest](../apps/web/data/arc-testnet-demo.json) records public wallet addresses and all transaction hashes, including activation, contributions, payout requests, reviewer approvals, and refunds. It contains no private keys. The `/arc-demo` page reads current totals and state directly from the Arc Testnet RPC.
 
+## Visual concepts
+
+Four AI-generated images in `apps/web/public/arc-demo/` show what the fictional campaigns *could* make: a subway screen placement (`subway-display.jpg`), the display artwork (`ad-artwork.jpg`), a cupsleeve and photocard product mockup (`goods-mockup.jpg`), and a possible café display (`cafe-concept.jpg`). They were generated for this demo with the built-in image generation tool. The prompts specified a fictional LUMI identity, lavender and blush celestial graphics, and no real artist likeness, transit branding, or café branding. Every site placement is labelled as a concept mockup. These images are not proof of a completed order, installation, or event.
+
 ## How to reproduce with new testnet wallets
 
 1. Install dependencies with `pnpm install --frozen-lockfile --ignore-scripts`.

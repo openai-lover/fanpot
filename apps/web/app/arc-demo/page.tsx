@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { createPublicClient, http, parseAbi } from 'viem';
 import manifest from '../../data/arc-testnet-demo.json';
 import { SupportAction } from '../../components/support-action';
@@ -29,7 +30,8 @@ export default async function ArcDemo() {
     <h1>From fan idea to verifiable fund flow</h1>
     <p className="arc-lead">Inspired by K-pop fan birthday ads and fan-made goods. Two labelled demo wallets simulate supporters. All USDC amounts are small testnet examples, not real advertising or print quotes.</p>
     <div className="arc-grid">
-      <article className="arc-card">
+      <article className="arc-card" id="ad-campaign">
+        <div className="arc-gallery"><figure className="arc-gallery-primary"><Image src="/arc-demo/subway-display.jpg" width={1536} height={1024} alt="Generated visual concept of a LUMI birthday advertisement on a subway screen; no placement has been booked" sizes="(max-width: 750px) 100vw, 50vw"/><figcaption>Proposed subway screen · generated mockup, not installed</figcaption></figure><figure className="arc-gallery-secondary"><Image src="/arc-demo/ad-artwork.jpg" width={1536} height={1024} alt="Generated original lavender LUMI Birthday Lights campaign artwork" sizes="(max-width: 750px) 100vw, 50vw"/><figcaption>Original ad artwork concept</figcaption></figure></div>
         <span className="small-pill">LIVE FUNDING · TESTNET</span>
         <h2>LUMI birthday screen</h2>
         <p>Original artwork for a proposed Hongdae station screen. A display vendor would receive up to 8 USDC; a poster printer up to 1 USDC. The remaining 1 USDC is refundable after settlement.</p>
@@ -41,7 +43,8 @@ export default async function ArcDemo() {
         <a className="arc-link" href={link(manifest.transactions['contribute-ad-fanA-1'])} target="_blank" rel="noreferrer">Simulated fan contribution A ↗</a>
         <a className="arc-link" href={link(manifest.transactions['contribute-ad-fanB-1'])} target="_blank" rel="noreferrer">Simulated fan contribution B ↗</a>
       </article>
-      <article className="arc-card">
+      <article className="arc-card" id="goods-campaign">
+        <div className="arc-gallery"><figure className="arc-gallery-primary"><Image src="/arc-demo/goods-mockup.jpg" width={1536} height={1024} alt="Generated concept mockup of LUMI cupsleeves, photocards and a birthday postcard; none were printed" sizes="(max-width: 750px) 100vw, 50vw"/><figcaption>Proposed printed goods · generated mockup, not produced</figcaption></figure><figure className="arc-gallery-secondary"><Image src="/arc-demo/cafe-concept.jpg" width={1536} height={1024} alt="Generated fictional birthday café display concept with fan-made LUMI goods; no café event took place" sizes="(max-width: 750px) 100vw, 50vw"/><figcaption>Possible birthday café display concept</figcaption></figure></div>
         <span className="small-pill">SETTLED · TESTNET</span>
         <h2>LUMI fan-made goods</h2>
         <p>Original cupsleeve and photocard concept. This example traces a completed 10 USDC test fund: 6 to a simulated printer, 3 to a simulated display vendor, and 1 returned to the two demo supporters.</p>
