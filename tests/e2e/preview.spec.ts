@@ -40,6 +40,9 @@ test('mainnet route does not invent deployment proof', async ({ page }) => {
   await page.goto('/launch');
   await expect(page.getByText('Fictional LUMI birthday screen · 2 USDC goal', { exact: false })).toBeVisible();
   await expect(page.getByText('No ad placement or merchandise is being sold.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Wallet actions temporarily paused' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Connect MetaMask' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Allow organizer' })).toBeDisabled();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 

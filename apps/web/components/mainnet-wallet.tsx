@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createPublicClient, createWalletClient, custom, formatUnits, http, parseAbi, type EIP1193Provider } from 'viem';
 import { ARC_USDC, fanpotArc } from '@fanpot/shared/chain';
+import { WALLET_ACTIONS_PAUSED, WALLET_REVIEW_URL } from '../wallet-safety';
 
 const client = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0], { timeout: 8000 }) });
 const usdcAbi = parseAbi(['function balanceOf(address owner) view returns (uint256)']);
@@ -23,6 +24,7 @@ export function MainnetWallet() {
   const [message, setMessage] = useState('');
 
   async function connect() {
+    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask warning is reviewed.'); return; }
     const provider = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
     if (!provider) { setMessage('Open this page in a browser with MetaMask.'); return; }
     setBusy(true);
@@ -54,8 +56,8 @@ export function MainnetWallet() {
 
   return <section className="mainnet-panel" aria-labelledby="wallet-status-heading">
     <h2 id="wallet-status-heading">Your wallet</h2>
-    <p>Connect MetaMask to read your Arc Mainnet USDC balance.</p>
-    <button className="button" type="button" onClick={connect} disabled={busy}>{busy ? 'Connecting…' : address ? 'Refresh wallet balance' : 'Connect wallet'}</button>
+    <p>{WALLET_ACTIONS_PAUSED ? <>Wallet actions are paused while MetaMask reviews a warning for this domain. <a href={WALLET_REVIEW_URL} target="_blank" rel="noreferrer">Review status ↗</a></> : 'Connect MetaMask to read your Arc Mainnet USDC balance.'}</p>
+    <button className="button" type="button" onClick={connect} disabled={busy || WALLET_ACTIONS_PAUSED}>{busy ? 'Connecting…' : address ? 'Refresh wallet balance' : 'Connect wallet'}</button>
     {address && <dl><div><dt>Address</dt><dd>{address.slice(0, 6)}…{address.slice(-4)}</dd></div><div><dt>Mainnet USDC</dt><dd>{balance} USDC</dd></div></dl>}
     <p className="mainnet-wallet-message" aria-live="polite">{message}</p>
   </section>;

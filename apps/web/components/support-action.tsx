@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createPublicClient, createWalletClient, custom, http, parseAbi, parseUnits, keccak256, toBytes, type EIP1193Provider } from 'viem';
+import { WALLET_ACTIONS_PAUSED, WALLET_REVIEW_URL } from '../wallet-safety';
 
 const chain = { id: 5042002, name: 'Arc Testnet', nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 }, rpcUrls: { default: { http: ['https://rpc.testnet.arc.io'] } } } as const;
 const usdc = '0x3600000000000000000000000000000000000000';
@@ -14,6 +15,7 @@ export function SupportAction({ address, active, remaining }: { address: `0x${st
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   async function contribute() {
+    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask warning is reviewed.'); return; }
     const provider = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
     if (!provider) { setMessage('Please open this page in a browser with MetaMask.'); return; }
     setBusy(true); setMessage('Connecting wallet…');
@@ -44,5 +46,6 @@ export function SupportAction({ address, active, remaining }: { address: `0x${st
     finally { setBusy(false); }
   }
   if (!active) return null;
+  if (WALLET_ACTIONS_PAUSED) return <div className="arc-support"><p>Wallet actions are paused while MetaMask reviews a warning for this domain. <a href={WALLET_REVIEW_URL} target="_blank" rel="noreferrer">Review status ↗</a></p></div>;
   return <div className="arc-support"><label htmlFor="support-amount">Testnet USDC amount</label><div><input id="support-amount" type="number" min="0.1" max={String(Number(remaining) / 1_000_000)} step="0.1" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" disabled={busy} onClick={contribute}>{busy ? 'Working…' : 'Connect & support'}</button></div><p aria-live="polite">{message}</p></div>;
 }

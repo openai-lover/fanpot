@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createPublicClient, createWalletClient, custom, formatUnits, getAddress, http, keccak256, parseAbi, parseUnits, toBytes, type EIP1193Provider } from 'viem';
 import { ARC_USDC, fanpotArc } from '@fanpot/shared/chain';
 import { fanPotCampaignAbi } from '@fanpot/shared/abi/FanPotCampaign';
+import { WALLET_ACTIONS_PAUSED, WALLET_REVIEW_URL } from '../wallet-safety';
 
 const campaignClient = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0]) });
 const tokenAbi = parseAbi(['function allowance(address owner, address spender) view returns (uint256)', 'function approve(address spender, uint256 amount) returns (bool)', 'function balanceOf(address owner) view returns (uint256)']);
@@ -18,6 +19,7 @@ export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy 
   const [busy, setBusy] = useState(false);
 
   async function connect() {
+    if (WALLET_ACTIONS_PAUSED) throw Error('Wallet actions are paused while the MetaMask warning is reviewed.');
     const provider = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
     if (!provider) throw Error('Open this page in a browser with MetaMask.');
     const wallet = createWalletClient({ chain: fanpotArc, transport: custom(provider) });
@@ -107,5 +109,6 @@ export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy 
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Settlement failed.'); }
     finally { setBusy(false); }
   }
+  if (WALLET_ACTIONS_PAUSED) return <section className="mainnet-panel mainnet-action"><h2>Wallet actions paused</h2><p>MetaMask currently marks this domain as unsafe. Do not connect or sign while its classification is reviewed. <a href={WALLET_REVIEW_URL} target="_blank" rel="noreferrer">Review status ↗</a></p></section>;
   return <section className="mainnet-panel mainnet-action"><h2>Your onchain position</h2><p>Connect MetaMask to see your balance, contribution and refund entitlement. Arc Mainnet transactions use real USDC, including gas.</p><button className="outline-button" type="button" disabled={busy} onClick={refresh}>{busy ? 'Working…' : walletAddress ? 'Refresh wallet' : 'Connect wallet'}</button>{walletAddress && <dl><div><dt>Wallet</dt><dd>{walletAddress.slice(0, 6)}…{walletAddress.slice(-4)}</dd></div><div><dt>USDC balance</dt><dd>{balance} USDC</dd></div><div><dt>Contributed</dt><dd>{contributed} USDC</dd></div><div><dt>Claimable refund</dt><dd>{claimable} USDC</dd></div></dl>}{phase === 1 && <div className="mainnet-contribute"><label htmlFor="mainnet-amount">Contribution in USDC</label><div><input id="mainnet-amount" type="number" min="0.1" max={remaining} step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" type="button" disabled={busy} onClick={support}>Support on Mainnet</button></div><small>MetaMask may ask for one exact USDC approval, then one contribution transaction.</small></div>}{(phase === 0 || phase === 1) && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('finalize')}>Finalize after funding deadline</button>}{(phase === 2 || phase === 3) && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('settle')}>Settle after timeout</button>}{phase === 4 && <button className="button" type="button" disabled={busy || claimable === '0'} onClick={refund}>Claim available refund</button>}<p className="mainnet-wallet-message" aria-live="polite">{message}</p></section>;
 }
