@@ -15,4 +15,5 @@ playwright-report/
 .tools/
 .swc/
 private-evidence/
+.demo/
 packages/contracts/lib/forge-std/
