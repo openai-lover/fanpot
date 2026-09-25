@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { createPublicClient, createWalletClient, custom, http, parseAbi, parseUnits, keccak256, toBytes, type EIP1193Provider } from 'viem';
-import { WALLET_ACTIONS_PAUSED, WALLET_REVIEW_URL } from '../wallet-safety';
+import { WALLET_ACTIONS_PAUSED } from '../wallet-safety';
+import { isUnknownChainError } from '../wallet-network';
 
 const chain = { id: 5042002, name: 'Arc Testnet', nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 }, rpcUrls: { default: { http: ['https://rpc.testnet.arc.io'] } } } as const;
 const usdc = '0x3600000000000000000000000000000000000000';
@@ -15,7 +16,7 @@ export function SupportAction({ address, active, remaining }: { address: `0x${st
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   async function contribute() {
-    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask warning is reviewed.'); return; }
+    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask warning is unresolved.'); return; }
     const provider = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
     if (!provider) { setMessage('Please open this page in a browser with MetaMask.'); return; }
     setBusy(true); setMessage('Connecting wallet…');
@@ -25,7 +26,11 @@ export function SupportAction({ address, active, remaining }: { address: `0x${st
       const wallet = createWalletClient({ chain, transport: custom(provider) });
       const [account] = await wallet.requestAddresses();
       try { await wallet.switchChain({ id: chain.id }); }
-      catch { await wallet.addChain({ chain }); await wallet.switchChain({ id: chain.id }); }
+      catch (error) {
+        if (!isUnknownChainError(error)) throw error;
+        await wallet.addChain({ chain });
+        await wallet.switchChain({ id: chain.id });
+      }
       const balance = await publicClient.readContract({ address: usdc, abi: tokenAbi, functionName: 'balanceOf', args: [account] });
       if (balance < units) throw Error('This wallet needs Arc Testnet USDC.');
       const allowance = await publicClient.readContract({ address: usdc, abi: tokenAbi, functionName: 'allowance', args: [account, address] });
@@ -46,6 +51,6 @@ export function SupportAction({ address, active, remaining }: { address: `0x${st
     finally { setBusy(false); }
   }
   if (!active) return null;
-  if (WALLET_ACTIONS_PAUSED) return <div className="arc-support"><p>Wallet actions are paused while MetaMask reviews a warning for this domain. <a href={WALLET_REVIEW_URL} target="_blank" rel="noreferrer">Review status ↗</a></p></div>;
+  if (WALLET_ACTIONS_PAUSED) return <div className="arc-support"><p>MetaMask currently marks this domain as unsafe. The cause is still unknown; wallet actions remain paused.</p></div>;
   return <div className="arc-support"><label htmlFor="support-amount">Testnet USDC amount</label><div><input id="support-amount" type="number" min="0.1" max={String(Number(remaining) / 1_000_000)} step="0.1" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" disabled={busy} onClick={contribute}>{busy ? 'Working…' : 'Connect & support'}</button></div><p aria-live="polite">{message}</p></div>;
 }

@@ -8,7 +8,8 @@ import { fanPotFactoryAbi } from '@fanpot/shared/abi/FanPotFactory';
 import { fanPotCampaignAbi } from '@fanpot/shared/abi/FanPotCampaign';
 import build from '../data/mainnet-factory-bytecode.json';
 import deployment from '../data/arc-mainnet-deployment.json';
-import { WALLET_ACTIONS_PAUSED, WALLET_REVIEW_URL } from '../wallet-safety';
+import { WALLET_ACTIONS_PAUSED } from '../wallet-safety';
+import { isUnknownChainError } from '../wallet-network';
 
 const organizer = MAINNET_ORGANIZER;
 const reviewer = MAINNET_REVIEWER;
@@ -32,7 +33,11 @@ async function wallet() {
   if (!account) throw Error('Select a wallet account.');
   if (await client.getChainId() !== fanpotArc.id) {
     try { await client.switchChain({ id: fanpotArc.id }); }
-    catch { await client.addChain({ chain: fanpotArc }); await client.switchChain({ id: fanpotArc.id }); }
+    catch (error) {
+      if (!isUnknownChainError(error)) throw error;
+      await client.addChain({ chain: fanpotArc });
+      await client.switchChain({ id: fanpotArc.id });
+    }
   }
   if (await client.getChainId() !== fanpotArc.id) throw Error('Switch your wallet to Arc Mainnet.');
   return { client, account: getAddress(account) };
@@ -65,7 +70,7 @@ export function MainnetLaunch() {
   function saveFactory(value: string) { setFactory(value); if (isAddress(value)) localStorage.setItem('fanpot-mainnet-factory', getAddress(value)); }
   function saveCampaign(value: string) { setCampaign(value); if (isAddress(value)) localStorage.setItem('fanpot-mainnet-campaign', getAddress(value)); }
   async function run(label: string, action: () => Promise<void>) {
-    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask site warning is reviewed.'); return; }
+    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask site warning is unresolved.'); return; }
     setBusy(true); setMessage(`${label}: waiting for wallet…`);
     try { await action(); setMessage(`${label}: confirmed on Arc Mainnet.`); }
     catch (error) { setMessage(error instanceof Error ? error.message : String(error)); }
@@ -132,7 +137,7 @@ export function MainnetLaunch() {
   }
 
   return <div className="launch-grid">
-    {WALLET_ACTIONS_PAUSED && <section className="mainnet-panel launch-wide" role="alert"><h2>Wallet actions temporarily paused</h2><p>MetaMask currently marks this domain as unsafe. Do not connect or sign while the classification is under review. The verified factory deployment remains visible below. <a href={WALLET_REVIEW_URL} target="_blank" rel="noreferrer">Follow the review request ↗</a></p></section>}
+    {WALLET_ACTIONS_PAUSED && <section className="mainnet-panel launch-wide" role="alert"><h2>Wallet actions temporarily paused</h2><p>MetaMask currently marks this domain as unsafe. The cause is still unknown. Do not connect or sign while the warning remains. The verified factory deployment remains visible below.</p></section>}
     <section className="mainnet-panel launch-wide"><h2>Campaign plan</h2><p>Fictional LUMI birthday screen · 2 USDC goal · one 1 USDC capped simulated vendor allocation · 14-day funding window. Any unspent funds remain claimable by supporters after settlement. No ad placement or merchandise is being sold.</p><details><summary>Exact rules committed onchain</summary><p>{rules}</p><code>{rulesHash}</code></details><dl><div><dt>Organizer</dt><dd>{organizer}</dd></div><div><dt>Reviewer</dt><dd>{reviewer}</dd></div><div><dt>USDC</dt><dd>{ARC_USDC}</dd></div></dl></section>
     <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Choose the organizer on this computer. The reviewer can open this page on the other computer when the campaign address is ready.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p></section>
     <section className="mainnet-panel"><h2>2. Deploy factory</h2><p>The verified factory below has already been deployed. Do not deploy another one. MetaMask shows the current USDC gas estimate before any later transaction.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !!factory} onClick={deploy}>Deploy factory</button><label className="launch-label">Factory address<input value={factory} onChange={(event) => saveFactory(event.target.value)} placeholder="0x…" /></label><button className="outline-button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(factory)} onClick={allowOrganizer}>Allow organizer</button></section>

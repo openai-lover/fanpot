@@ -1,6 +1,6 @@
 # Arc Microgrants submission draft — not ready to send
 
-The public Arc Mainnet factory is deployed and passes `pnpm verify:factory`. A campaign, separate reviewer activation, and an actual contribution are still missing. MetaMask marks the public domain unsafe, so wallet actions are paused while the [official review](https://github.com/MetaMask/eth-phishing-detect/issues/296876) is pending. The text below describes the intended final submission and must be checked against deployed evidence before use.
+The public Arc Mainnet factory is deployed and passes `pnpm verify:factory`. A campaign, separate reviewer activation, and an actual contribution are still missing. MetaMask marks the public domain unsafe, so wallet actions are paused while the cause is investigated. The text below describes the intended final submission and must be checked against deployed evidence before use.
 
 **Project:** FanPot
 

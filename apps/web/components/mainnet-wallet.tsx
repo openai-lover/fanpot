@@ -3,19 +3,11 @@
 import { useState } from 'react';
 import { createPublicClient, createWalletClient, custom, formatUnits, http, parseAbi, type EIP1193Provider } from 'viem';
 import { ARC_USDC, fanpotArc } from '@fanpot/shared/chain';
-import { WALLET_ACTIONS_PAUSED, WALLET_REVIEW_URL } from '../wallet-safety';
+import { WALLET_ACTIONS_PAUSED } from '../wallet-safety';
+import { isUnknownChainError } from '../wallet-network';
 
 const client = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0], { timeout: 8000 }) });
 const usdcAbi = parseAbi(['function balanceOf(address owner) view returns (uint256)']);
-
-function isUnknownChain(error: unknown) {
-  let current = error;
-  for (let depth = 0; depth < 5 && current && typeof current === 'object'; depth++) {
-    if ('code' in current && Number(current.code) === 4902) return true;
-    current = 'cause' in current ? current.cause : null;
-  }
-  return false;
-}
 
 export function MainnetWallet() {
   const [busy, setBusy] = useState(false);
@@ -24,7 +16,7 @@ export function MainnetWallet() {
   const [message, setMessage] = useState('');
 
   async function connect() {
-    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask warning is reviewed.'); return; }
+    if (WALLET_ACTIONS_PAUSED) { setMessage('Wallet actions are paused while the MetaMask warning is unresolved.'); return; }
     const provider = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
     if (!provider) { setMessage('Open this page in a browser with MetaMask.'); return; }
     setBusy(true);
@@ -36,7 +28,7 @@ export function MainnetWallet() {
       try {
         await wallet.switchChain({ id: fanpotArc.id });
       } catch (error) {
-        if (!isUnknownChain(error)) throw error;
+        if (!isUnknownChainError(error)) throw error;
         await wallet.addChain({ chain: fanpotArc });
         await wallet.switchChain({ id: fanpotArc.id });
       }
@@ -56,7 +48,7 @@ export function MainnetWallet() {
 
   return <section className="mainnet-panel" aria-labelledby="wallet-status-heading">
     <h2 id="wallet-status-heading">Your wallet</h2>
-    <p>{WALLET_ACTIONS_PAUSED ? <>Wallet actions are paused while MetaMask reviews a warning for this domain. <a href={WALLET_REVIEW_URL} target="_blank" rel="noreferrer">Review status ↗</a></> : 'Connect MetaMask to read your Arc Mainnet USDC balance.'}</p>
+    <p>{WALLET_ACTIONS_PAUSED ? 'MetaMask currently marks this domain as unsafe. The cause is still unknown; wallet actions remain paused.' : 'Connect MetaMask to read your Arc Mainnet USDC balance.'}</p>
     <button className="button" type="button" onClick={connect} disabled={busy || WALLET_ACTIONS_PAUSED}>{busy ? 'Connecting…' : address ? 'Refresh wallet balance' : 'Connect wallet'}</button>
     {address && <dl><div><dt>Address</dt><dd>{address.slice(0, 6)}…{address.slice(-4)}</dd></div><div><dt>Mainnet USDC</dt><dd>{balance} USDC</dd></div></dl>}
     <p className="mainnet-wallet-message" aria-live="polite">{message}</p>

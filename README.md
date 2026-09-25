@@ -6,7 +6,7 @@ FanPot is an open-source fan campaign escrow proof of concept for Arc. Supporter
 
 - [Public app](https://fanpot-web-one.vercel.app/) · [Arc Mainnet proof](https://fanpot-web-one.vercel.app/mainnet) · [Arc Testnet scenarios](https://fanpot-web-one.vercel.app/arc-demo)
 - [Verified Arc Mainnet factory deployment](https://explorer.arc.io/tx/0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892) · [factory contract](https://explorer.arc.io/address/0x8D8a8bEdE436bfF36E70d261E2041dA6F6777Ab6) · `pnpm verify:factory`
-- **Current gate:** No Arc Mainnet campaign or contribution is published yet. MetaMask marks the site unsafe; all wallet actions are paused pending [official review](https://github.com/MetaMask/eth-phishing-detect/issues/296876). This project has **not** been submitted to the grant program.
+- **Current gate:** No Arc Mainnet campaign or contribution is published yet. MetaMask marks the site unsafe; all wallet actions are paused while the cause is investigated. See the [wallet warning investigation](docs/wallet-warning-investigation.md). This project has **not** been submitted to the grant program.
 
 All artists, fans, vendors, and campaign stories shown here are fictional demonstrations. Images are AI-generated concepts. The project has not booked an advertisement, manufactured goods, or passed an independent smart-contract audit. The Testnet transactions do not stand in for Mainnet proof. See [grant readiness](docs/grant-readiness.md) and the [submission draft](docs/microgrant-submission.md).
 
@@ -33,7 +33,7 @@ K-pop 생일 광고·카페 프로젝트의 고정 예산 금고. [공개 데모
 - 비례 환불, 무기한 미청구 권리, 0원 claim, rounding dust 유지, 직접 송금과 장부 분리.
 - SafeERC20, storage ReentrancyGuard, CEI, Math.mulDiv, 입금 delta 검사.
 - bigint 금액·gas 계산, canonical rules hash, 공개 개인정보 projection, 기여 receipt 검증.
-- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/launch`는 Arc Mainnet 계약 배포와 검토자 활성화를 위한 지갑 흐름이며, `/mainnet`은 검증된 팩토리와 캠페인 증거를 보여 줍니다. 현재 MetaMask가 도메인을 위험하다고 표시하여 `/launch` 지갑 거래는 공식 검토가 끝날 때까지 중지했습니다.
+- Next.js 영어 기본 홈/가상 프로젝트 상세/도움말/내 참여 안내/배포 증거 상태. `/arc-demo`는 네 캠페인의 **실제 Arc Testnet 상태**를 읽고 광고 캠페인에 MetaMask로 테스트 USDC를 보낼 수 있습니다. `/launch`는 Arc Mainnet 계약 배포와 검토자 활성화를 위한 지갑 흐름이며, `/mainnet`은 검증된 팩토리와 캠페인 증거를 보여 줍니다. 현재 MetaMask가 도메인을 위험하다고 표시하여 `/launch` 지갑 거래는 경고 원인이 해결될 때까지 중지했습니다.
 - 설정값·실제 배포 증거가 없는 상태에서 production 검사를 통과하지 못하도록 차단.
 
 ## 로컬 실행
@@ -86,7 +86,7 @@ pnpm dev
 
 1. Supabase SQL migration/RLS와 SIWE 일회 nonce·세션·행 소유권·CSRF.
 2. prepared snapshot 고정, 이벤트 색인·receipt reconciliation·중복/역순 처리·원자적 cursor.
-3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet에 작동하며 소액 Mainnet 흐름은 보안 경고 검토 중입니다.
+3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet에 작동하며 소액 Mainnet 흐름은 보안 경고 원인 조사 중입니다.
 4. 운영자 생성, 검토·지급 UI, 증빙 재인코딩·고정 SHA-256.
 5. local-chain E2E → 실제 MetaMask 지갑 검증 → 독립 리뷰 → 운영 수준의 Mainnet 준비.
 

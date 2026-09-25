@@ -4,7 +4,7 @@
 
 2026-09-25: added four explicitly fictional Arc Testnet campaigns, an on-chain readout, and a MetaMask contribution path for one funding campaign. The scenarios cover live funding, settled spending, skipped budget, cancellation, and refunds. Details and transaction links: [Arc Testnet demo](arc-testnet-demo.md). This is still not a completed MVP or Mainnet proof.
 
-2026-09-25: added a [Mainnet wallet launch and proof flow](mainnet-connection.md), English-only site UI, a public repository, and a public Vercel site. The Mainnet factory deployment receipt and configuration are verified. MetaMask flags the site as unsafe, so wallet actions are paused during official review. Campaign creation, activation, contribution, and grant submission remain pending. See [grant readiness](grant-readiness.md).
+2026-09-25: added a [Mainnet wallet launch and proof flow](mainnet-connection.md), English-only site UI, a public repository, and a public Vercel site. The Mainnet factory deployment receipt and configuration are verified. MetaMask flags the site as unsafe, so wallet actions are paused while its cause is investigated. Campaign creation, activation, contribution, and grant submission remain pending. See [grant readiness](grant-readiness.md).
 
 | Handoff area | State |
 |---|---|
