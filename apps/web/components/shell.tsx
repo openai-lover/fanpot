@@ -18,7 +18,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>{mainnetLive ? 'Arc Mainnet proof of concept · Fictional artist' : hasMainnetFactory ? 'Arc Mainnet factory · Arc Testnet demos' : 'Arc Testnet demo · Fictional artists and campaigns'}</p></div><div className="footer-links"><Link href="/help">Help</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div><span className="copyright">© 2026 FanPot · {mainnetLive ? 'Onchain prototype' : 'Development preview'}</span></footer>
   </I18n.Provider>;
 }
-function Logo() { return <Image src="/fanpot-logo.png" width={1312} height={1199} alt="" className="brand-logo" loading="eager" />; }
+function Logo() { return <span className="brand-wordmark">fanpot<span>○</span></span>; }
 export function RulesCard() {
   const { messages: m } = useContext(I18n);
   return <section className="rules" id="rules"><div className="section-title"><span className="eyebrow">FUND CONTROLS</span><h2>{m.rulesTitle}</h2><p>{mainnetLive ? 'The Arc Mainnet prototype and testnet examples show each rule in a public contract.' : m.rulesSub}</p></div><div className="rule-grid">{[LockKeyhole, ClipboardCheck, RotateCcw].map((Icon, i) => <article key={i}><span className={`rule-icon color-${i}`}><Icon size={23} strokeWidth={1.75}/></span><h3>{m[`rule${i + 1}` as keyof typeof m]}</h3><p>{m[`rule${i + 1}Body` as keyof typeof m]}</p></article>)}</div></section>;

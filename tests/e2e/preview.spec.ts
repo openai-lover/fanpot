@@ -6,7 +6,7 @@ test('public home explains the project and labels generated campaigns', async ({
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.getByRole('heading', { name: 'Imagine their name lighting up the city.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'A little love. A bigger moment.' })).toBeVisible();
   await expect(page.getByText('A refund requires a separate claim transaction; it is not automatic.', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Arc Mainnet' })).toBeVisible();
   await expect(page.getByText('AI-GENERATED CONCEPT').first()).toBeVisible();
