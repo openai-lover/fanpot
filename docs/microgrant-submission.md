@@ -1,6 +1,6 @@
-# Arc Microgrants submission draft — not ready to send
+# Arc Microgrants submission draft — Mainnet proof verified
 
-The public Arc Mainnet factory is deployed and passes `pnpm verify:factory`. The campaign has been created and its settings verified. Separate reviewer activation is confirmed; an actual contribution remains pending. On 2026-09-27 a fresh MetaMask connection showed no malicious-site banner with phishing detection and security alerts enabled. Wallet controls have been restored; the earlier classification cause is still unknown. The text below describes the intended final submission and must be checked against deployed evidence before use.
+The public Arc Mainnet factory and campaign are deployed. Reviewer activation and a real 0.25 USDC builder contribution are confirmed. `pnpm verify:proof` passed on 2026-09-27. On 2026-09-27 a fresh MetaMask connection showed no malicious-site banner with phishing detection and security alerts enabled. Wallet controls have been restored; the earlier classification cause is still unknown. The description below matches the verified Mainnet demonstration. The application has not been submitted.
 
 **Project:** FanPot
 
@@ -12,7 +12,7 @@ The public Arc Mainnet factory is deployed and passes `pnpm verify:factory`. The
 
 ## Short description
 
-FanPot is a fan campaign escrow proof of concept on Arc Mainnet. A campaign accepts USDC toward a fixed goal. Its organizer commits recipient addresses, payout caps, a deadline, and a rules hash before funding. A separately controlled reviewer must approve a payout request that matches the committed amount and evidence hash. Supporters can claim eligible refunds when funding fails or after settlement; the organizer has no withdrawal or rule change function for an existing campaign.
+FanPot is a fan campaign escrow proof of concept on Arc Mainnet. A campaign accepts USDC toward a fixed goal. Its organizer commits recipient addresses, payout caps, a deadline, and a rules hash before funding. A separate reviewer wallet must approve a payout request that matches the committed amount and evidence hash. Supporters can claim eligible refunds when funding fails or after settlement; the organizer has no withdrawal or rule change function for an existing campaign.
 
 Arc makes the transaction currency and gas currency USDC, so the demo can show campaign accounting and receipts in one familiar unit. The live page reads contract state directly from Arc rather than displaying an editable fundraising total. The public repository includes the contracts, wallet flow, generated demo imagery, transaction manifest, and a proof verifier that checks deployed bytecode input, roles, campaign configuration, receipts, and a real contribution.
 
@@ -23,6 +23,6 @@ Arc makes the transaction currency and gas currency USDC, so the demo can show c
 3. Inspect the source and run `pnpm verify:proof` to check the recorded transactions against Arc Mainnet.
 4. The separate `/arc-demo` page illustrates refund and spending edge cases on Arc Testnet; it is supporting context and is not the Mainnet proof.
 
-The named artist, campaign, fans, and vendor are simulated for this proof of concept. The concept images are AI generated. No real advertisement was booked, goods were manufactured, or independent fans contributed. The recorded factory deployment paid real Arc Mainnet USDC gas; the planned campaign contribution has not happened. The contracts have not undergone a third-party audit.
+The named artist, campaign, fans, and vendor are simulated for this proof of concept. The concept images are AI generated. No real advertisement was booked, goods were manufactured, or independent fans contributed. All demonstration wallets are controlled by the builder. The recorded transactions used real Arc Mainnet USDC for gas, and 0.25 USDC was contributed to the campaign. Mainnet payout and refund have not been demonstrated; those scenarios are recorded on Testnet. The contracts have not undergone a third-party audit.
 
-**Submission gate:** Submit only after MetaMask's domain warning is resolved, a Mainnet campaign is active, a real contribution is visible, `pnpm verify:proof` passes, and the public page shows the corresponding contract evidence.
+**Before submitting:** Confirm the builder’s program eligibility and declaration answers, then submit the live link, public repository, builder profile, and description through the official application. Mainnet activation, contribution, and proof verification are complete. The fresh MetaMask check did not reproduce the domain warning; its original classification cause remains unknown.

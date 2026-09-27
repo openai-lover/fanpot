@@ -9,6 +9,7 @@
     "deploy-factory": "0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892",
     "allow-organizer": "0x508c8acef7a80235ea7d5f8394ca815891caac1b0431bc27838b858a319a470d",
     "create-campaign": "0xe4e270745e93bfc8f08109d978de6eece6f154e722f797a524bdb65c2cef0e1d",
-    "activate-campaign": "0x8bae7ae575d079acbd25af09f08e227937f80fb2d7d769fb42d4a0096ea8d9a8"
+    "activate-campaign": "0x8bae7ae575d079acbd25af09f08e227937f80fb2d7d769fb42d4a0096ea8d9a8",
+    "contribute-campaign": "0x13d41d6e22a4163ce7a2d299ecfc4c2fedc6b871cb20d8886429c9e16259b5b5"
   }
 }
