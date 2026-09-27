@@ -19,11 +19,13 @@
 | Create / support / thanks / manage flows | Testnet contribution and small Mainnet wallet demonstration flows; full authenticated flows pending |
 | Deployment scripts / Arc Foundry / source verification | Reproducible solc-js testnet deployment script and transaction manifest; explorer source verification pending |
 | §15.16 local chain browser E2E | Pending; current Playwright suite tests the preview only |
-| Actual desktop/mobile wallet and Testnet | Testnet contract flows performed with local demo wallets; MetaMask and mobile interaction still unverified |
-| Mainnet / public URL / proof / grant submission | Public URL and repository live; factory deployed and verified; campaign proof and submission pending |
+| Actual desktop/mobile wallet and Testnet | Testnet scenarios recorded; desktop MetaMask Mainnet creation, activation and contribution verified; mobile wallet interaction unverified |
+| Mainnet / public URL / proof / grant submission | Public URL and repository live; active campaign with 0.25 USDC builder contribution; `verify:proof` passes; grant submission pending |
 
 Next concrete milestone: SQL schema/RLS and authenticated metadata lifecycle, then shared idempotent index ingestion. Preserve prepared snapshots and public/private output separation from the start. Keep code-only progress possible before user accounts are needed. Request Supabase development credentials only when connecting to a real development DB, and WalletConnect project ID only when enabling that connector.
 
-Git origin is `https://github.com/openai-lover/fanpot.git`. The 2026-09-25 testnet transactions used new faucet-funded demo wallets. The repository is public. One Mainnet factory deployment transaction has been verified; no campaign transaction or grant submission has been performed.
+Git origin is `https://github.com/openai-lover/fanpot.git`. The 2026-09-25 testnet transactions used new faucet-funded demo wallets. The repository is public. Mainnet deployment, organizer authorization, creation, activation, and contribution transactions have been verified. No grant submission has been performed.
 
 2026-09-27 follow-up: fresh desktop MetaMask account connection completed on the production hostname without a malicious-site banner. Security alerts and phishing detection were visually confirmed on. The app read the expected organizer on chain 5042. Wallet controls are restored. This verifies account connection, not campaign transactions or mobile wallets.
+
+2026-09-27 Mainnet completion: the designated reviewer activated the campaign and the organizer contributed 0.25 USDC. All five required receipts are published and `pnpm verify:proof` passes. A repeated activation reverted with `InvalidState`; the launch UI now prevents activation outside Ready and simulates before requesting a signature. Payout/refund remain demonstrated on Testnet only.

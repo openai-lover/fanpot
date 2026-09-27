@@ -86,11 +86,11 @@ pnpm dev
 
 1. Supabase SQL migration/RLS와 SIWE 일회 nonce·세션·행 소유권·CSRF.
 2. prepared snapshot 고정, 이벤트 색인·receipt reconciliation·중복/역순 처리·원자적 cursor.
-3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet에 작동하며 소액 Mainnet 흐름은 실제 캠페인 거래 서명과 증빙이 남아 있습니다.
+3. 완전한 지갑 상태 복구, pending/replacement 처리, 내 환불 화면. MetaMask 시연 경로는 Arc Testnet에 작동하며 소액 Mainnet 흐름은 생성·활성화·0.25 USDC 기여가 검증됐습니다.
 4. 운영자 생성, 검토·지급 UI, 증빙 재인코딩·고정 SHA-256.
 5. local-chain E2E → 실제 MetaMask 지갑 검증 → 독립 리뷰 → 운영 수준의 Mainnet 준비.
 
-전체 운영 서비스에 필요한 인증·색인·파일 업로드는 아직 미완료입니다. Mainnet 캠페인 흐름은 소액 시연에 한정하며, `verify:proof`는 실제 Mainnet 배포·기여 영수증을 검증해야 통과합니다.
+전체 운영 서비스에 필요한 인증·색인·파일 업로드는 아직 미완료입니다. Mainnet 캠페인 흐름은 소액 시연에 한정하며, `verify:proof`는 실제 Mainnet 배포·기여 영수증을 검증하여 통과했습니다.
 
 ## 계정·운영값이 필요한 시점
 

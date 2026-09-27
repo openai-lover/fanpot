@@ -8,7 +8,7 @@ With the builder's explicit approval, only FanPot's existing connection was remo
 
 The current public `eth-phishing-detect` list also had no exact hostname or parent-domain match. Production scripts on the launch page were served from the same origin. These findings do not establish the cause of the original classification, certify the app as safe, or guarantee the result in other wallets. MetaMask's public `useOriginTrustSignals.ts` maps a cached URL scan's `recommendedAction: Block` to the Malicious badge; the original scan result and reason were not available. A provider classification/cache change is a possibility, not a confirmed diagnosis. No official review was requested.
 
-The dated investigation below records the previous state. Its blanket pause decision has been superseded by this follow-up. Mainnet campaign creation, activation and contribution evidence still need to be completed with the builder signing each transaction.
+The dated investigation below records the previous state. Its blanket pause decision has been superseded by this follow-up. Mainnet campaign creation, activation and a 0.25 USDC contribution were subsequently completed with the builder signing each transaction; the public manifest and `pnpm verify:proof` now verify this evidence.
 
 ## What is known
 
