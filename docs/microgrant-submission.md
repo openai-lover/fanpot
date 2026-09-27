@@ -1,6 +1,6 @@
 # Arc Microgrants submission draft — not ready to send
 
-The public Arc Mainnet factory is deployed and passes `pnpm verify:factory`. A campaign, separate reviewer activation, and an actual contribution are still missing. MetaMask marks the public domain unsafe, so wallet actions are paused while the cause is investigated. The text below describes the intended final submission and must be checked against deployed evidence before use.
+The public Arc Mainnet factory is deployed and passes `pnpm verify:factory`. A campaign, separate reviewer activation, and an actual contribution are still missing. On 2026-09-27 a fresh MetaMask connection showed no malicious-site banner with phishing detection and security alerts enabled. Wallet controls have been restored; the earlier classification cause is still unknown. The text below describes the intended final submission and must be checked against deployed evidence before use.
 
 **Project:** FanPot
 

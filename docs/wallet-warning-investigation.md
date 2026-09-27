@@ -1,5 +1,15 @@
 # MetaMask website warning investigation — 2026-09-25
 
+## Follow-up — 2026-09-27
+
+The builder's existing wallet connection was found in their Chrome profile. The app's blanket pause, not a missing wallet or deployment, was preventing its connection button from working. Account inspection is now separate from transactions and requests only `eth_requestAccounts` and `eth_chainId`.
+
+With the builder's explicit approval, only FanPot's existing connection was removed. A fresh connection prompt on the same production hostname showed **no malicious-site banner**, and connection completed. MetaMask's **Security alerts** and **Phishing detection** switches were visually confirmed enabled; no protection settings were changed. The site network was then set to Arc Mainnet and the app read chain 5042 and the expected organizer address. Transaction buttons were restored after this check.
+
+The current public `eth-phishing-detect` list also had no exact hostname or parent-domain match. Production scripts on the launch page were served from the same origin. These findings do not establish the cause of the original classification, certify the app as safe, or guarantee the result in other wallets. MetaMask's public `useOriginTrustSignals.ts` maps a cached URL scan's `recommendedAction: Block` to the Malicious badge; the original scan result and reason were not available. A provider classification/cache change is a possibility, not a confirmed diagnosis. No official review was requested.
+
+The dated investigation below records the previous state. Its blanket pause decision has been superseded by this follow-up. Mainnet campaign creation, activation and contribution evidence still need to be completed with the builder signing each transaction.
+
 ## What is known
 
 MetaMask displayed **Malicious / unsafe** for `fanpot-web-one.vercel.app` at the account connection prompt. The first wallet call in each FanPot entry point is Viem `requestAddresses()` (an `eth_requestAccounts` request). Arc network switching and all contract transactions happen afterward. The prompt's general permissions to view balances and *request* transactions are normal dapp connection capabilities; a transaction or USDC allowance still requires a separate confirmation. See MetaMask's [dapp guide](https://support.metamask.io/more-web3/dapps/user-guide-dapps/) and [security alerts guide](https://support.metamask.io/configure/wallet/security-alerts/).

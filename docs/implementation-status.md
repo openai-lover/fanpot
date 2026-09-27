@@ -25,3 +25,5 @@
 Next concrete milestone: SQL schema/RLS and authenticated metadata lifecycle, then shared idempotent index ingestion. Preserve prepared snapshots and public/private output separation from the start. Keep code-only progress possible before user accounts are needed. Request Supabase development credentials only when connecting to a real development DB, and WalletConnect project ID only when enabling that connector.
 
 Git origin is `https://github.com/openai-lover/fanpot.git`. The 2026-09-25 testnet transactions used new faucet-funded demo wallets. The repository is public. One Mainnet factory deployment transaction has been verified; no campaign transaction or grant submission has been performed.
+
+2026-09-27 follow-up: fresh desktop MetaMask account connection completed on the production hostname without a malicious-site banner. Security alerts and phishing detection were visually confirmed on. The app read the expected organizer on chain 5042. Wallet controls are restored. This verifies account connection, not campaign transactions or mobile wallets.

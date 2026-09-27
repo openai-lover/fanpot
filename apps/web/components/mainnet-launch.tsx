@@ -63,6 +63,23 @@ export function MainnetLaunch() {
     if (fromUrl && isAddress(fromUrl)) setCampaign(getAddress(fromUrl));
   }, []);
 
+  useEffect(() => {
+    const injected = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
+    if (!injected?.on || !injected.removeListener) return;
+    const accountsChanged = (accounts: string[]) => {
+      setAccount(accounts[0] && isAddress(accounts[0]) ? getAddress(accounts[0]) : null);
+      setConnectionMessage('');
+      if (!accounts.length) setConnectedChain(null);
+    };
+    const chainChanged = (chainId: string) => setConnectedChain(Number(chainId));
+    injected.on('accountsChanged', accountsChanged);
+    injected.on('chainChanged', chainChanged);
+    return () => {
+      injected.removeListener('accountsChanged', accountsChanged);
+      injected.removeListener('chainChanged', chainChanged);
+    };
+  }, []);
+
   function record(label: string, hash: string) {
     setTransactions((previous) => {
       const next = { ...previous, [label]: hash };
@@ -86,7 +103,7 @@ export function MainnetLaunch() {
       const connected = await connectForInspection(provider());
       setAccount(connected.account);
       setConnectedChain(connected.chainId);
-      setConnectionMessage('Account connected. No network change, signature or transaction was requested. This does not verify the wallet’s site classification.');
+      setConnectionMessage('Account connected. Each transaction requires a separate confirmation in your wallet.');
     } catch (error) {
       setAccount(null);
       setConnectedChain(null);
