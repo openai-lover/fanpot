@@ -10,7 +10,7 @@ test('public home explains the project and labels generated campaigns', async ({
   await expect(page.getByText('Claims require a separate transaction.', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Funds & spending' })).toBeVisible();
   await expect(page.locator('.campaign-disclosure')).toContainText('AI-generated imagery');
-  await expect(page.locator('.campaign-teaser-image').getByText('Testnet', { exact: true })).toHaveCount(4);
+  await expect(page.locator('.campaign-teaser-image').getByText('Testnet', { exact: true })).toHaveCount(3);
   await expect(page.locator('header')).not.toContainText(/Development preview|Testnet demo|prototype/i);
   await expect(page.locator('footer')).not.toContainText(/Development preview|Testnet demo|prototype/i);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
