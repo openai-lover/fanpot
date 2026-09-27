@@ -6,11 +6,13 @@ test('public home explains the project and labels generated campaigns', async ({
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.getByRole('heading', { name: 'A little love. A bigger moment.' })).toBeVisible();
-  await expect(page.getByText('A refund requires a separate claim transaction; it is not automatic.', { exact: false })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Arc Mainnet' })).toBeVisible();
-  await expect(page.getByText('AI-GENERATED CONCEPT').first()).toBeVisible();
-  await expect(page.getByText('CONCEPT ONLY · NO FUNDING')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Big moments. Made together.' })).toBeVisible();
+  await expect(page.getByText('Claims require a separate transaction.', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Onchain records' })).toBeVisible();
+  await expect(page.locator('.campaign-disclosure')).toContainText('AI-generated imagery');
+  await expect(page.locator('.campaign-teaser-image').getByText('Testnet', { exact: true })).toHaveCount(4);
+  await expect(page.locator('header')).not.toContainText(/Development preview|Testnet demo|prototype/i);
+  await expect(page.locator('footer')).not.toContainText(/Development preview|Testnet demo|prototype/i);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
   await page.screenshot({ path: `test-results/${info.project.name}-home.png`, fullPage: true });
@@ -25,7 +27,7 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
     await page.evaluate((y) => window.scrollTo({ top: y, behavior: 'instant' }), geometry.top + (geometry.height - (page.viewportSize()?.height ?? 900)) * progress);
   };
   await scrub(.29);
-  await expect(page.locator('.story-step')).toContainText('02 / 06');
+  await expect(page.locator('.story-step')).toContainText('02 / 03');
   const earlyAmount = await page.locator('.story-pot-amount strong').textContent();
   const earlyFrame = await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform);
   const earlyBoardWidth = (await page.locator('.story-billboard').boundingBox())?.width ?? 0;
@@ -34,12 +36,12 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
   await scrub(.35);
   await expect.poll(() => page.locator('.story-scene-copy').evaluateAll((scenes) => scenes.filter((scene) => Number(getComputedStyle(scene).opacity) > .05).length)).toBe(1);
   await scrub(.76);
-  await expect(page.locator('.story-step')).toContainText('05 / 06');
+  await expect(page.locator('.story-step')).toContainText('03 / 03');
   await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
   await expect.poll(() => page.locator('.story-reality').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.7);
   expect(await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform)).not.toBe(earlyFrame);
   await scrub(.97);
-  await expect(page.locator('.story-step')).toContainText('06 / 06');
+  await expect(page.locator('.story-step')).toContainText('03 / 03');
   await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
   await expect(page.locator('.story-pot-status')).toHaveText('GOAL REACHED · AWAITING REVIEW');
   await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(1);
@@ -52,7 +54,7 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
   });
   expect(alignment).toBeLessThan(4);
   await scrub(.29);
-  await expect(page.locator('.story-step')).toContainText('02 / 06');
+  await expect(page.locator('.story-step')).toContainText('02 / 03');
   await expect(page.locator('.story-pot-amount strong')).toHaveText(earlyAmount ?? '');
   await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -60,10 +62,10 @@ test('home story follows scroll position and can be rewound', async ({ page }) =
 
 test('preview campaign cannot silently take funds', async ({ page }, info) => {
   await page.goto('/c/lumi-birthday-lights-demo');
-  await expect(page.getByText('This is a local product preview.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Funding is not open for this campaign.', { exact: false })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Support this project' })).toBeDisabled();
   await page.getByText('Funds & spending', { exact: true }).click();
-  await expect(page.getByText('No deployment or transaction records exist for this preview.')).toBeVisible();
+  await expect(page.getByText('No contract or transaction records exist for this campaign.')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (info.project.name.startsWith('mobile')) {
     const poster = await page.locator('.detail-grid .poster').boundingBox();

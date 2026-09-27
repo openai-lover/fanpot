@@ -1,17 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowDown, ArrowUpRight, Heart } from 'lucide-react';
+import { ArrowDown, Heart } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 const sceneCopy = [
-  { kicker: '01 / THE IDEA', title: 'A little love. A bigger moment.', body: 'Bring a fan project to life, together.', detail: 'LUMI is a fictional artist. The billboard is an illustration; no ad has been booked.' },
-  { kicker: '02 / TOGETHER', title: 'Made possible. Together.', body: 'Small contributions move one shared idea forward.', detail: 'Illustrative fan contributions include $5, $10, $20 and $25.' },
-  { kicker: '03 / THE FANPOT', title: 'One pot. Clear progress.', body: 'See the goal, the amount raised, and the plan everyone is supporting.', detail: 'A sample FanPot shows the amount raised, a $3,000 goal, fan count, and recent support.' },
-  { kicker: '04 / CLEAR RULES', title: 'Clear rules. From the start.', body: 'Contribute in USDC. If the goal is missed, claim your funds after finalization.', detail: 'A refund requires a separate claim transaction; it is not automatic. The amounts shown here are illustrative.' },
-  { kicker: '05 / THE GOAL', title: 'Funded. Then reviewed.', body: 'Reaching the goal comes first. An independent payout review comes next.', detail: 'Reaching the goal does not book an ad or send funds to an organizer automatically.' },
-  { kicker: '06 / THE VISION', title: 'From fans. To the city.', body: 'A glimpse of what you could make possible. AI-generated concept; no ad booked.', detail: 'LUMI is a fictional artist and the large city billboard is an AI-generated concept.' },
+  { kicker: 'FAN-LED PROJECTS', title: 'Big moments. Made together.', body: 'Bring fan ads and goods to life with a shared USDC fund.', detail: 'The LUMI artwork, amounts and supporters in this animation are illustrative.' },
+  { kicker: 'ONE SHARED GOAL', title: 'Small contributions. One big idea.', body: 'Pool support in a campaign contract, with a clear budget and reviewed payouts.', detail: 'The contract holds contributions. A separate reviewer must approve each payout within the fixed budget.' },
+  { kicker: 'FROM FANS, WITH LOVE', title: 'An idea worth putting up.', body: 'From a birthday wish to a moment the whole city can see.', detail: 'The city billboard is an AI-generated concept. No advertising placement has been booked.' },
 ] as const;
 
 const fans = [
@@ -89,10 +85,10 @@ export function HomeStory() {
       frame = 0;
       if (!track || !stage || motion.matches) return;
       const progress = clamp(-track.getBoundingClientRect().top / travel);
-      const ranges = [[-.05, .195], [.155, .36], [.325, .52], [.48, .665], [.625, .855], [.82, 1.02]] as const;
+      const ranges = [[-.05, .28], [.24, .70], [.66, 1.05]] as const;
       const copyLevels = ranges.map(([start, end]) => visible(progress, start, end));
       const activeScene = copyLevels.reduce((best, level, index) => level > copyLevels[best] ? index : best, 0);
-      copies.forEach((copy, index) => { copy.style.opacity = index === activeScene ? String(Math.max(.88, copyLevels[index])) : '0'; });
+      copies.forEach((copy, index) => { copy.style.opacity = index === activeScene ? String(copyLevels[index]) : '0'; });
       if (activeScene !== previousScene) {
         previousScene = activeScene;
         if (sceneNumberRef.current) sceneNumberRef.current.textContent = String(activeScene + 1).padStart(2, '0');
@@ -152,7 +148,7 @@ export function HomeStory() {
         previousFans = supporters;
         if (supporterRef.current) supporterRef.current.textContent = String(supporters);
       }
-      if (potStatusRef.current) potStatusRef.current.textContent = amount === 3000 ? 'GOAL REACHED · AWAITING REVIEW' : 'FUNDING EXAMPLE';
+      if (potStatusRef.current) potStatusRef.current.textContent = amount === 3000 ? 'GOAL REACHED · AWAITING REVIEW' : 'ILLUSTRATIVE CAMPAIGN';
       stage.dataset.outcome = amount === 3000 ? 'funded' : 'funding';
 
       const arrival = span(progress, .18, .37);
@@ -190,19 +186,19 @@ export function HomeStory() {
           <svg className="story-real-desktop" viewBox="0 0 1672 941" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="story-desktop-screen"><rect x="565" y="132" width="1026" height="482" /></clipPath></defs><image className="story-real-city" href="/arc-demo/story-megascreen-desktop-v1.png" width="1672" height="941" /><image className="story-real-art" href="/arc-demo/ad-artwork-idol-v2.jpg" x="565" y="132" width="1026" height="482" preserveAspectRatio="xMidYMid slice" clipPath="url(#story-desktop-screen)" /><rect className="story-real-target" ref={desktopTargetRef} x="555" y="119" width="1048" height="508" fill="transparent" /></svg>
           <svg className="story-real-mobile" viewBox="0 0 941 1672" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="story-mobile-screen"><rect x="50" y="749" width="860" height="439" /></clipPath></defs><image className="story-real-city" href="/arc-demo/story-megascreen-mobile-v1.png" width="941" height="1672" /><rect className="story-real-fill" x="50" y="749" width="860" height="439" fill="#765c9b" clipPath="url(#story-mobile-screen)" /><image className="story-real-art" href="/arc-demo/ad-artwork-idol-v2.jpg" x="50" y="749" width="860" height="439" preserveAspectRatio="xMidYMid meet" clipPath="url(#story-mobile-screen)" /><rect className="story-real-target" ref={mobileTargetRef} x="42" y="738" width="877" height="460" fill="transparent" /></svg>
         </div>
-        <div className="story-topbar"><span className="story-mark"><Heart size={16} fill="currentColor" /> FANPOT</span><span>Illustrative concept</span></div>
+        <div className="story-topbar"><span>FanPot</span><span>From an idea to a shared moment.</span></div>
         <div className="story-inner">
           <div className="story-copy-stack">{sceneCopy.map((scene, index) => <div className="story-scene-copy" data-story-scene key={scene.kicker} style={{ opacity: index === 0 ? 1 : 0 }}><span className="story-kicker">{scene.kicker}</span>{index === 0 ? <h1>{scene.title}</h1> : <h2>{scene.title}</h2>}<p>{scene.body}</p></div>)}</div>
           <div className="story-world">
             <div className="story-billboard" ref={billboardFrameRef}><div className="story-billboard-screen" ref={billboardRef}><Image src="/arc-demo/ad-artwork-idol-v2.jpg" alt="" fill priority sizes="(max-width: 700px) 85vw, 46vw" /></div><span className="story-billboard-caption">LUMI · BIRTHDAY LIGHTS</span></div>
             <div className="story-fan-field">{fans.slice(0, 3).map((fan, index) => <div className={`story-fan story-fan-${fan.color}`} key={fan.name} ref={(node) => { fanRefs.current[index] = node; }}><span className="story-fan-avatar">{fan.initials}</span><span className="story-fan-label">{fan.name}<strong>+${fan.amount}</strong></span></div>)}</div>
-            <div className="story-pot" ref={potRef} style={{ opacity: 0 }}><div className="story-pot-top"><span className="story-pot-logo"><Heart size={15} fill="currentColor" /> FanPot</span><span className="story-pot-status" ref={potStatusRef}>FUNDING EXAMPLE</span></div><span className="story-pot-caption">LUMI birthday screen</span><div className="story-pot-amount"><strong ref={balanceRef}>$185</strong><span>of $3,000</span></div><div className="story-pot-meter"><span ref={meterRef} style={{ width: '6%' }} /></div><div className="story-pot-bottom"><span><strong ref={percentRef}>6%</strong> funded</span><span><strong ref={supporterRef}>26</strong> fans</span></div><div className="story-pot-currency">FUNDED IN <strong ref={currencyRef}>USDC</strong></div></div>
+            <div className="story-pot" ref={potRef} style={{ opacity: 0 }}><div className="story-pot-top"><span className="story-pot-logo"><Heart size={15} fill="currentColor" /> FanPot</span><span className="story-pot-status" ref={potStatusRef}>ILLUSTRATIVE CAMPAIGN</span></div><span className="story-pot-caption">LUMI birthday screen</span><div className="story-pot-amount"><strong ref={balanceRef}>$185</strong><span>of $3,000</span></div><div className="story-pot-meter"><span ref={meterRef} style={{ width: '6%' }} /></div><div className="story-pot-bottom"><span><strong ref={percentRef}>6%</strong> funded</span><span><strong ref={supporterRef}>26</strong> fans</span></div><div className="story-pot-currency">FUNDED IN <strong ref={currencyRef}>USDC</strong></div></div>
           </div>
         </div>
-        <div className="story-bottom-bar"><span className="story-scroll-cue"><ArrowDown size={16}/> Scroll to discover</span><span className="story-step"><span ref={sceneNumberRef}>01</span> / 06</span><span className="story-progress"><span ref={progressRef} /></span></div>
+        <div className="story-bottom-bar"><span className="story-scroll-cue"><ArrowDown size={16}/> Scroll to discover</span><span className="story-step"><span ref={sceneNumberRef}>01</span> / 03</span><span className="story-progress"><span ref={progressRef} /></span></div>
       </div>
       <ol className="story-accessible">{sceneCopy.map((scene, index) => <li key={scene.kicker}><span>{scene.kicker}</span>{index === 0 ? <h1>{scene.title}</h1> : <h2>{scene.title}</h2>}<p>{scene.body} {scene.detail}</p></li>)}</ol>
     </section>
-    <section className="story-bridge" aria-labelledby="story-bridge-title"><div className="story-bridge-inner"><span className="eyebrow">YOUR TURN TO IMAGINE</span><h2 id="story-bridge-title">What would your fandom put on the map?</h2><p>Explore the fictional campaign examples and see the funding rules in action. Creating your own campaign is in development.</p><div className="story-bridge-actions"><Link className="button" href="#projects">Explore FanPots <ArrowUpRight size={17}/></Link><Link className="text-link" href="#rules">How funds work <ArrowUpRight size={16}/></Link></div></div></section>
+
   </>;
 }
