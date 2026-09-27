@@ -81,7 +81,7 @@ test('preview campaign cannot silently take funds', async ({ page }, info) => {
   await page.goto('/c/lumi-birthday-lights-demo');
   await expect(page.getByText('Funding is not open for this campaign.', { exact: false })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Support this project' })).toBeDisabled();
-  await page.getByText('Funds & spending', { exact: true }).click();
+  await page.locator('#funds summary').click();
   await expect(page.getByText('No contract or transaction records exist for this campaign.')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (info.project.name.startsWith('mobile')) {
@@ -90,7 +90,7 @@ test('preview campaign cannot silently take funds', async ({ page }, info) => {
   }
 });
 
-test('mainnet route does not invent deployment proof', async ({ page }) => {
+test('mainnet route does not invent deployment proof', async ({ page }, info) => {
   await page.goto('/mainnet');
   if (deployment.factory && deployment.campaign) {
     await expect(page.getByRole('heading', { name: 'LUMI birthday screen' })).toBeVisible();
@@ -98,6 +98,7 @@ test('mainnet route does not invent deployment proof', async ({ page }) => {
     await expect(page.getByText('Fictional campaign. No ad placement is booked.')).toBeVisible();
     await expect(page.getByText('Real USDC on Arc Mainnet. Network fees apply.')).toBeVisible();
     await expect(page.locator('#activity')).not.toHaveAttribute('open');
+    await page.screenshot({ path: `test-results/${info.project.name}-campaign.png`, fullPage: true });
     await page.getByText('Transaction history', { exact: true }).click();
     await expect(page.getByRole('link', { name: 'Contribution received View receipt' })).toHaveAttribute('href', `https://explorer.arc.io/tx/${deployment.transactions['contribute-campaign']}`);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
