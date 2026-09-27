@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '@fontsource-variable/noto-sans-kr';
 import './globals.css';
 import './home-story.css';
+import './service.css';
 import { Shell } from '../components/shell';
 import mainnetDeployment from '../data/arc-mainnet-deployment.json';
 const mainnetLive = Boolean(mainnetDeployment.factory && mainnetDeployment.campaign);

@@ -8,7 +8,7 @@ test('public home explains the project and labels generated campaigns', async ({
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.getByRole('heading', { name: 'Made of fan love.' })).toBeVisible();
   await expect(page.getByText('Claims require a separate transaction.', { exact: false })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Onchain records' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Funds & spending' })).toBeVisible();
   await expect(page.locator('.campaign-disclosure')).toContainText('AI-generated imagery');
   await expect(page.locator('.campaign-teaser-image').getByText('Testnet', { exact: true })).toHaveCount(4);
   await expect(page.locator('header')).not.toContainText(/Development preview|Testnet demo|prototype/i);
@@ -95,9 +95,15 @@ test('mainnet route does not invent deployment proof', async ({ page }) => {
   if (deployment.factory && deployment.campaign) {
     await expect(page.getByRole('heading', { name: 'LUMI birthday screen' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Campaign contract' })).toHaveAttribute('href', `https://explorer.arc.io/address/${deployment.campaign}`);
+    await expect(page.getByText('Fictional campaign. No ad placement is booked.')).toBeVisible();
+    await expect(page.getByText('Real USDC on Arc Mainnet. Network fees apply.')).toBeVisible();
+    await expect(page.locator('#activity')).not.toHaveAttribute('open');
+    await page.getByText('Transaction history', { exact: true }).click();
+    await expect(page.getByRole('link', { name: 'Contribution received View receipt' })).toHaveAttribute('href', `https://explorer.arc.io/tx/${deployment.transactions['contribute-campaign']}`);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   } else {
-    await expect(page.getByRole('heading', { name: 'Mainnet campaign is being prepared' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Support on Mainnet' })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Campaign temporarily unavailable' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Contribute' })).toHaveCount(0);
   }
   await page.goto('/launch');
   await expect(page.getByText('Fictional LUMI birthday screen · 2 USDC goal', { exact: false })).toBeVisible();

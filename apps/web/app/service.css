@@ -1,0 +1,77 @@
+/* Campaigns use the same quiet studio palette as the home story. */
+.campaign-page{padding-top:36px;max-width:1160px}
+.campaign-page .mainnet-campaign{border:0;border-radius:0;gap:48px;margin:36px 0 48px;overflow:visible;align-items:center}
+.campaign-page .mainnet-campaign-art{overflow:hidden;border-radius:20px;align-self:stretch;background:var(--soft)}
+.campaign-page .mainnet-campaign-art img{display:block;min-height:430px;object-position:48% center}
+.campaign-page .mainnet-campaign-art span{font-size:11px;font-weight:500;padding:6px 10px}
+.campaign-page .mainnet-campaign-copy{padding:12px 0}
+.campaign-meta{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--muted)}
+.campaign-meta>span:first-child{color:var(--text);font-weight:600}
+.campaign-page .mainnet-campaign-copy h1{font-size:clamp(36px,4.2vw,56px);line-height:1.04;letter-spacing:-.055em;margin:22px 0 16px;text-wrap:balance}
+.campaign-page .campaign-description{font-size:18px;line-height:1.5;margin-bottom:12px}
+.campaign-page .campaign-context{font-size:12px;margin:0;line-height:1.6}
+.campaign-total{margin:30px 0 16px;display:flex;flex-direction:column;gap:3px}
+.campaign-total strong{font-size:36px;letter-spacing:-.045em;font-weight:600;line-height:1.2}
+.campaign-total strong span{font-size:18px;font-weight:500;letter-spacing:0}
+.campaign-total>span{font-size:13px;color:var(--muted)}
+.campaign-timing{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted)}
+.campaign-page .campaign-cta{margin-top:28px;border-radius:999px;min-height:48px}
+.campaign-page .mainnet-grid{gap:48px;margin:0 0 40px;align-items:start}
+.campaign-page .campaign-funds{border:0;border-top:1px solid var(--border);border-radius:0;padding:26px 0}
+.campaign-page .mainnet-action{background:var(--soft);border:0;padding:28px;border-radius:20px;scroll-margin-top:28px}
+.campaign-page .mainnet-panel h2{font-size:25px;letter-spacing:-.035em}
+.campaign-page .mainnet-panel dt,.campaign-page .mainnet-panel dd{font-size:14px}
+.campaign-page .mainnet-panel dd{font-weight:500}
+.campaign-page .mainnet-panel dl{margin:22px 0}
+.campaign-assurances{padding:0;list-style:none;font-size:13px;line-height:1.65;color:var(--muted);margin:24px 0}
+.campaign-assurances li{position:relative;padding-left:17px;margin:10px 0}
+.campaign-assurances li:before{content:'✓';position:absolute;left:0;color:var(--text);font-size:11px}
+.campaign-page .mainnet-action .outline-button{background:transparent;border-radius:999px;font-size:13px;min-height:42px}
+.campaign-page .mainnet-contribute>div{align-items:stretch}
+.campaign-page .mainnet-contribute input{flex:1;width:100%;background:#fff;border-radius:10px}
+.campaign-page .mainnet-contribute .button{border-radius:10px;white-space:nowrap;min-width:120px}
+.campaign-page .mainnet-contribute small,.campaign-page .contribution-terms{font-size:12px;line-height:1.65;color:var(--muted)}
+.campaign-page .contribution-terms{margin:8px 0 0}
+.campaign-details{border-top:1px solid var(--border)}
+.campaign-details>details{border-bottom:1px solid var(--border)}
+.campaign-details summary,.help-answers summary,.arc-records summary{cursor:pointer;font-size:15px;font-weight:550;padding:20px 0;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.campaign-details summary::-webkit-details-marker,.help-answers summary::-webkit-details-marker,.arc-records summary::-webkit-details-marker{display:none}
+.campaign-details summary:after,.help-answers summary:after,.arc-records summary:after{content:'+';font-size:20px;font-weight:400;color:var(--muted)}
+.campaign-details details[open]>summary:after,.help-answers details[open]>summary:after,.arc-records[open]>summary:after{content:'−'}
+.campaign-detail-body{padding:0 0 28px;max-width:760px;font-size:13px;color:var(--muted);line-height:1.8}
+.campaign-detail-body h3{font-size:16px;color:var(--text);margin:26px 0 10px}
+.campaign-detail-body dl{margin:24px 0}
+.campaign-detail-body dl>div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;margin:10px 0}
+.campaign-detail-body dd{margin:0;overflow-wrap:anywhere;color:var(--text)}
+.campaign-detail-body .rules-hash{overflow-wrap:anywhere;font-size:12px}
+.campaign-detail-body .technical-terms summary{font-size:13px;padding:12px 0}
+.campaign-receipts{list-style:none;padding:0;margin:0 0 20px}
+.campaign-receipts a{display:flex;justify-content:space-between;gap:20px;padding:10px 0;color:var(--text)}
+.campaign-receipts a span{color:var(--muted);white-space:nowrap;font-size:12px}
+.service-info{text-align:left;max-width:760px;padding:72px 24px 100px;min-height:60vh}
+.service-info h1{font-size:clamp(36px,5vw,56px);letter-spacing:-.055em;line-height:1.1;margin-bottom:24px}
+.service-info>p{font-size:16px;line-height:1.8;max-width:640px;margin:0 0 24px}
+.service-info .outline-button{border:1px solid var(--border);border-radius:999px;margin-top:16px}
+.help-answers{margin:34px 0;border-top:1px solid var(--border);width:100%}
+.help-answers details{border-bottom:1px solid var(--border)}
+.help-answers p{font-size:14px;line-height:1.8;max-width:600px;margin:0 0 22px}
+.arc-demo>.preview-banner{background:var(--soft);color:var(--muted);display:inline-flex;font-size:12px;padding:7px 12px;margin-top:10px}
+.arc-demo>.arc-lead{font-size:14px;max-width:640px}
+.arc-records{border-top:1px solid var(--border);margin-top:20px}
+.arc-records summary{font-size:13px;padding:16px 0}
+.arc-records .arc-link{font-size:12px}
+.arc-gallery figcaption{font-size:11px}
+@media(max-width:750px){
+ .campaign-page{padding-top:24px}
+ .campaign-page .mainnet-campaign{gap:24px;margin:24px 0 32px}
+ .campaign-page .mainnet-campaign-art img{min-height:0;aspect-ratio:4/3}
+ .campaign-page .mainnet-campaign-copy{padding:0}
+ .campaign-page .mainnet-campaign-copy h1{font-size:40px;max-width:400px}
+ .campaign-page .mainnet-grid{gap:16px;display:flex;flex-direction:column}
+ .campaign-page .mainnet-action{order:-1;width:100%;padding:24px}
+ .campaign-page .campaign-funds{width:100%;padding:24px 0}
+ .campaign-page .campaign-cta{width:100%}
+ .campaign-detail-body dl>div{grid-template-columns:1fr;gap:2px}
+ .campaign-page .mainnet-contribute .button{min-width:0;padding:12px 18px}
+ .service-info{padding-top:48px}
+}

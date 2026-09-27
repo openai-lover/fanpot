@@ -1,2 +1,2 @@
-import { Information } from '../../components/shell';
-export default function Page() { return <Information kind="proof"/>; }
+import { redirect } from 'next/navigation';
+export default function Page() { redirect('/mainnet#activity'); }

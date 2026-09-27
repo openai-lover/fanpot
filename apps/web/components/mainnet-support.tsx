@@ -10,7 +10,7 @@ import { isUnknownChainError } from '../wallet-network';
 const campaignClient = createPublicClient({ chain: fanpotArc, transport: http(fanpotArc.rpcUrls.default.http[0]) });
 const tokenAbi = parseAbi(['function allowance(address owner, address spender) view returns (uint256)', 'function approve(address spender, uint256 amount) returns (bool)', 'function balanceOf(address owner) view returns (uint256)']);
 
-export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy }: { campaign: `0x${string}`; phase: number; remaining: string; deadline: number; settleBy: number }) {
+export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy, fundingEnded, settlementEnded }: { campaign: `0x${string}`; phase: number; remaining: string; deadline: number; settleBy: number; fundingEnded: boolean; settlementEnded: boolean }) {
   const [amount, setAmount] = useState('0.25');
   const [walletAddress, setWalletAddress] = useState<`0x${string}` | null>(null);
   const [balance, setBalance] = useState<string | null>(null);
@@ -38,7 +38,7 @@ export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy 
     return { wallet, account: getAddress(account) };
   }
   async function refresh() {
-    setBusy(true); setMessage('Reading your onchain position…');
+    setBusy(true); setMessage('Updating your contribution…');
     try {
       const { account } = await connect();
       const [units, given, available] = await Promise.all([
@@ -47,7 +47,7 @@ export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy 
         campaignClient.readContract({ address: campaign, abi: fanPotCampaignAbi, functionName: 'claimable', args: [account] }),
       ]);
       setWalletAddress(account); setBalance(formatUnits(units, 6)); setContributed(formatUnits(given, 6)); setClaimable(formatUnits(available, 6));
-      setMessage('Onchain position refreshed.');
+      setMessage('Your contribution is up to date.');
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Wallet connection failed.'); }
     finally { setBusy(false); }
   }
@@ -115,5 +115,15 @@ export function MainnetSupport({ campaign, phase, remaining, deadline, settleBy 
     finally { setBusy(false); }
   }
   if (WALLET_ACTIONS_PAUSED) return <section className="mainnet-panel mainnet-action"><h2>Wallet actions paused</h2><p>MetaMask currently marks this domain as unsafe. The cause is still unknown. Do not connect or sign while the warning remains.</p></section>;
-  return <section className="mainnet-panel mainnet-action"><h2>Your onchain position</h2><p>Connect MetaMask to see your balance, contribution and refund entitlement. Arc Mainnet transactions use real USDC, including gas.</p><button className="outline-button" type="button" disabled={busy} onClick={refresh}>{busy ? 'Working…' : walletAddress ? 'Refresh wallet' : 'Connect wallet'}</button>{walletAddress && <dl><div><dt>Wallet</dt><dd>{walletAddress.slice(0, 6)}…{walletAddress.slice(-4)}</dd></div><div><dt>USDC balance</dt><dd>{balance} USDC</dd></div><div><dt>Contributed</dt><dd>{contributed} USDC</dd></div><div><dt>Claimable refund</dt><dd>{claimable} USDC</dd></div></dl>}{phase === 1 && <div className="mainnet-contribute"><label htmlFor="mainnet-amount">Contribution in USDC</label><div><input id="mainnet-amount" type="number" min="0.1" max={remaining} step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" type="button" disabled={busy} onClick={support}>Support on Mainnet</button></div><small>MetaMask may ask for one exact USDC approval, then one contribution transaction.</small></div>}{(phase === 0 || phase === 1) && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('finalize')}>Finalize after funding deadline</button>}{(phase === 2 || phase === 3) && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('settle')}>Settle after timeout</button>}{phase === 4 && <button className="button" type="button" disabled={busy || claimable === '0'} onClick={refund}>Claim available refund</button>}<p className="mainnet-wallet-message" aria-live="polite">{message}</p></section>;
+  return <section className="mainnet-panel mainnet-action" id="support">
+    <h2>{walletAddress ? 'Your contribution' : 'Be part of it.'}</h2>
+    <p>{walletAddress ? 'Your balance and contributions, in one place.' : 'Connect your wallet to contribute or check your funds.'}</p>
+    <button className="outline-button" type="button" disabled={busy} onClick={refresh}>{busy ? 'Working…' : walletAddress ? 'Refresh balance' : 'Connect wallet'}</button>
+    {walletAddress && <dl><div><dt>Wallet</dt><dd>{walletAddress.slice(0, 6)}…{walletAddress.slice(-4)}</dd></div><div><dt>Available balance</dt><dd>{balance} USDC</dd></div><div><dt>Your contribution</dt><dd>{contributed} USDC</dd></div>{claimable !== '0' && <div><dt>Available refund</dt><dd>{claimable} USDC</dd></div>}</dl>}
+    {phase === 1 && !fundingEnded && <div className="mainnet-contribute"><label htmlFor="mainnet-amount">Amount in USDC</label><div><input id="mainnet-amount" type="number" min="0.1" max={remaining} step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} /><button className="button" type="button" disabled={busy} onClick={support}>Contribute</button></div><small>Real USDC on Arc Mainnet. Network fees apply.</small><p className="contribution-terms">Funds may stay locked until settlement. Your wallet may ask for a spending approval, then a contribution confirmation.</p></div>}
+    {(phase === 0 || phase === 1) && fundingEnded && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('finalize')}>Finalize funding</button>}
+    {(phase === 2 || phase === 3) && settlementEnded && <button className="outline-button" type="button" disabled={busy} onClick={() => finish('settle')}>Settle campaign</button>}
+    {phase === 4 && <button className="button" type="button" disabled={busy || claimable === '0'} onClick={refund}>Claim refund</button>}
+    {message && <p className="mainnet-wallet-message" aria-live="polite">{message}</p>}
+  </section>;
 }
