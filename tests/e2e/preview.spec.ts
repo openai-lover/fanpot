@@ -6,7 +6,7 @@ test('public home explains the project and labels generated campaigns', async ({
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.getByRole('heading', { name: 'Big moments. Made together.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Made of fan love.' })).toBeVisible();
   await expect(page.getByText('Claims require a separate transaction.', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Onchain records' })).toBeVisible();
   await expect(page.locator('.campaign-disclosure')).toContainText('AI-generated imagery');
@@ -18,45 +18,62 @@ test('public home explains the project and labels generated campaigns', async ({
   await page.screenshot({ path: `test-results/${info.project.name}-home.png`, fullPage: true });
 });
 
-test('home story follows scroll position and can be rewound', async ({ page }) => {
+test('billboard preserves its shape, lands continuously and rewinds', async ({ page }, info) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
+  const stage = page.locator('.story-stage');
+  const board = page.locator('.story-board');
+  const image = board.locator('img');
+  await expect.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const source = await image.getAttribute('src');
   const track = page.locator('.story-track');
-  const geometry = await track.evaluate((element) => ({ top: element.getBoundingClientRect().top + scrollY, height: element.clientHeight }));
-  const scrub = async (progress: number) => {
-    await page.evaluate((y) => window.scrollTo({ top: y, behavior: 'instant' }), geometry.top + (geometry.height - (page.viewportSize()?.height ?? 900)) * progress);
+  const geometry = await track.evaluate((el) => ({ top: el.getBoundingClientRect().top + scrollY, height: el.clientHeight }));
+  const scrub = async (p: number) => {
+    await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), geometry.top + (geometry.height - page.viewportSize()!.height) * p);
+    await expect.poll(async () => Math.abs(Number(await stage.getAttribute('data-progress')) - p)).toBeLessThan(.001);
   };
-  await scrub(.29);
-  await expect(page.locator('.story-step')).toContainText('02 / 03');
-  const earlyAmount = await page.locator('.story-pot-amount strong').textContent();
-  const earlyFrame = await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform);
-  const earlyBoardWidth = (await page.locator('.story-billboard').boundingBox())?.width ?? 0;
-  const cityScreenWidth = (await page.locator(page.viewportSize()!.width <= 700 ? '.story-real-mobile .story-real-target' : '.story-real-desktop .story-real-target').boundingBox())?.width ?? 0;
-  expect(earlyBoardWidth / cityScreenWidth).toBeLessThan(.75);
-  await scrub(.35);
-  await expect.poll(() => page.locator('.story-scene-copy').evaluateAll((scenes) => scenes.filter((scene) => Number(getComputedStyle(scene).opacity) > .05).length)).toBe(1);
-  await scrub(.76);
-  await expect(page.locator('.story-step')).toContainText('03 / 03');
-  await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
-  await expect.poll(() => page.locator('.story-reality').evaluate((element) => Number(getComputedStyle(element).opacity))).toBeGreaterThan(.7);
-  expect(await page.locator('.story-billboard').evaluate((element) => getComputedStyle(element).transform)).not.toBe(earlyFrame);
+  const uniformScale = async () => {
+    const axes = await board.evaluate(el => {
+      const m = new DOMMatrix(getComputedStyle(el).transform);
+      return [Math.hypot(m.m11,m.m12,m.m13), Math.hypot(m.m21,m.m22,m.m23), Math.hypot(m.m31,m.m32,m.m33)];
+    });
+    expect(Math.max(...axes) - Math.min(...axes)).toBeLessThan(.0001);
+  };
+  await scrub(0);
+  const initial = await board.boundingBox();
+  const intro = await page.locator('.story-intro').boundingBox();
+  expect(initial!.y).toBeGreaterThan(intro!.y + intro!.height);
+  await uniformScale();
+  await page.screenshot({ path: `test-results/${info.project.name}-story-start.png` });
+  await scrub(.48);
+  await expect(stage).toHaveAttribute('data-scene', 'together');
+  await uniformScale();
+  const before = await board.boundingBox();
+  await scrub(.49);
+  const after = await board.boundingBox();
+  expect(Math.abs(after!.width - before!.width)).toBeLessThan(8);
+  expect(Math.abs(after!.x - before!.x)).toBeLessThan(8);
+  await page.screenshot({ path: `test-results/${info.project.name}-story-middle.png` });
   await scrub(.97);
-  await expect(page.locator('.story-step')).toContainText('03 / 03');
-  await expect(page.locator('.story-pot-amount strong')).toHaveText('$3,000');
-  await expect(page.locator('.story-pot-status')).toHaveText('GOAL REACHED · AWAITING REVIEW');
-  await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(1);
-  await expect.poll(() => page.locator('.story-billboard').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
-  await expect.poll(() => page.locator('.story-pot').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
+  await uniformScale();
+  await expect(stage).toHaveAttribute('data-scene', 'city');
+  await expect(page.locator('.story-finish')).toHaveCSS('opacity', '1');
+  await expect(board).toBeVisible();
+  await expect(image).toHaveAttribute('src', source!);
   const alignment = await page.evaluate(() => {
-    const board = document.querySelector('.story-billboard')!.getBoundingClientRect();
-    const target = document.querySelector(innerWidth <= 700 ? '.story-real-mobile .story-real-target' : '.story-real-desktop .story-real-target')!.getBoundingClientRect();
-    return Math.max(Math.abs(board.left - target.left), Math.abs(board.top - target.top), Math.abs(board.width - target.width), Math.abs(board.height - target.height));
+    const a = document.querySelector('.story-board')!.getBoundingClientRect();
+    const b = document.querySelector(innerWidth <= 700 ? '.story-city-mobile .story-mount-target' : '.story-city-desktop .story-mount-target')!.getBoundingClientRect();
+    return Math.max(Math.abs(a.left-b.left),Math.abs(a.top-b.top),Math.abs(a.width-b.width),Math.abs(a.height-b.height));
   });
-  expect(alignment).toBeLessThan(4);
-  await scrub(.29);
-  await expect(page.locator('.story-step')).toContainText('02 / 03');
-  await expect(page.locator('.story-pot-amount strong')).toHaveText(earlyAmount ?? '');
-  await expect.poll(() => page.locator('.story-real-art:visible').evaluate((element) => Number(getComputedStyle(element).opacity))).toBe(0);
+  expect(alignment).toBeLessThan(2);
+  const end = await board.boundingBox();
+  expect(end!.width).toBeGreaterThan(initial!.width);
+  await page.screenshot({ path: `test-results/${info.project.name}-story-finish.png` });
+  await scrub(0);
+  const rewound = await board.boundingBox();
+  expect(Math.abs(rewound!.width-initial!.width)).toBeLessThan(2);
+  expect(Math.abs(rewound!.x-initial!.x)).toBeLessThan(2);
+  await expect(page.locator('.story-city')).toHaveCSS('opacity','0');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 

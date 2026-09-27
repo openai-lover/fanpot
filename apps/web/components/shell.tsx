@@ -18,24 +18,24 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <footer><div><Link href="/" className="brand small" aria-label="FanPot home"><Logo /></Link><p>Made for the moments fans make.</p></div><div className="footer-links"><Link href="/mainnet">Onchain records</Link><Link href="/help">Help</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div><span className="copyright">© 2026 FanPot</span></footer>
   </I18n.Provider>;
 }
-function Logo() { return <span className="brand-wordmark">fanpot<span>○</span></span>; }
+function Logo() { return <span className="brand-wordmark">fanpot</span>; }
 export function RulesCard() {
   const { messages: m } = useContext(I18n);
-  return <section className="rules" id="rules"><div className="section-title"><span className="eyebrow">BUILT INTO EVERY FANPOT</span><h2>{m.rulesTitle}</h2><p>{m.rulesSub}</p></div><div className="rule-grid">{[LockKeyhole, ClipboardCheck, RotateCcw].map((Icon, i) => <article key={i}><span className={`rule-icon color-${i}`}><Icon size={23} strokeWidth={1.75}/></span><h3>{m[`rule${i + 1}` as keyof typeof m]}</h3><p>{m[`rule${i + 1}Body` as keyof typeof m]}</p></article>)}</div></section>;
+  return <section className="rules" id="rules"><div className="section-title"><h2>{m.rulesTitle}</h2><p>{m.rulesSub}</p></div><div className="rule-grid">{[LockKeyhole, ClipboardCheck, RotateCcw].map((Icon, i) => <article key={i}><span className={`rule-icon color-${i}`}><Icon size={23} strokeWidth={1.75}/></span><h3>{m[`rule${i + 1}` as keyof typeof m]}</h3><p>{m[`rule${i + 1}Body` as keyof typeof m]}</p></article>)}</div></section>;
 }
 export function Poster({ compact = false }: { compact?: boolean }) { return <div className={`poster ${compact ? 'compact' : ''}`} role="img" aria-label="Original typographic poster for fictional artist LUMI"><span className="poster-top">TO OUR LITTLE UNIVERSE</span><span className="poster-orbit"/><span className="poster-star one">✦</span><span className="poster-star two">✧</span><span className="poster-name">LUMI</span><span className="poster-hand">you make our days brighter.</span><span className="poster-bottom">BIRTHDAY LIGHTS <span>WITH LOVE, TOGETHER</span></span></div>; }
 const demoProjects = [
-  { id: 'ad-campaign', image: '/arc-demo/subway-display-idol-v2.jpg', category: 'FAN AD', title: 'LUMI birthday screen', description: 'A birthday wish, larger than life.', alt: 'Generated concept of fictional performer LUMI on a proposed subway ad' },
-  { id: 'goods-campaign', image: '/arc-demo/goods-mockup-idol-v2.jpg', category: 'FAN GOODS', title: 'A little LUMI to keep', description: 'Photocards made to be shared.', alt: 'Generated LUMI photocard and cupsleeve concept' },
-  { id: 'cafe-campaign', image: '/arc-demo/cafe-concept-candid-v3.jpg', category: 'FAN EVENT', title: 'Meet over a birthday wish', description: 'A café moment for the whole fandom.', alt: 'Generated concept of a fictional LUMI birthday café' },
-  { id: 'cancelled-campaign', image: '/arc-demo/bus-shelter-idol-v2.jpg', category: 'FAN AD · REFUNDED', title: 'A brighter way home', description: 'A bus shelter project with a full refund record.', alt: 'Generated concept of an unbooked LUMI bus shelter ad' },
+  { id: 'ad-campaign', image: '/arc-demo/subway-display-idol-v2.jpg', category: 'Birthday ad', title: 'LUMI birthday screen', description: 'A birthday wish, larger than life.', alt: 'Generated concept of fictional performer LUMI on a proposed subway ad' },
+  { id: 'goods-campaign', image: '/arc-demo/goods-mockup-idol-v2.jpg', category: 'Fan-made goods', title: 'A little LUMI to keep', description: 'Photocards made to be shared.', alt: 'Generated LUMI photocard and cupsleeve concept' },
+  { id: 'cafe-campaign', image: '/arc-demo/cafe-concept-candid-v3.jpg', category: 'Birthday café', title: 'Meet over a birthday wish', description: 'A café moment for the whole fandom.', alt: 'Generated concept of a fictional LUMI birthday café' },
+  { id: 'cancelled-campaign', image: '/arc-demo/bus-shelter-idol-v2.jpg', category: 'Ad campaign / Refunded', title: 'A brighter way home', description: 'A bus shelter project with a full refund record.', alt: 'Generated concept of an unbooked LUMI bus shelter ad' },
 ];
 export function Home() {
   return <main id="main" tabIndex={-1} className="home-main">
     <HomeStory/>
     <div className="home-content">
       <section className="projects-section" id="projects">
-        <div className="section-heading"><div><span className="eyebrow">THE CAMPAIGNS</span><h2>Good ideas bring fans together.</h2><p>A screen. A keepsake. A place to meet.</p></div></div>
+        <div className="section-heading"><div><h2>Find your next shared moment.</h2><p>Birthday screens, fan-made goods and places to come together.</p></div></div>
         <div className="campaign-teasers">
           {mainnetLive && <Link className="campaign-teaser" href="/mainnet"><div className="campaign-teaser-image"><Image src="/arc-demo/subway-display-idol-v2.jpg" width={1536} height={1024} alt="Generated LUMI station display concept" sizes="(max-width: 750px) 100vw, 50vw"/><span>Arc Mainnet</span></div><div className="campaign-teaser-copy"><span className="eyebrow">FAN AD</span><h3>LUMI birthday screen</h3><p>USDC contributions with a fixed vendor budget.</p><strong>View campaign <ArrowUpRight size={16}/></strong></div></Link>}
           {demoProjects.map((project) => <Link className="campaign-teaser" href={`/arc-demo#${project.id}`} key={project.id}><div className="campaign-teaser-image"><Image src={project.image} width={1536} height={1024} alt={project.alt} sizes="(max-width: 750px) 100vw, 50vw"/><span>Testnet</span></div><div className="campaign-teaser-copy"><span className="eyebrow">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><strong>View campaign <ArrowUpRight size={16}/></strong></div></Link>)}
