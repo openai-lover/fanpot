@@ -10,6 +10,7 @@ import build from '../data/mainnet-factory-bytecode.json';
 import deployment from '../data/arc-mainnet-deployment.json';
 import { WALLET_ACTIONS_PAUSED } from '../wallet-safety';
 import { isUnknownChainError } from '../wallet-network';
+import { connectForInspection } from '../wallet-connection';
 
 const organizer = MAINNET_ORGANIZER;
 const reviewer = MAINNET_REVIEWER;
@@ -45,6 +46,8 @@ async function wallet() {
 
 export function MainnetLaunch() {
   const [account, setAccount] = useState<Address | null>(null);
+  const [connectedChain, setConnectedChain] = useState<number | null>(null);
+  const [connectionMessage, setConnectionMessage] = useState('');
   const [factory, setFactory] = useState('');
   const [campaign, setCampaign] = useState('');
   const [vendor, setVendor] = useState<string>(suggestedVendor);
@@ -77,7 +80,18 @@ export function MainnetLaunch() {
     finally { setBusy(false); }
   }
   async function connect() {
-    await run('Connect', async () => { const { account } = await wallet(); setAccount(account); });
+    setBusy(true);
+    setConnectionMessage('Review the account connection request in MetaMask. Cancel if it shows a security warning.');
+    try {
+      const connected = await connectForInspection(provider());
+      setAccount(connected.account);
+      setConnectedChain(connected.chainId);
+      setConnectionMessage('Account connected. No network change, signature or transaction was requested. This does not verify the wallet’s site classification.');
+    } catch (error) {
+      setAccount(null);
+      setConnectedChain(null);
+      setConnectionMessage(error instanceof Error ? error.message : 'Connection was not completed.');
+    } finally { setBusy(false); }
   }
   function requireRole(actual: Address, expected: Address) {
     if (actual.toLowerCase() !== expected.toLowerCase()) throw Error(`Select ${expected} in MetaMask for this action.`);
@@ -137,9 +151,9 @@ export function MainnetLaunch() {
   }
 
   return <div className="launch-grid">
-    {WALLET_ACTIONS_PAUSED && <section className="mainnet-panel launch-wide" role="alert"><h2>Wallet actions temporarily paused</h2><p>MetaMask currently marks this domain as unsafe. The cause is still unknown. Do not connect or sign while the warning remains. The verified factory deployment remains visible below.</p></section>}
+    {WALLET_ACTIONS_PAUSED && <section className="mainnet-panel launch-wide" role="alert"><h2>Transactions temporarily paused</h2><p>A MetaMask site warning was previously reported. Its current classification has not been verified. Account connection is available for checking the wallet prompt; cancel if it displays a warning. Deployment, approvals and payments remain paused.</p></section>}
     <section className="mainnet-panel launch-wide"><h2>Campaign plan</h2><p>Fictional LUMI birthday screen · 2 USDC goal · one 1 USDC capped simulated vendor allocation · 14-day funding window. Any unspent funds remain claimable by supporters after settlement. No ad placement or merchandise is being sold.</p><details><summary>Exact rules committed onchain</summary><p>{rules}</p><code>{rulesHash}</code></details><dl><div><dt>Organizer</dt><dd>{organizer}</dd></div><div><dt>Reviewer</dt><dd>{reviewer}</dd></div><div><dt>USDC</dt><dd>{ARC_USDC}</dd></div></dl></section>
-    <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Choose the organizer on this computer. The reviewer can open this page on the other computer when the campaign address is ready.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p></section>
+    <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Choose the organizer on this computer. This step only requests account access and reads the selected network.</p><button className="button" disabled={busy} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p>{connectedChain !== null && <p>Selected network: {connectedChain === fanpotArc.id ? 'Arc Mainnet' : `chain ${connectedChain}`}</p>}<p aria-live="polite">{connectionMessage}</p></section>
     <section className="mainnet-panel"><h2>2. Deploy factory</h2><p>The verified factory below has already been deployed. Do not deploy another one. MetaMask shows the current USDC gas estimate before any later transaction.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !!factory} onClick={deploy}>Deploy factory</button><label className="launch-label">Factory address<input value={factory} onChange={(event) => saveFactory(event.target.value)} placeholder="0x…" /></label><button className="outline-button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(factory)} onClick={allowOrganizer}>Allow organizer</button></section>
     <section className="mainnet-panel"><h2>3. Create campaign</h2><p>The vendor address is controlled by the builder. A payout still requires a separate reviewer decision, and no payout is needed to demonstrate live funding.</p><label className="launch-label">Simulated vendor address<input value={vendor} onChange={(event) => setVendor(event.target.value)} /></label><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(factory) || !!campaign} onClick={createCampaign}>Create 2 USDC campaign</button><label className="launch-label">Campaign address<input value={campaign} onChange={(event) => saveCampaign(event.target.value)} placeholder="0x…" /></label></section>
     <section className="mainnet-panel"><h2>4. Reviewer activation</h2><p>On the other computer, connect {reviewer} and confirm activation. The reviewer wallet needs Arc USDC for gas.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(campaign)} onClick={activate}>Activate with reviewer wallet</button>{isAddress(campaign) && <a href={`/launch?campaign=${getAddress(campaign)}`}>Reviewer link ↗</a>}</section>
