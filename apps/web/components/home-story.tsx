@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
@@ -150,7 +149,6 @@ export function HomeStory() {
       <div className="story-static-art"><CampaignArtwork/></div>
       <h2>A little from all of us.</h2><p>Contributions stay in a campaign contract. Every payout needs a separate reviewer.</p>
       <h2>From your fandom. To the world.</h2><p>LUMI and the city placement are fictional, AI-generated campaign concepts. No advertisement has been booked.</p>
-      <Link href="#projects">Explore campaigns</Link>
     </div>
   </section>;
 }

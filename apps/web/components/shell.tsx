@@ -40,7 +40,7 @@ export function Home() {
           {mainnetLive && <Link className="campaign-teaser" href="/mainnet"><div className="campaign-teaser-image"><Image src="/arc-demo/subway-display-idol-v2.jpg" width={1536} height={1024} alt="Generated LUMI station display concept" sizes="(max-width: 750px) 100vw, 50vw"/><span>Arc Mainnet</span></div><div className="campaign-teaser-copy"><span className="eyebrow">FAN AD</span><h3>LUMI birthday screen</h3><p>USDC contributions with a fixed vendor budget.</p><strong>View campaign <ArrowUpRight size={16}/></strong></div></Link>}
           {demoProjects.map((project) => <Link className="campaign-teaser" href={`/arc-demo#${project.id}`} key={project.id}><div className="campaign-teaser-image"><Image src={project.image} width={1536} height={1024} alt={project.alt} sizes="(max-width: 750px) 100vw, 50vw"/><span>Testnet</span></div><div className="campaign-teaser-copy"><span className="eyebrow">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><strong>View campaign <ArrowUpRight size={16}/></strong></div></Link>)}
         </div>
-        <p className="campaign-disclosure">Illustrative campaigns with fictional artists and AI-generated imagery. Testnet contributions use test tokens; no ads, goods or events have been purchased. Animation figures are illustrative.</p>
+        <p className="campaign-disclosure">Illustrative campaigns with fictional artists and AI-generated imagery. Testnet contributions use test tokens; no ads, goods or events have been purchased.</p>
       </section>
       <RulesCard/>
     </div>
