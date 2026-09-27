@@ -50,6 +50,8 @@ export function MainnetLaunch() {
   const [connectionMessage, setConnectionMessage] = useState('');
   const [factory, setFactory] = useState('');
   const [campaign, setCampaign] = useState('');
+  const [activationPhase, setActivationPhase] = useState<number | null>(null);
+  const [activationStatus, setActivationStatus] = useState('');
   const [vendor, setVendor] = useState<string>(suggestedVendor);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
@@ -57,11 +59,26 @@ export function MainnetLaunch() {
 
   useEffect(() => {
     setFactory(deployment.factory ?? localStorage.getItem('fanpot-mainnet-factory') ?? '');
-    setCampaign(localStorage.getItem('fanpot-mainnet-campaign') ?? '');
+    setCampaign(deployment.campaign ?? localStorage.getItem('fanpot-mainnet-campaign') ?? '');
     try { setTransactions({ ...JSON.parse(localStorage.getItem('fanpot-mainnet-transactions') ?? '{}'), ...deployment.transactions }); } catch { setTransactions(deployment.transactions); }
     const fromUrl = new URLSearchParams(window.location.search).get('campaign');
     if (fromUrl && isAddress(fromUrl)) setCampaign(getAddress(fromUrl));
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    setActivationPhase(null);
+    if (!isAddress(campaign)) { setActivationStatus('Enter a valid campaign address.'); return; }
+    setActivationStatus('Checking campaign status…');
+    publicClient.readContract({ address: getAddress(campaign), abi: fanPotCampaignAbi, functionName: 'phase' })
+      .then((phase) => {
+        if (cancelled) return;
+        setActivationPhase(phase);
+        setActivationStatus(phase === 0 ? 'Ready for reviewer activation.' : 'Already activated. No further activation transaction is needed.');
+      })
+      .catch(() => { if (!cancelled) setActivationStatus('Unable to check campaign status. Reload this page to retry.'); });
+    return () => { cancelled = true; };
+  }, [campaign]);
 
   useEffect(() => {
     const injected = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
@@ -160,20 +177,29 @@ export function MainnetLaunch() {
       const { client, account } = await wallet(); requireRole(account, reviewer);
       const config = await publicClient.readContract({ address: getAddress(campaign), abi: fanPotCampaignAbi, functionName: 'getConfig' });
       if (config.reviewer.toLowerCase() !== reviewer.toLowerCase() || config.organizer.toLowerCase() !== organizer.toLowerCase() || config.rulesHash !== rulesHash) throw Error('Campaign configuration differs from this plan.');
-      const hash = await client.writeContract({ account, chain: fanpotArc, address: getAddress(campaign), abi: fanPotCampaignAbi, functionName: 'activate' });
+      const phase = await publicClient.readContract({ address: getAddress(campaign), abi: fanPotCampaignAbi, functionName: 'phase' });
+      setActivationPhase(phase);
+      if (phase !== 0) {
+        setActivationStatus('Already activated. No further activation transaction is needed.');
+        return;
+      }
+      const { request } = await publicClient.simulateContract({ account, address: getAddress(campaign), abi: fanPotCampaignAbi, functionName: 'activate' });
+      const hash = await client.writeContract(request);
       record('activate-campaign', hash);
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       if (receipt.status !== 'success') throw Error('Activation reverted.');
+      setActivationPhase(1);
+      setActivationStatus('Activated successfully. The campaign is open for contributions.');
     });
   }
 
   return <div className="launch-grid">
     {WALLET_ACTIONS_PAUSED && <section className="mainnet-panel launch-wide" role="alert"><h2>Transactions temporarily paused</h2><p>A MetaMask site warning was previously reported. Its current classification has not been verified. Account connection is available for checking the wallet prompt; cancel if it displays a warning. Deployment, approvals and payments remain paused.</p></section>}
     <section className="mainnet-panel launch-wide"><h2>Campaign plan</h2><p>Fictional LUMI birthday screen · 2 USDC goal · one 1 USDC capped simulated vendor allocation · 14-day funding window. Any unspent funds remain claimable by supporters after settlement. No ad placement or merchandise is being sold.</p><details><summary>Exact rules committed onchain</summary><p>{rules}</p><code>{rulesHash}</code></details><dl><div><dt>Organizer</dt><dd>{organizer}</dd></div><div><dt>Reviewer</dt><dd>{reviewer}</dd></div><div><dt>USDC</dt><dd>{ARC_USDC}</dd></div></dl></section>
-    <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Choose the organizer on this computer. This step only requests account access and reads the selected network.</p><button className="button" disabled={busy} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p>{connectedChain !== null && <p>Selected network: {connectedChain === fanpotArc.id ? 'Arc Mainnet' : `chain ${connectedChain}`}</p>}<p aria-live="polite">{connectionMessage}</p></section>
+    <section className="mainnet-panel"><h2>1. Connect wallet</h2><p>Connect the reviewer wallet for activation, or the organizer wallet for setup. This step only requests account access and reads the selected network.</p><button className="button" disabled={busy} onClick={connect}>Connect MetaMask</button><p>{account ?? 'No wallet connected'}</p>{connectedChain !== null && <p>Selected network: {connectedChain === fanpotArc.id ? 'Arc Mainnet' : `chain ${connectedChain}`}</p>}<p aria-live="polite">{connectionMessage}</p></section>
     <section className="mainnet-panel"><h2>2. Deploy factory</h2><p>The verified factory below has already been deployed. Do not deploy another one. MetaMask shows the current USDC gas estimate before any later transaction.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !!factory} onClick={deploy}>Deploy factory</button><label className="launch-label">Factory address<input value={factory} onChange={(event) => saveFactory(event.target.value)} placeholder="0x…" /></label><button className="outline-button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(factory)} onClick={allowOrganizer}>Allow organizer</button></section>
     <section className="mainnet-panel"><h2>3. Create campaign</h2><p>The vendor address is controlled by the builder. A payout still requires a separate reviewer decision, and no payout is needed to demonstrate live funding.</p><label className="launch-label">Simulated vendor address<input value={vendor} onChange={(event) => setVendor(event.target.value)} /></label><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(factory) || !!campaign} onClick={createCampaign}>Create 2 USDC campaign</button><label className="launch-label">Campaign address<input value={campaign} onChange={(event) => saveCampaign(event.target.value)} placeholder="0x…" /></label></section>
-    <section className="mainnet-panel"><h2>4. Reviewer activation</h2><p>On the other computer, connect {reviewer} and confirm activation. The reviewer wallet needs Arc USDC for gas.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(campaign)} onClick={activate}>Activate with reviewer wallet</button>{isAddress(campaign) && <a href={`/launch?campaign=${getAddress(campaign)}`}>Reviewer link ↗</a>}</section>
+    <section className="mainnet-panel"><h2>4. Reviewer activation</h2><p>On the other computer, connect {reviewer} and confirm activation. The reviewer wallet needs Arc USDC for gas.</p><button className="button" disabled={busy || WALLET_ACTIONS_PAUSED || !isAddress(campaign) || activationPhase !== 0} onClick={activate}>{activationPhase !== null && activationPhase !== 0 ? 'Campaign already activated' : 'Activate with reviewer wallet'}</button><p aria-live="polite">{activationStatus}</p>{isAddress(campaign) && <a href={`/launch?campaign=${getAddress(campaign)}`}>Reviewer link ↗</a>}</section>
     <section className="mainnet-panel launch-wide"><h2>Transaction evidence</h2><p aria-live="polite">{message || 'Each step needs a separate MetaMask confirmation. Never share your seed phrase.'}</p><ul>{Object.entries(transactions).map(([label, hash]) => <li key={label}><a href={`${explorer}/tx/${hash}`} target="_blank" rel="noreferrer">{label} · {hash.slice(0, 12)}… ↗</a></li>)}</ul><p>After creating and activating the campaign, add its verified addresses and receipts to the public deployment manifest before submitting the grant.</p></section>
   </div>;
 }

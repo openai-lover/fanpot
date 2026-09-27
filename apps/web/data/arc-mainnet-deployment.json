@@ -1,12 +1,14 @@
 {
   "chainId": 5042,
   "factory": "0x8D8a8bEdE436bfF36E70d261E2041dA6F6777Ab6",
-  "campaign": null,
+  "campaign": "0x82f2C8E937a26Af861F5614181863889218ab11E",
   "reviewer": "0xD25a47E35bF60C9AA51E1F450f3E0e850721Fe78",
   "organizer": "0x844DFA170aDC069755eBF58FcccDC1e465cF88A5",
-  "vendor": null,
+  "vendor": "0xbb431b640e57c1134af69c8014227daab8405f90",
   "transactions": {
     "deploy-factory": "0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892",
-    "allow-organizer": "0x508c8acef7a80235ea7d5f8394ca815891caac1b0431bc27838b858a319a470d"
+    "allow-organizer": "0x508c8acef7a80235ea7d5f8394ca815891caac1b0431bc27838b858a319a470d",
+    "create-campaign": "0xe4e270745e93bfc8f08109d978de6eece6f154e722f797a524bdb65c2cef0e1d",
+    "activate-campaign": "0x8bae7ae575d079acbd25af09f08e227937f80fb2d7d769fb42d4a0096ea8d9a8"
   }
 }

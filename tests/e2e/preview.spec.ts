@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-const deployment = JSON.parse(readFileSync('apps/web/data/arc-mainnet-deployment.json', 'utf8')) as { factory: string | null; campaign: string | null };
+const deployment = JSON.parse(readFileSync('apps/web/data/arc-mainnet-deployment.json', 'utf8')) as { factory: string | null; campaign: string | null; transactions: Record<string, string> };
 
 test('public home explains the project and labels generated campaigns', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
@@ -105,6 +105,9 @@ test('mainnet route does not invent deployment proof', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Transactions temporarily paused' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Connect MetaMask' })).toBeEnabled();
   await expect(page.getByRole('button', { name: 'Allow organizer' })).toBeEnabled();
+  if (deployment.transactions['activate-campaign']) {
+    await expect(page.getByRole('button', { name: 'Campaign already activated' })).toBeDisabled();
+  }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
