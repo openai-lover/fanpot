@@ -6,6 +6,7 @@
   "organizer": "0x844DFA170aDC069755eBF58FcccDC1e465cF88A5",
   "vendor": null,
   "transactions": {
-    "deploy-factory": "0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892"
+    "deploy-factory": "0xc4ce06ea92cfae48ee95fcba9cdaa04e5904c17881a2fed34cac85e0b2865892",
+    "allow-organizer": "0x508c8acef7a80235ea7d5f8394ca815891caac1b0431bc27838b858a319a470d"
   }
 }
