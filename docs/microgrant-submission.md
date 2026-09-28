@@ -1,5 +1,7 @@
 # Arc Microgrants submission draft — Mainnet proof verified
 
+**Current judge-facing copy (September 28):** [Concise title, visual summary, market sources and formatted application](submission/README.md). The technical reference below is retained for proof verification.
+
 The public Arc Mainnet factory and campaign are deployed. Reviewer activation and a real 0.25 USDC builder contribution are confirmed. `pnpm verify:proof` passed on 2026-09-27. On 2026-09-27 a fresh MetaMask connection showed no malicious-site banner with phishing detection and security alerts enabled. Wallet controls have been restored; the earlier classification cause is still unknown. The description below matches the verified Mainnet demonstration. The application has not been submitted.
 
 **Project:** FanPot

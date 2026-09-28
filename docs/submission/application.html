@@ -1,0 +1,39 @@
+<h1>Fan love. Clear money rules.</h1>
+<p><strong>FanPot lets K-pop communities pool USDC for ads and goods under spending rules everyone can verify.</strong> Built and running on Arc Mainnet.</p>
+<p><a href="https://fanpot-web-one.vercel.app/mainnet">Open the live Mainnet campaign</a> · <a href="https://github.com/openai-lover/fanpot">Explore the code</a> · <a href="https://github.com/openai-lover">Meet the builder</a></p>
+<p><img src="https://raw.githubusercontent.com/openai-lover/fanpot/main/docs/submission/fanpot-overview.png" alt="FanPot: fans contribute USDC to fixed-rule escrow; reviewer-approved payments go to committed recipients; eligible refunds return to supporters. Arc uses USDC for gas too." /></p>
+<h2>The problem: shared money, unclear control</h2>
+<p>A birthday billboard is a community effort. When its budget sits in an organizer’s personal wallet, supporters depend on updates to understand where it can go. FanPot makes the recipient, spending limit and approval process inspectable before anyone contributes.</p>
+<h2>Three rules supporters can check</h2>
+<ul>
+<li><strong>Commit first.</strong> The goal, deadline, recipient addresses and payout caps are fixed before funding. An existing campaign cannot be reconfigured.</li>
+<li><strong>Review before payment.</strong> Once funding succeeds, the organizer requests a payout; a separate reviewer wallet approves the exact amount and evidence hash. The contract pays the committed recipient directly.</li>
+<li><strong>Return eligible balances.</strong> Supporters can claim refunds if funding fails, or their share of unused funds after settlement. Claims require a transaction; gas is not refunded.</li>
+</ul>
+<h2>A global audience. A focused starting point.</h2>
+<p><img src="https://raw.githubusercontent.com/openai-lover/fanpot/main/docs/submission/fanpot-market.png" alt="Market context: 225 million reported Hallyu fans in 2023; about 120 million dollars of Korean CD exports to 131 destinations in Q1 2026. FanPot focuses on contract-enforced campaign spending rules." /></p>
+<p><strong>225 million reported Hallyu fans</strong> in 2023 [1]. <strong>About $120 million in Korean CD exports across 131 destinations</strong> in Q1 2026 [2]. These show broad cultural reach and cross-border purchasing; they do not measure FanPot’s addressable market or fan-ad spending.</p>
+<p><strong>First users:</strong> birthday-ad organizers sharing campaign links with existing international fan communities. FanPlus already runs recurring birthday and anniversary votes with advertising rewards [3]. FanPot’s opportunity is to make the pooled budget itself verifiable.</p>
+<h2>What makes FanPot different?</h2>
+<ul>
+<li><strong>FanPlus:</strong> voting that earns advertising rewards [3].</li>
+<li><strong>MAKESTAR:</strong> reward crowdfunding with platform-managed funding and refund policies [4].</li>
+<li><strong>FanPot:</strong> fan-organized USDC funding with immutable recipient caps, a reviewer approval gate, and publicly inspectable receipts.</li>
+</ul>
+<p>The distinction is <strong>how spending authority is enforced</strong>. Existing services have their own safeguards. FanPot puts campaign constraints in a non-upgradeable contract with no organizer withdrawal override.</p>
+<h2>Why Arc + USDC belong in the product</h2>
+<ul>
+<li><strong>One asset to prepare.</strong> Arc uses USDC for gas, so a supporter can fund the campaign and pay network fees with USDC [5].</li>
+<li><strong>One accounting unit.</strong> Goals, contributions, capped payouts and refunds share the same dollar-denominated asset across participating wallets.</li>
+<li><strong>Enforceable rules, inspectable state.</strong> Arc’s EVM execution runs the escrow; the live page reads campaign totals from the chain. Public receipts let supporters verify money movement.</li>
+</ul>
+<h2>Verify the working proof</h2>
+<p><strong>Mainnet:</strong> factory deployment, campaign creation, reviewer activation and a <a href="https://explorer.arc.io/tx/0x13d41d6e22a4163ce7a2d299ecfc4c2fedc6b871cb20d8886429c9e16259b5b5">0.25 USDC builder contribution</a> are recorded. The repository includes tests, transaction manifests and <code>pnpm verify:proof</code>. <a href="https://fanpot-web-one.vercel.app/arc-demo">Payout and refund scenarios</a> are recorded separately on Testnet.</p>
+<p><strong>Current scope:</strong> early proof capped at 100 USDC per campaign. Artists are fictional, imagery is AI-generated, and all demonstration wallets are builder-controlled; no independent fan traction or fulfilled ad booking is claimed. Mainnet payout/refund remain unperformed. The contracts are not externally audited. Evidence hashes record commitments, not proof of delivery.</p>
+<p><strong>Next:</strong> validate one campaign with a real organizer, independent reviewer and recipient; complete the organizer workflow and security review before raising limits. Measure contribution completion and reconciliation time. Fiat onboarding and vendor acceptance remain work to do.</p>
+<h3>Sources</h3>
+<p>[1] <a href="https://www.korea.net/NewsFocus/Society/view?articleId=248349">Korea.net / Korea Foundation, 2023 Hallyu survey</a> (published March 2024; broader Korean culture, not K-pop buyers alone).<br />
+[2] <a href="https://www.customs.go.kr/kcs/na/ntt/selectNttInfo.do?bbsId=1362&amp;mi=2891&amp;nttSn=10162525&amp;nttSnUrl=179890e073bed46afdac69472414d73f">Korea Customs Service, Q1 2026 CD exports</a> (April 28, 2026).<br />
+[3] <a href="https://fanplus.co.kr/en-US/faq">FanPlus official FAQ</a>.<br />
+[4] <a href="https://policies.makestar.com/makestar-terms/en/20260806/">MAKESTAR terms, August 6, 2026</a>.<br />
+[5] <a href="https://www.arc.io/network">Arc: network and USDC gas</a>.</p>
