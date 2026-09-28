@@ -36,6 +36,7 @@ export default async function MainnetPage() {
   const now = Math.floor(Date.now() / 1000);
   return <main id="main" className="mainnet-page campaign-page" tabIndex={-1}>
     <Link href="/#projects" className="back-link">← All campaigns</Link>
+    <p><Link href="/mainnet/manage">Organizer & reviewer: manage payments →</Link></p>
     {live ? <>
       <section className="mainnet-campaign">
         <div className="mainnet-campaign-art"><Image src="/arc-demo/subway-display-idol-v2.jpg" width={1536} height={1024} alt="AI-generated LUMI station screen concept" priority sizes="(max-width: 750px) 100vw, 50vw" /><span>AI-generated concept</span></div>
