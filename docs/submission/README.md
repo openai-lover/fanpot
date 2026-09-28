@@ -19,7 +19,7 @@ The formatted application body is [application.html](application.html). It is an
 - [FanPlus FAQ](https://fanplus.co.kr/en-US/faq): monthly birthday/debut-anniversary voting and advertising rewards. No assertion is made about absence of safeguards.
 - [MAKESTAR official terms](https://policies.makestar.com/makestar-terms/en/20260806/): reward crowdfunding, platform funding conditions and refund policies. No assertion is made that it lacks refunds or transparency.
 - [Arc network](https://www.arc.io/network): USDC gas and EVM support. FanPot has not integrated CCTP, Gateway, a fiat onramp or gas sponsorship. The architecture is not claimed to be impossible on other chains.
-- Implementation claims: `packages/contracts/src/FanPotCampaign.sol`, `apps/web/data/arc-mainnet-deployment.json`, and `pnpm verify:proof`. Mainnet proof concerns deployment, creation, activation and the builder contribution; payout/refund demonstrations remain Testnet.
+- Implementation claims: `packages/contracts/src/FanPotCampaign.sol`, `apps/web/data/arc-mainnet-deployment.json`, and `pnpm verify:proof`. The [complete Mainnet transaction trail](mainnet-proof.md) covers funding, organizer request, reviewer-approved payment, settlement and refund. Final state: Closed, with zero accounted balance.
 
 Research checked September 28, 2026. The chosen 2023 fandom figure has an explicit observation year; it is not presented as a current 2026 count.
 

@@ -1,0 +1,11 @@
+KYUMIN KIM (김규민) — BUILDER & FAN EXPERIENCE OPERATOR
+
+I can build the product and bring the fans together. FanPot combines my two strongest capabilities: hands-on software development and turning fan communities into real, well-run offline experiences.
+
+I co-founded and served as Co-CEO of Playhof, which became Korea's No. 1 fan group-viewing platform. My work covered the business model, community gatherings, shared viewing experiences, customer experience and day-to-day execution. Offline fan experiences are a particular strength: understanding what makes people show up, participate and enjoy being part of a community. I was also selected as a Google.org-supported young entrepreneur.
+
+I bring the technical ability to turn that experience into a working product. At KDID, I plan, develop and operate construction ERP/SaaS products, working across Flutter apps, web services and AI workflow automation. These products address real operational needs, including workforce attendance, safety communication, costs and administration. For FanPot, that development work now includes a Next.js application and Solidity escrow contracts deployed on Arc Mainnet, with a verified end-to-end USDC lifecycle: funding, reviewer-approved payout, settlement and supporter refund.
+
+This combination is why I am building FanPot. I understand the work behind bringing fans together, and I can build the software that supports it. My focus is to carry that experience into fan-funded ads, goods and events, with clear spending rules and verifiable USDC payments on Arc.
+
+
